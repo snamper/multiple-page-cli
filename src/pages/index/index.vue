@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img src="../../assets/logo.png">
     <p> this is index </p>
     <HelloWorld/>
   </div>
@@ -22,6 +22,8 @@ export default {
 </script>
 
 <style>
+@import '../../assets/css/base.css';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
