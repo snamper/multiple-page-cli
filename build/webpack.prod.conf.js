@@ -50,13 +50,15 @@ const webpackConfig = merge(baseWebpackConfig, {
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
       allChunks: true,
     }),
+    
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
-    // new OptimizeCSSPlugin({
-    //   cssProcessorOptions: config.build.productionSourceMap
-    //     ? { safe: true, map: { inline: false } }
-    //     : { safe: true }
-    // }),
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: config.build.productionSourceMap
+        ? { safe: true, map: { inline: false } }
+        : { safe: true }
+    }),
+
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
@@ -64,6 +66,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: path.resolve(config.build.assetsRoot, './index.html'),
       template: path.resolve(__dirname, '..', './src/pages/index/index.html'),
       inject: true,
+      chunks: ['index', 'vendor', 'manifest', 'common'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -81,6 +84,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: path.resolve(config.build.assetsRoot, './first.html'),
       template: path.resolve(__dirname, '..', './src/pages/first/first.html'),
       inject: true,
+      chunks: ['first', 'vendor', 'manifest', 'common'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -120,19 +124,19 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'manifest',
-    //   minChunks: Infinity
-    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity
+    }),
     // This instance extracts shared chunks from code splitted chunks and bundles them
     // in a separate chunk, similar to the vendor chunk
     // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'app',
-    //   async: 'vendor-async',
-    //   children: true,
-    //   minChunks: 3
-    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'app',
+      async: 'vendor-async',
+      children: true,
+      minChunks: 3
+    }),
 
     // copy custom static assets
     // new CopyWebpackPlugin([
