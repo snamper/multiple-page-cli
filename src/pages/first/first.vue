@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
+  <div id="first">
+    <img src="../../assets/logo.png">
     <p> this is first</p>
     <HelloWorld/>
   </div>

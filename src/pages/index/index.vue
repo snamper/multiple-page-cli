@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="index">
     <img src="../../assets/logo.png">
     <p> this is index </p>
     <HelloWorld/>

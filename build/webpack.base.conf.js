@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const webpackConfig = require('./webpack.config.js')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -10,11 +11,12 @@ function resolve (dir) {
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    // app: './src/main.js'
-    index: './src/pages/index/index.js',
-    first: './src/pages/first/first.js'
-  },
+  // entry: {
+  //   // app: './src/main.js'
+  //   index: './src/pages/index/index.js',
+  //   first: './src/pages/first/first.js'
+  // },
+  entry: webpackConfig.entry,
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -78,5 +80,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+
+  plugins: [
+
+  ].concat(webpackConfig.plugins)
 }
