@@ -32,8 +32,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // contentBase: false, // since we use CopyWebpackPlugin.
 
     // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要。devServer.publicPath 将用于确定应该从哪里提供 bundle，并且此选项优先。
-    contentBase: './dist',
-    
+    contentBase: config.dev.contentBase,
+
     compress: true,
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,

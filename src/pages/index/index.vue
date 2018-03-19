@@ -1,7 +1,7 @@
 <template>
   <div id="index">
     <img src="../../assets/logo.png">
-    <p> this is index </p>
+    <p> this is index h</p>
     <HelloWorld/>
   </div>
 </template>
