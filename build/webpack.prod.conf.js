@@ -32,6 +32,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+
+    // https://www.webpackjs.com/guides/tree-shaking/
+    // for tree shaking
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
