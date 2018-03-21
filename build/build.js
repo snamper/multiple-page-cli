@@ -3,6 +3,8 @@ require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
 
+// test git push
+
 const ora = require('ora')      // 主要用来实现node.js命令行环境的loading效果，和显示各种状态的图标
 const rm = require('rimraf')    // 清除文件用的包
 const path = require('path')
