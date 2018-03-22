@@ -9,11 +9,11 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '../',
     proxyTable: {},
 
-    // 开发环境文件夹 (跟build保持一致吧)
-    contentBase: path.resolve(__dirname, '../dist'),
+    // 开发环境文件夹
+    contentBasePath: path.resolve(__dirname, '../src'),
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -45,13 +45,15 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '../',
+
+    contentBasePath: path.resolve(__dirname, '../dist'),
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

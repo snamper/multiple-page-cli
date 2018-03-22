@@ -32,16 +32,23 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // contentBase: false, // since we use CopyWebpackPlugin.
 
     // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要。devServer.publicPath 将用于确定应该从哪里提供 bundle，并且此选项优先。
-    contentBase: config.dev.contentBase,
+    // contentBase: config.dev.contentBase,
+    contentBase: false,
 
     compress: true,
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
+
+    // 编译错误时，错误输出到浏览器
     overlay: config.dev.errorOverlay
       ? { warnings: false, errors: true }
       : false,
+
+    // 公共资源路径
     publicPath: config.dev.assetsPublicPath,
+
+    // 代理
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
@@ -62,13 +69,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     //   inject: true
     // }),
     // copy custom static assets
-    // new CopyWebpackPlugin([
-    //   {
-    //     from: path.resolve(__dirname, '../static'),
-    //     to: config.dev.assetsSubDirectory,
-    //     ignore: ['.*']
-    //   }
-    // ])
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../static'),
+        to: config.dev.assetsSubDirectory,
+        ignore: ['.*']
+      }
+    ])
   ]
 })
 

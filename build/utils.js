@@ -12,6 +12,18 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
+// 用于生成contentBase（html存放位置，开发环境在内存中，生产环境在dist中）
+exports.assetsHtmlPath = function (_path) {
+  const contentBasePath = process.env.NODE_ENV === 'production'
+    ? config.build.contentBasePath
+    : config.dev.contentBasePath
+  
+  let result = path.join(contentBasePath, _path);
+  console.log(result)
+  return result;
+}
+
+// vue-cli 内部已经集成了postcss
 exports.cssLoaders = function (options) {
   options = options || {}
 

@@ -1,0 +1,75 @@
+@charset "utf-8";
+
+/* 
+    变量 
+    // 变量的值可以定义
+*/
+@browser-default-font-size: 16px;  // 根元素默认font-size
+@scale-ratio: 2;    // 缩放比，稿子与屏幕的比
+
+/*
+    这块是用于转换px与rem的，最大目的是为了可以直接写px，不用每次算rem。。。
+    稿子宽度一般是750px，开发的手机尺寸宽度一般是375px
+*/
+
+// $px为稿子中的px大小
+.pxtorem(@name, @px) {
+    // unit 替换单位
+    @{name}: unit(@px / @browser-default-font-size / @scale-ratio, rem);
+}
+
+.padding(@top: 6px, @right: 16px, @bottom: @top, @left: @right) {
+    .pxtorem(padding-top, @top);
+    .pxtorem(padding-right, @right);
+    .pxtorem(padding-bottom, @bottom);
+    .pxtorem(padding-left, @left);
+}
+.margin(@top: 0, @right: 0, @bottom: @top, @left: @right) {
+    .pxtorem(margin-top, @top);
+    .pxtorem(margin-right, @right);
+    .pxtorem(margin-bottom, @bottom);
+    .pxtorem(margin-left, @left);
+}
+
+.absolute (@top: 0, @right: 0, @bottom: 0, @left: 0){
+    position: absolute;
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}
+.fixed (@top: 0, @right: 0, @bottom: 0, @left: 0){
+    position: fixed;
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}
+
+// 常用的
+.font-size (@px: 24px){
+    .pxtorem(font-size, @px);
+}
+.height (@px: auto) {
+    .pxtorem(height, @px);
+}
+.width (@px: auto) {
+    .pxtorem(width, @px);
+}
+.line-height-center (@px: 32px) {
+    .pxtorem(height, @px);
+    .pxtorem(line-height, @px);
+}
+.self-fixed-center (@width: auto, @height: auto) {
+    .pxtorem(height, @height);
+    .pxtorem(width, @width);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+// @mixin btn ($top: 0, $right: 0){
+//     padding: $top $right;
+// }
