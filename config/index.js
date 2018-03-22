@@ -9,11 +9,11 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '../',
+    assetsPublicPath: '/',
     proxyTable: {},
 
     // 开发环境文件夹
-    contentBasePath: path.resolve(__dirname, '../src'),
+    contentBasePath: path.resolve(__dirname, '/src/pages/mobile'),
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

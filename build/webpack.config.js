@@ -47,10 +47,18 @@ Object.keys(entries).forEach(function (name) {
     
     let srcPath = entries[name]
     let isPcmall = srcPath.indexOf('pcmall') >= 0 ? 'pcmall' : 'mobile'
-    let targetPath = utils.assetsHtmlPath(`/${isPcmall}/${name}.html`)
-    let templatePath = process.env.NODE_ENV === 'production' 
+
+    // devServer 中设置contentBase: false 后，内存中文件目录相当于在项目根目录。
+    // 同时开发环境中，开头千万不要带'/'。。。死的很难看。。。睡觉睡觉orz
+    let targetPath = process.env.NODE_ENV === 'production'
         ? utils.assetsHtmlPath(`/${isPcmall}/${name}.html`)
-        : utils.assetsHtmlPath(`/pages/${isPcmall}/${name}/${name}.html`)
+        : `${isPcmall}/${name}.html`
+        
+    let templatePath = process.env.NODE_ENV === 'production' 
+        ? path.join(__dirname, `../src/pages/${isPcmall}/${name}/${name}.html`)
+        : path.join(__dirname, `../src/pages/${isPcmall}/${name}/${name}.html`)
+
+    console.log(targetPath)
 
     // 每个页面生成一个entry，如果需要hotupdate，在这里修改entry
     webpackConfig.entry[name] = srcPath
@@ -61,7 +69,7 @@ Object.keys(entries).forEach(function (name) {
         // filename: utils.assetsHtmlPath('./pcmall/' + name + '.html'),
         filename: targetPath,
 
-        // 每个html的模板
+        // 每个html的模板ß
         // template: path.resolve(__dirname, '../src/pages/pcmall', name, name + '.html'),
         // template: path.resolve(__dirname, '../src/pages/' + isPcmall, name, name + '.html'),
         template: templatePath,

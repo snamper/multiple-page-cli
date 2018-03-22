@@ -34,6 +34,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要。devServer.publicPath 将用于确定应该从哪里提供 bundle，并且此选项优先。
     // contentBase: config.dev.contentBase,
     contentBase: false,
+    // contentBase: path.join(__dirname, '/dist'),
 
     compress: true,
     host: HOST || config.dev.host,
@@ -100,6 +101,7 @@ module.exports = new Promise((resolve, reject) => {
         : undefined
       }))
 
+      console.log(devWebpackConfig)
       resolve(devWebpackConfig)
     }
   })

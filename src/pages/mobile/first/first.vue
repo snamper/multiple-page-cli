@@ -2,7 +2,7 @@
   <div id="first">
     <!-- <img src="../../assets/logo.png"> -->
     <p> this is first</p>
-    hello
+    hello wtf
     <!-- <HelloWorld/> -->
   </div>
 </template>
