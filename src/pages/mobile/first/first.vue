@@ -4,6 +4,9 @@
     <p> this is first</p>
     hello wtf
     <!-- <HelloWorld/> -->
+  <i class="icon icon-home"></i>
+  <a class="operate btn-confirm"></a>
+    
   </div>
 </template>
 
@@ -22,9 +25,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-@import '../../../assets/css/middleware.less';
-
+<style lang="scss" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

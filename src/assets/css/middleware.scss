@@ -1,0 +1,13 @@
+/**
+*  中间入口，基本类全引用这个吧。防止变更文件结构
+*/
+
+@charset 'utf-8';
+
+@import './lib/variable';
+@import './lib/mixin';
+@import './common/base';
+@import './common/common';
+@import './common/fix-iphoneX';
+
+@import './common/icon';

@@ -1,6 +1,6 @@
 // 字典，值与文字的对应，用于转换/翻译
 
-export default const dictionary = {
+const dictionary = {
     paymentStatus: [
         {v: 0, t: "未付款"},
         {v: 1, t: "已付款"},
@@ -47,3 +47,5 @@ export default const dictionary = {
         {v: "youzhengguoji", t: "邮政"}
     ],
 }
+
+export default dictionary;

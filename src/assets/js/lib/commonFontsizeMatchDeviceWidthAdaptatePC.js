@@ -15,7 +15,7 @@
             // fontSize = ( ( deviceWidth * 16 / 375 ) * devicePixelRatio/** devicePixelRatio */),
             // scale = 1/devicePixelRatio;    //    1 / devicePixelRatio
 
-        document.documentElement.style.fontSize = fontSize + 'px';
+        // document.documentElement.style.fontSize = fontSize + 'px';
 
         // 当存在viewport时，添加 viewport-fit=cover
         var metaEL = document.querySelector('meta[name="viewport"]');

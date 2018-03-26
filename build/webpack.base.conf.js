@@ -4,6 +4,10 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpackConfig = require('./webpack.config.js')
+const webpack = require('webpack')
+
+const pxtorem = require('postcss-pxtorem')
+
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -25,7 +29,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', 'scss', 'css'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -82,7 +86,6 @@ module.exports = {
     child_process: 'empty'
   },
 
-  plugins: [
+  plugins: [].concat(webpackConfig.plugins)
 
-  ].concat(webpackConfig.plugins)
 }

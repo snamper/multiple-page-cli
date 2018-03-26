@@ -1,0 +1,68 @@
+@charset 'utf-8';
+
+@import './variable.scss';
+
+// -----------------------------------------------------------
+
+// @function pxtorem($px) {    // $px为稿子中的px大小
+//     @return $px / $browser-default-font-size / $ratio + rem;
+// }
+
+// @function border($px: 1px, $color: $black-eee, $decoration: solid) {
+//   @return $px $decoration $color;
+// }
+
+// ----------------------------------------------------------
+
+// @mixin box-modal($type: padding, $top: 0, $right: 0, $bottom: $top, $left: $right) {
+//   #{$type}: {
+//     top: $top;
+//     right: $right;
+//     bottom: $bottom;
+//     left: $left;
+//   }
+// }
+
+// @mixin padding($top: 6px, $right: 16px, $bottom: $top, $left: $right) {
+//   @include box-modal(padding, $top, $right, $bottom, $left);
+// }
+
+// @mixin margin($top: 0, $right: 0, $bottom: $top, $left: $right) {
+//   @include box-modal(margin, $top, $right, $bottom, $left);  
+// }
+
+@mixin absolute ($top: 0, $right: 0, $bottom: 0, $left: 0){
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin fixed ($top: 0, $right: 0, $bottom: 0, $left: 0) {
+  position: fixed;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+// 常用的
+@mixin line-height-center ($px: 32px, $align: center) {
+  height: $px;
+  line-height: $px;
+  text-align: $align;
+}
+@mixin self-fixed-center ($width: auto, $height: auto) {
+  height: $height;
+  width: $width;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@mixin square ($width: 40px, $height: $width) {
+  width: $width;
+  height: $height;
+  overflow: hidden;
+}

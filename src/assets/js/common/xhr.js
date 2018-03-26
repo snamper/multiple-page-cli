@@ -15,7 +15,6 @@ export default class XHR {
 
     request (params, method, data) {
         var paramsMap = base.getTypeMap(base.getBaseType(params) !== 'array' && [params] || params);
-
         var requestUrl = getRequestUrl(paramsMap);
 
         return axios[method](requestUrl)

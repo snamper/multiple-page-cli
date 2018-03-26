@@ -3,6 +3,7 @@
  */
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 import axios from 'axios'
 import xhr from './common/xhr'
 import './lib/commonFontsizeMatchDeviceWidthAdaptatePC'
@@ -22,6 +23,7 @@ import vueFilter from './common/vueFilter'
 
 const middleware = {
     Vue,
+    Vuex,
     axios,
     xhr,
     config,
