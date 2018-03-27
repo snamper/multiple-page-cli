@@ -279,7 +279,7 @@ export default {
     p {
       padding: 0;
       span {
-
+        // color: $black-666;
       }
     }
   }
