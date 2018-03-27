@@ -31,7 +31,7 @@ module.exports = {
       rootValue: browserDefaultFontsize * ratio,      
       unitPrecision: 5,
       propList: ['*'],
-      minPixelValue: 4
+      minPixelValue: 6
     }
   }
 }

@@ -13,14 +13,6 @@ import common from './common/common'
 import vueMixin from './common/vueMixin'
 import vueFilter from './common/vueFilter'
 
-// export const Vue = Vue
-// export const axios = axios
-// export const base = base
-// export const common = common
-
-// export Vue from 'vue'.....
-// export axios from 'axios'.....
-
 const middleware = {
     Vue,
     Vuex,

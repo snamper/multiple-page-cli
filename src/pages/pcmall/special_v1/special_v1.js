@@ -2,15 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 
-// import Vue from 'vue'
-import middleware from '@/assets/js/middleware.js'
+import Vue from 'vue'
 import App from './special_v1.vue'
 
-import '@/assets/css/middleware.scss'
+import '@/assets/css/middleware.scss';
 
-middleware.Vue.config.productionTip = false
+Vue.config.productionTip = false
 
-new middleware.Vue({
+new Vue({
   el: '#app',
   components: { App },
   template: '<App/>'

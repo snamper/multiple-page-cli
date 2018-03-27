@@ -89,7 +89,7 @@ const base = {
 
     //cookies读取
     getCookie : function (Name) {
-        var search = Name + "="
+        var search = Name + "=";
         if(document.cookie.length > 0) {
             offset = document.cookie.indexOf(search)
             if(offset != -1) {
@@ -104,6 +104,11 @@ const base = {
                 return "";
             }
         }
+    },
+
+    home: function () {
+        let location = window.location;
+        return `${location.protocol}//${location.host}`;
     }
 };
 

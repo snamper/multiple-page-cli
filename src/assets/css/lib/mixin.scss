@@ -48,7 +48,7 @@
 }
 
 // 常用的
-@mixin line-height-center ($px: 32px, $align: center) {
+@mixin line-height-center ($px: 100%, $align: center) {
   height: $px;
   line-height: $px;
   text-align: $align;
