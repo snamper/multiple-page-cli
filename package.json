@@ -42,7 +42,6 @@
     "postcss-loader": "^2.0.8",
     "postcss-pxtorem": "^4.0.1",
     "postcss-url": "^7.2.1",
-    "responsive-loader": "^1.1.0",
     "rimraf": "^2.6.0",
     "sass": "^1.0.0-rc.1",
     "sass-loader": "^6.0.7",

@@ -2,7 +2,8 @@
 <div class="product-selectlist__container">
 
   <header class="product-selectlist__header">
-    title
+    <icon :icon="icon"/>
+    233hg
   </header>
 
   <div class="wrapper">
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import icon from './icon'
+
 // 该组件为商品列表的展示，多选购买
 export default {
   props: {
@@ -48,9 +51,25 @@ export default {
       default: []
     }
   },
+  components: {icon},
   data() {
     return {
-      list: this.productList
+      list: this.productList,
+      icon: 'circle1',
+      // selected: true
+    }
+  },
+  computed: {
+    allSelected: function () {
+      return this.selected
+    },
+    selected: function () {
+      return this.selected
+    }
+  },
+  methods: {
+    check: function () {
+      this.selected = !this.selected
     }
   }
 }
@@ -61,7 +80,8 @@ export default {
 @import '../assets/css/mixin.scss';
 
 .wrapper {
-  height: 10rem;
+  height: 90%;
+  height: calc(100vh - 200px);
   overflow: scroll;
 }
 
@@ -69,9 +89,11 @@ export default {
   position: relative;
   overflow: hidden;
   background: $white-2;
+  height: 100%;
 }
 .product-selectlist__header {
   @include line-height-center(100px);
+  @include flex-box();
   width: 100%;
   background-color: $white;
   position: absolute;
@@ -116,7 +138,7 @@ export default {
     }
   }
   .product-selectlist__item__info-wrapper {
-    @include flexBox(column, space-between);
+    @include flex-box(column, space-between);
     height: 100%;
     position: relative;
     flex: 1 0;

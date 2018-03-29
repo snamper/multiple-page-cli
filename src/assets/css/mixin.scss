@@ -67,7 +67,7 @@
   overflow: hidden;
 }
 
-@mixin flexBox ($flow: row, $justify-type: space-around) {
+@mixin flex-box ($flow: row, $justify-type: space-around) {
   display: flex;
   flex-flow: $flow nowrap;
   justify-content: $justify-type;

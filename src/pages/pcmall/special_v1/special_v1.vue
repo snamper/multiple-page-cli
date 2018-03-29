@@ -100,9 +100,9 @@
 
   <special-footer/>
 
-  <!-- <dialog-wrapper>
+  <dialog-wrapper>
     <product-list-select :product-list="list"/>
-  </dialog-wrapper> -->
+  </dialog-wrapper>
 </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
 <i :class="className">
-  <!-- <slot></slot> -->
+  <slot></slot>
 </i>
 </template>
 
@@ -17,12 +17,12 @@ export default {
       className: `icon icon-${this.icon}`
     }
   },
-  computed: {
-    className: () => {
-      let text = `icon icon-${this.icon}`
-      return text;
-    }
-  }
+  // computed: {
+  //   className: () => {
+  //     let text = `icon icon-${this.icon}`
+  //     return text;
+  //   }
+  // }
 }
 </script>
 
@@ -57,11 +57,11 @@ $icon-map: (
   // edit: 'edit.png',
   // transhbin: 'trashbin.png',
   // selected: 'selected.png',
-  // tick1: 'tick1.png',
+  tick1: 'tick1.png',
   // tick2: 'tick2.png',
   // circle: 'circle.png',
-  // circle1: 'circle1.png',
-  // circle2: 'circle2.png',
+  circle1: 'circle1.png',
+  circle2: 'circle2.png',
   // loading: 'loading.gif',
   // wallet: 'wallet.png',
   // waitinglist: 'waitinglist.png',

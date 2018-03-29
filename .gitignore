@@ -15,3 +15,4 @@ yarn-error.log*
 
 # node_module
 node_modules
+dist
