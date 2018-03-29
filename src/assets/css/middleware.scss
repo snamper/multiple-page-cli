@@ -4,10 +4,10 @@
 
 @charset 'utf-8';
 
-@import './lib/variable';
-@import './lib/mixin';
-@import './common/base';
-@import './common/common';
-@import './common/fix-iphoneX';
+@import './variable';
+@import './mixin';
+@import './base';
+@import './common';
+@import './fix-iphoneX';
 
-@import './common/icon';
+@import './icon';

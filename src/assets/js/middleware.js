@@ -5,19 +5,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import xhr from './common/xhr'
-import './lib/commonFontsizeMatchDeviceWidthAdaptatePC'
-import config from './common/config'
-import base from './common/base'
-import common from './common/common'
-import vueMixin from './common/vueMixin'
-import vueFilter from './common/vueFilter'
+// import xhr from './common/xhr'
+import './commonFontsizeMatchDeviceWidthAdaptatePC'
+import config from './config'
+import base from './base'
+import common from './common'
+import vueMixin from './vueMixin'
+import vueFilter from './vueFilter'
 
 const middleware = {
     Vue,
     Vuex,
     axios,
-    xhr,
+    // xhr,
     config,
     base,
     common,

@@ -10,10 +10,11 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // assetsPublicPath: 'https://s103.ggwan.com/shopv2/new_cart/img',
     proxyTable: {},
 
     // 开发环境文件夹
-    contentBasePath: path.resolve(__dirname, '/src/pages/mobile'),
+    // contentBasePath: path.resolve(__dirname, '/src/pages/mobile'),
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -45,7 +46,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '../',
+    assetsPublicPath: '../',          // 在打包出来的html中的文件引用位置
 
     contentBasePath: path.resolve(__dirname, '../dist'),
 

@@ -1,0 +1,231 @@
+@charset "utf-8";
+
+@import './mixin.scss';
+
+/************************
+			reset 部分
+************************/
+html {
+	width: 100%;
+	height: auto;
+	// background: #fff;
+}
+/*reset*/
+body,
+div,
+ol,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+th,
+td,
+dl,
+dd,
+form,
+iframe,
+input,
+textarea,
+select,
+label,
+article,
+aside,
+footer,
+header,
+menu,
+nav,
+section,
+time,
+audio,
+video {
+	margin: 0;
+	padding: 0;
+}
+
+article,
+aside,
+footer,
+header,
+hgroup,
+nav,
+section,
+audio,
+canvas,
+video,
+img {
+	display: block;
+}
+
+body {
+	font-size: 100%;
+	font-family: "微软雅黑", Helvetica, STHeiti, Droid Sans Fallback;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	color: #000;
+	background-color: #fff;
+	width: 100%;
+	height: auto;
+}
+
+textarea {
+	resize: none;
+}
+
+iframe,
+img {
+	border: 0;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+li {
+	display: block;
+}
+
+input,
+select,
+textarea {
+	outline: 0;
+	-webkit-user-modify: read-write-plaintext-only;
+}
+
+input {
+	-webkit-appearance: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+/*********************************
+    xfh.add 补充的项目通用部分
+*********************************/
+
+html, body {
+	// background: #f5f0eb;
+	background: #fff;
+	min-height: 100%;
+}
+
+body, input, textarea {
+	font-family: "微软雅黑", Helvetica, STHeiti, Droid Sans Fallback;
+	color: #333;
+	// font-size: pxtorem(24px);
+	font-size: 24px;
+}
+
+i, b, small, strong, em {
+	font-weight: 400;
+	font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 400;
+}
+
+a {
+	color: #333;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+
+/**************************************************
+	对各种标签的最通用（频率最高）、最直观的属性
+	慢慢与便签联系起来，形成规范
+*************************************************/
+h1 {
+	font-size: 32px;
+}
+h2 {
+	font-size: 28px;
+}
+h3 {
+	font-size: 24px;
+}
+h4 {
+	font-size: 20px;
+}
+p, span {
+	font-size: 24px;
+}
+
+/**************************************************
+			类 <=> 含义
+
+			颗粒化处理，方便写样式
+*************************************************/
+.left {
+  position: absolute;
+  left: 0;
+}
+.right {
+  position: absolute;
+  right: 0;
+}
+.top {
+	position: absolute;
+	top: 0;
+}
+.bottom {
+	position: absolute;
+	bottom: 0;
+}
+
+.bold {
+	font-weight: 600;
+}
+
+.black-333 {
+	color: $black-333;
+}
+.black-666 {
+	color: $black-666;
+}
+.black-999 {
+	color: $black-999;
+}
+.black-ccc {
+	color: $black-ccc;
+}
+.black-eee {
+	color: $black-eee;
+}
+
+.red, .red-0 {
+	color: $red;
+}
+.red-1 {
+	color: $red-1;
+}
+.red-2 {
+	color: $red-2;
+}
+
+// border
+.bdtop {
+	border-top: 1px solid $black-ccc;
+}
+.bdbottom{
+  border-bottom: 1px solid $black-ccc;	
+}
+.bdright{
+  border-right: 1px solid $black-ccc;	
+}
+
+.mrtop-0 {
+	margin-top: 0;
+}
+.mrbottom-0 {
+	margin-bottom: 0;
+}

@@ -6,6 +6,8 @@ const vueLoaderConfig = require('./vue-loader.conf')
 const webpackConfig = require('./webpack.config.js')
 const webpack = require('webpack')
 
+const pxtorem = require('postcss-pxtorem')
+
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -23,8 +25,11 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    ? config.build.assetsPublicPath
+    : config.dev.assetsPublicPath
+
+    // publicPath: 'https://s103.ggwan.com/shopv2/new_cart/img'
+    // https://s103.ggwan.com/shopv2/new_cart/img/kefu.png
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', 'scss', 'css'],
@@ -50,7 +55,10 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          // limit: 1,
+          name: utils.assetsPath('img/[name].[hash:7].[ext]'),
+          // name: utils.assetsPath('img/[name].[ext]'),
+          // fallback: 'responsive-loader'
         }
       },
       {
