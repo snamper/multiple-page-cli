@@ -103,6 +103,10 @@
   <dialog-wrapper>
     <product-list-select :product-list="list"/>
   </dialog-wrapper>
+
+  <dialog-wrapper>
+    <style-list :style-list="styleList"/>
+  </dialog-wrapper>
 </div>
 </template>
 
@@ -112,6 +116,7 @@ import specialFooter from '@/components/special__footer'
 import productListView from '@/components/special__product-list--view'
 import productListSelect from '@/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
+import styleList from '@/components/style__list'
 
 export default {
   // 新专题模板v1
@@ -121,7 +126,8 @@ export default {
     specialFooter, 
     dialogWrapper, 
     productListView,
-    productListSelect
+    productListSelect,
+    styleList
   },
   data() {
     return {
@@ -249,6 +255,9 @@ export default {
           age: '28',
           content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
         },
+      ],
+      styleList: [
+
       ]
     }
   },

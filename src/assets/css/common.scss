@@ -13,6 +13,7 @@
       2. 我们用2个连字符来分隔块名（或元素名）和修饰符名，再用另1个下划线来分隔修饰符名和它对应的值。
 
       block-name__element-name--feature-name_feature-value
+
 /**************************************************
 
 
@@ -26,44 +27,39 @@
 // 基本操作样式(默认中等）
 .operate,
 .operate_medium {
-  @include line-height-center(46px);
-  padding: 0 16px;
-  font-size: 24px;
-  display: inline-block;
-  border-radius: 3px;
-  color: #666;
-  box-sizing: border-box;
+  @include operate();
+  font-size: 24px;  
 }
 .operate_small {
-  @include line-height-center();
-  padding: 0 16px;
-  font-size: 20px;
-  display: inline-block;
-  border-radius: 3px;
-  text-align: center;
-  color: $black-666;
-  box-sizing: border-box;
+  @include operate();
+  font-size: 20px;  
 }
 
+
 // 普通操作（文字，#666）
-.operate_default {
-  color: $black-666;
-}
-.operate_confirm {
-  color: $red-1;
-}
+// .operate_default {
+//   @include operate();  
+//   color: $black-666;
+// }
+// .operate_confirm {
+//   @include operate();  
+//   color: $red-1;
+// }
 // 普通操作（按钮，#666）
 .btn_default {
+  @include operate();  
   border: 1px solid $black-666;
   color: $black-666;
 }
-// 确定操作（按钮，#666）
+// 确定操作（按钮）
 .btn_confirm {
+  @include operate();  
   border: 1px solid #bc2228;
   color: #bc2228;
 }
 // 确定操作（实心按钮
-.btn_primary{
+.btn_primary {
+  @include operate();
   color: #fff;
   background: #ff0000;
   border: 1px solid #ff0000;  

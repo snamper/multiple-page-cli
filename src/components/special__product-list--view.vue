@@ -14,8 +14,8 @@
           {{row.t}}
         </h4>
         <p class="price">
-          {{row.price}}
-          <em>{{row.oldPrice}}</em>
+          <em>{{row.price}}</em>
+          <del>{{row.oldPrice}}</del>
         </p>
         <p class="operation">
           <i class="icon icon-cart"></i>
@@ -121,8 +121,7 @@ export default {
   .price{
     font-weight: 600;
     font-size: 28px;
-    color: $red-1;
-    em {
+    del {
       color: $black-666;
       text-decoration: line-through;
     }

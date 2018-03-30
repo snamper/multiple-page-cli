@@ -3,14 +3,12 @@
 
   <div class="special-footer__nav">
     <div class="special-footer__nav__item bdright">
-      <!-- <i class="icon icon-kefu"></i> -->
       <icon icon="kefu"/>
       <h4 class="black-666">
         客服
       </h4>
     </div>
     <div class="special-footer__nav__item">
-      <!-- <i class="icon icon-cart"></i> -->
       <icon icon="cart"/>
       <h4 class="black-666">
         购物车
@@ -43,38 +41,23 @@ export default {
 @import '../assets/css/icon.scss';
 
 .special-footer{
-  height: 90px;
-  // padding: 0 24px;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: $white;
-  color: $black-666;
-  border-top: 1px solid $black-eee;
-  z-index: 20;
+  @include page-footer();
 }
 .special-footer__nav {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: stretch;
-  text-align: center;
+  @include flex-box();
 }
 .special-footer__nav__item {
   flex: 1 0 auto;
   width: 124px;
+  @include flex-box (column, space-around, center);
   .icon {
     display: inline-block;
     position: relative;
     height: 1.5rem;
-    // background-size: 1.5625rem;
-    // background-position: 50% 50%;
-    // background-repeat: no-repeat;
-    margin-top: .2rem;
   }
   h4 {
     @include line-height-center(24px);
+    margin-bottom: 3px;
   }
 }
 

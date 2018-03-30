@@ -2,8 +2,14 @@
 <div class="product-selectlist__container">
 
   <header class="product-selectlist__header">
-    <icon :icon="icon"/>
-    233hg
+    <span class="left vc">
+      <icon icon="circle2"/>
+      全选
+    </span>
+    <h2 class="bold">
+      支持货到付款
+    </h2>
+    <a class="btn_default right vc">取消</a>
   </header>
 
   <div class="wrapper">
@@ -12,9 +18,11 @@
             v-for="(row, index) in list" 
             :key="index">
 
-        <div class="">
-          <i class="icon icon-circle"></i>
-        </div>
+        <!-- <div class="product-selectlist__item__select-icon left vc"> -->
+          <!-- <i class="icon icon-circle"></i> -->
+          <icon icon="circle2" 
+                class="product-selectlist__item__select-icon vc"/>
+        <!-- </div> -->
         <dl>
           <dt class="product-selectlist__item__img-wrapper">
             <img :src="row.imgSrc"/>
@@ -24,7 +32,7 @@
               {{row.t}}
             </h3>
             <p class="product-selectlist__item__operation bottom">
-              <span>{{row.price}}</span>
+              <em>{{row.price}}</em>
               <a class="operate btn_default right">
                 选择规格
                 <i class="icon icon-arrowdown"></i>
@@ -37,11 +45,14 @@
     </div>
   </div>
 
+  <pay-footer/>
+
 </div>
 </template>
 
 <script>
 import icon from './icon'
+import payFooter from './pay__footer'
 
 // 该组件为商品列表的展示，多选购买
 export default {
@@ -51,7 +62,7 @@ export default {
       default: []
     }
   },
-  components: {icon},
+  components: {icon, payFooter},
   data() {
     return {
       list: this.productList,
@@ -78,6 +89,7 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/css/variable.scss';
 @import '../assets/css/mixin.scss';
+@import '../assets/css/common.scss';
 
 .wrapper {
   height: 90%;
@@ -102,6 +114,17 @@ export default {
   right: 0;
   border-bottom: 1px solid $black-eee;
   z-index: 20;
+  span {
+    left: suit-size(2);
+    .icon {
+      position: relative;
+      display: inline-block;
+      vertical-align: text-bottom;
+    }
+  }
+  a {
+    right: suit-size(2);
+  }
 }
 
 .product-selectlist {
@@ -111,6 +134,7 @@ export default {
   padding: 35px;
   padding-left: 90px;
   min-height: 210px;
+  position: relative;
   box-sizing: border-box;
   border-bottom: 1px solid $black-ccc;
   &:first-child {
@@ -118,6 +142,9 @@ export default {
   }
   &:last-child {
     border-bottom: 0;
+  }
+  .product-selectlist__item__select-icon {
+    left: suit-size(2);
   }
   dl {
     // overflow: hidden;
@@ -160,12 +187,10 @@ export default {
     }
   }
   .product-selectlist__item__operation{
-    @include line-height-center(48px, left);
+    @include line-height-center(48px, 48px, left);
     width: 100%;
-    span {
+    em {
       font-size: 28px;
-      font-weight: 600;
-      color: $red-1;
     }
   }
 }

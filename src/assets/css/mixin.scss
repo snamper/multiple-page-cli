@@ -31,6 +31,13 @@
 //   @include box-modal(margin, $top, $right, $bottom, $left);  
 // }
 
+// 普通常用尺寸：容器留白、元素间隔等
+// $suit-size: 24px;
+@function suit-size($ratio: 2) {
+  @return 12px * $ratio;
+}
+
+
 @mixin absolute ($top: 0, $right: 0, $bottom: 0, $left: 0){
   position: absolute;
   top: $top;
@@ -48,9 +55,9 @@
 }
 
 // 常用的
-@mixin line-height-center ($px: 100%, $align: center) {
-  height: $px;
-  line-height: $px;
+@mixin line-height-center ($height: 100%, $line-height: $height, $align: center) {
+  height: $height;
+  line-height: $line-height;
   text-align: $align;
 }
 @mixin self-fixed-center ($width: auto, $height: auto) {
@@ -67,9 +74,74 @@
   overflow: hidden;
 }
 
-@mixin flex-box ($flow: row, $justify-type: space-around) {
+@mixin flex-box ($flow: row, $justify-type: space-around, $align-items: stretch) {
   display: flex;
   flex-flow: $flow nowrap;
   justify-content: $justify-type;
-  align-items: stretch;
+  align-items: $align-items;
+}
+
+@mixin operate () {
+  @include line-height-center(46px);
+  padding: 0 16px;
+  display: inline-block;
+  border-radius: 3px;
+  color: $black-666;  
+  box-sizing: border-box;
+  min-width: 96px;
+}
+
+@mixin ellipsis ($line-count: 1) {
+  @if ($line-count = 1) {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  @else {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line-count;
+  }
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+
+//定位上下居中 vertical-center
+@mixin vc () {
+	position: absolute;
+	top: 50%;
+  transform: translateY(-50%);
+}
+
+//定位左右居中 horizon-center
+@mixin hc () {  
+	position: absolute;
+	left: 50%;
+  transform: translateX(-50%);
+}
+
+// 页面头尾
+@mixin page-header () {
+  @include line-height-center(100px);
+  background: $white-2;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid $black-eee;
+  z-index: 20;
+}
+@mixin page-footer () {
+  // height: 90px;
+  @include line-height-center(90px);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $white;
+  color: $black-666;
+  border-top: 1px solid $black-eee;
+  z-index: 20;
 }

@@ -6,6 +6,7 @@ import Vue from 'vue'
 import App from './special_v1.vue'
 
 import '@/assets/css/middleware.scss';
+import '@/ui-lib/output'
 
 Vue.config.productionTip = false
 

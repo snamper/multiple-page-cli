@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+@import './variable.scss';
 @import './mixin.scss';
 
 /************************
@@ -122,7 +123,7 @@ body, input, textarea {
 	font-size: 24px;
 }
 
-i, b, small, strong, em {
+i, b, small, strong, em, del {
 	font-weight: 400;
 	font-style: normal;
 }
@@ -139,6 +140,20 @@ a:hover {
 	text-decoration: none;
 }
 
+/**************************************************
+	**** 必读!!!!! ****
+
+		标签方面：
+	1、icon统一用<i>
+	2、该项目为商城，价格统一用<em>，旧价格（中划线灰色的）统一用<del>
+
+*************************************************/
+
+em {
+	font-size: 28px;
+	font-weight: 600;
+	color: $red-1;
+}
 
 /**************************************************
 	对各种标签的最通用（频率最高）、最直观的属性
@@ -165,6 +180,8 @@ p, span {
 
 			颗粒化处理，方便写样式
 *************************************************/
+
+// 定位
 .left {
   position: absolute;
   left: 0;
@@ -182,6 +199,7 @@ p, span {
 	bottom: 0;
 }
 
+// 文字
 .bold {
 	font-weight: 600;
 }
@@ -223,9 +241,24 @@ p, span {
   border-right: 1px solid $black-ccc;	
 }
 
+// margin
 .mrtop-0 {
 	margin-top: 0;
 }
 .mrbottom-0 {
 	margin-bottom: 0;
+}
+
+// 垂直水平居中
+.vc {
+	@include vc();
+}
+.hc {
+	@include hc();
+}
+.vhc {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
