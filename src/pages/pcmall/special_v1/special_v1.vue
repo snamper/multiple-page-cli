@@ -7,12 +7,12 @@
     </section>
     <section class="section-layout product-wrapper">
       <div class="section-header">
-        <h1 class="section-header__title">
+        <h1 class="section-header__title brown-2">
           <i class="icon icon-square"></i>
           在线请购
           <i class="icon icon-square"></i>
         </h1>
-        <p class="tags">
+        <p class="section-header__sub-title tags">
           <span class="tag">
             <i class="icon icon-tick2"></i>
             支持货到付款
@@ -100,12 +100,15 @@
 
   <special-footer/>
 
-  <dialog-wrapper>
+  <!-- <dialog-wrapper opacity="visible">
     <product-list-select :product-list="list"/>
-  </dialog-wrapper>
+  </dialog-wrapper> -->
 
   <dialog-wrapper>
     <style-list :style-list="styleList"/>
+    <dialog-footer>
+      <a class="btn_primary">确认</a>
+    </dialog-footer>
   </dialog-wrapper>
 </div>
 </template>
@@ -117,6 +120,7 @@ import productListView from '@/components/special__product-list--view'
 import productListSelect from '@/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
 import styleList from '@/components/style__list'
+import dialogFooter from '@/components/dialog__footer'
 
 export default {
   // 新专题模板v1
@@ -127,7 +131,8 @@ export default {
     dialogWrapper, 
     productListView,
     productListSelect,
-    styleList
+    styleList,
+    dialogFooter
   },
   data() {
     return {
@@ -257,7 +262,28 @@ export default {
         },
       ],
       styleList: [
-
+        {
+          t: '生肖鼠女',
+          selected: true
+        },
+        {
+          t: '生肖我鼠女',
+        },
+        {
+          t: '生肖鼠问问女',
+        },
+        {
+          t: '生肖鼠女问问我我',
+        },
+        {
+          t: '生肖',
+        },
+        {
+          t: '生鼠女',
+        },
+        {
+          t: '生肖鼠女',
+        },
       ]
     }
   },
@@ -271,7 +297,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/css/variable.scss';
 @import '../../../assets/css/mixin.scss';
+@import '../../../assets/css/common.scss';
 
 .container {
   background: #f4efea;

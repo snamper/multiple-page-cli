@@ -1,5 +1,9 @@
-import checkbox from './src/checkbox'
+import UiCheckbox from './src/checkbox'
+import UiRadioButton from './src/radio-button'
+import UiInputNumber from './src/input-number'
 
-export default {
-  checkbox
+export {
+  UiCheckbox,
+  UiRadioButton,
+  UiInputNumber
 }
