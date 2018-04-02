@@ -55,7 +55,7 @@ export default {
     },
     data() {
         return {
-            // selectedStyle: 'ad',
+            // selectedStyle: '',
         }
     },
     computed: {
@@ -64,7 +64,7 @@ export default {
         ]),
         selectedStyle: {
             get() {
-                return this.openItem && this.openItemp.selectedStyle || '';
+                return this.openItem && this.openItem.selectedStyle || '';
             },
             set(val) {
                 this.openItem && (this.openItem.selectedStyle = val);
