@@ -32,7 +32,6 @@ export default {
   @include fixed();
   background: $white-1;
   z-index: 30;
-  // display: none;
 }
 .trans {
   background: rgba(51, 51, 51, .6);

@@ -29,7 +29,7 @@
       </div>
 
       <!-- 商品列表 -->
-      <product-list-view :product-list="list"/>
+      <product-list-view :product-list="productList"/>
 
     </section>
 
@@ -44,7 +44,7 @@
 
       <ul class="note-list">
         <li class="note-list__item"
-            v-for="(row, index) in list2" 
+            v-for="(row, index) in noteList" 
             :key="index">
           <h3 class="note-list__item__title black-666 bold">
             {{row.name}}
@@ -77,7 +77,7 @@
 
       <ul class="note-list">
         <li class="note-list__item" 
-            v-for="(row,index) in list2" 
+            v-for="(row,index) in noteList" 
             :key="index">
           <h3 class="note-list__item__title black-666 bold">
             {{row.name}}
@@ -100,16 +100,26 @@
 
   <special-footer/>
 
-  <!-- <dialog-wrapper opacity="visible">
-    <product-list-select :product-list="list"/>
-  </dialog-wrapper> -->
+  <transition 
+      name="dialogUp"
+    >
+    <dialog-wrapper 
+        opacity="visible" 
+        v-if="showProList" >
+      <product-list-select/>
+    </dialog-wrapper>
+  </transition>
 
-  <dialog-wrapper>
-    <style-list :style-list="styleList"/>
-    <dialog-footer>
-      <a class="btn_primary">确认</a>
-    </dialog-footer>
-  </dialog-wrapper>
+  <transition>
+    <dialog-wrapper v-if="showStyleList" 
+        v-on:click.native.prevent.self="toggleStyleList({show: false})">
+      <style-list :style-list="styleList"/>
+      <dialog-footer>
+        <a class="dialog__footer__btn--large btn_primary vhc" 
+            v-on:click.prevent="toggleStyleList({show: false})">确认</a>
+      </dialog-footer>
+    </dialog-wrapper>
+  </transition>
 </div>
 </template>
 
@@ -121,6 +131,8 @@ import productListSelect from '@/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
 import styleList from '@/components/style__list'
 import dialogFooter from '@/components/dialog__footer'
+
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   // 新专题模板v1
@@ -136,159 +148,23 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-        {
-          imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-          t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-          price: '￥258.00',
-          oldPrice: '￥258.00',
-          people: '2000人购买'
-        },
-      ],
-
-      list2: [
-        {
-          name: '周公山',
-          mobile: '137xxxxx26',
-          time: '2017年11月24日',
-          address: '浙江省杭州市',
-          sex: '女',
-          status: '已发货',
-          age: '28',
-          content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-        },
-        {
-          name: '周公山',
-          mobile: '137xxxxx26',
-          time: '2017年11月24日',
-          address: '浙江省杭州市',
-          sex: '女',
-          status: '已发货',
-          age: '28',
-          content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-        },
-        {
-          name: '周公山',
-          mobile: '137xxxxx26',
-          time: '2017年11月24日',
-          address: '浙江省杭州市',
-          sex: '女',
-          status: '已发货',
-          age: '28',
-          content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-        },
-        {
-          name: '周公山',
-          mobile: '137xxxxx26',
-          time: '2017年11月24日',
-          address: '浙江省杭州市',
-          sex: '女',
-          status: '已发货',
-          age: '28',
-          content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-        },
-        {
-          name: '周公山',
-          mobile: '137xxxxx26',
-          time: '2017年11月24日',
-          address: '浙江省杭州市',
-          sex: '女',
-          status: '已发货',
-          age: '28',
-          content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-        },
-      ],
-      styleList: [
-        {
-          t: '生肖鼠女',
-          selected: true
-        },
-        {
-          t: '生肖我鼠女',
-        },
-        {
-          t: '生肖鼠问问女',
-        },
-        {
-          t: '生肖鼠女问问我我',
-        },
-        {
-          t: '生肖',
-        },
-        {
-          t: '生鼠女',
-        },
-        {
-          t: '生肖鼠女',
-        },
-      ]
+      
     }
   },
+  computed: {
+    ...mapState([
+      'showProList',
+      'productList',
+      'noteList',
+      'showStyleList',
+      'styleList',
+    ])
+  },
   methods: {
-
+    ...mapMutations([
+      'toggleProList',
+      'toggleStyleList',
+    ]),
   },
   mounted: function() {
     // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。

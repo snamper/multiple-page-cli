@@ -15,6 +15,7 @@ export default {
 @import '../assets/css/mixin';
 
 .dialog__footer {
-    
+    @include line-height-center(140px);
 }
+
 </style>

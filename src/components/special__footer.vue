@@ -17,7 +17,8 @@
     <div class="special-footer__nav__item btn-brown">
       <h1>电话下单</h1>
     </div>
-    <div class="special-footer__nav__item btn-red">
+    <div class="special-footer__nav__item btn-red" 
+        @click="toggleProList(true)">
       <h1>立即请购</h1>
     </div>
   </div>
@@ -26,11 +27,22 @@
 </template>
 
 <script>
+import {mapState, mapMutations} from 'vuex'
 import icon from './icon'
 
 export default {
   components: {
     icon
+  },
+  computed: {
+    ...mapState([
+      'showProList'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'toggleProList'
+    ])
   }
 }
 </script>

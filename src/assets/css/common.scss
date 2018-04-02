@@ -585,16 +585,11 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
     footer
 *****************************/
 .footer{
-  // position: fixed;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
   @include fixed();
   top: unset;
-  background: #f3f1f2;
   height: 100px;
   overflow: hidden;
-  border-top: 1px solid #dedbdb;
+  text-align: center;
   ul{
     display: flex;
     flex-flow: row nowrap;
@@ -617,7 +612,11 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
     text-align: center;
   }
 }
-
+.dialog__footer__btn--large {
+  @include line-height-center(90px);
+  width: 696px;
+  font-size: 34px;
+}
 
 /*****************************
     装载待复制文本的input
@@ -630,7 +629,15 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
   z-index: -100;
 }
 
-
+/*****************************
+    过渡动画
+*****************************/
+.dialogUp-enter-active, .dialog-leave-active{
+  transition: all 15s;
+}
+.dialog-enter, .dialog-leave-to{
+  transform: translate(50%, 50%);
+}
 
 
 

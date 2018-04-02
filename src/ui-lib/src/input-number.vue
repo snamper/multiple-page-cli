@@ -12,7 +12,11 @@
         class="ui-input-number__input"
         :type="type"
         :placeholder="placeholder"
-        :value="currentValue"/>
+        :value="currentValue"
+        ref="input"
+        @focus="focus" 
+        @blur="blur" 
+        @change="change" />
 </div>
 </template>
 
@@ -31,6 +35,12 @@ export default {
             currentValue: this.value
         }
     },
+    watch: {
+        'value'(val, oldValue) {
+            console.log('watch')
+            this.setCurrentValue(val);
+        }
+    },
     methods: {
         decrease() {
             if (this.currentValue > 1) {
@@ -41,6 +51,20 @@ export default {
         increase() {
             this.currentValue++
             this.$emit('input', this.currentValue)
+        },
+        focus() {
+            this.$refs.input.focus();
+        },
+        blur() {
+            this.$refs.input.blur();
+        },
+        change(event) {
+            let newVal = event.target.value ? Number(event.target.value) : '';
+            this.setCurrentValue(newVal);
+        },
+        setCurrentValue(value) {
+            if (value === this.currentValue) return;
+            this.currentValue = value;
         }
     }
 }

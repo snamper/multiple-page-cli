@@ -14,15 +14,14 @@ export default {
   },
   data() {
     return {
-      className: `icon icon-${this.icon}`
+      
     }
   },
-  // computed: {
-  //   className: () => {
-  //     let text = `icon icon-${this.icon}`
-  //     return text;
-  //   }
-  // }
+  computed: {
+    className() {
+      return `icon icon-${this.icon}`;
+    }
+  }
 }
 </script>
 
@@ -51,7 +50,7 @@ export default {
 $icon-map: (
   // back: 'back.jpg',
   // truck: 'truck.jpg',
-  // more: 'more.jpg',
+  more: 'more.jpg',
   // location: 'location.jpg',
   // location2: 'location2.png',
   // edit: 'edit.png',
@@ -59,7 +58,7 @@ $icon-map: (
   // selected: 'selected.png',
   tick1: 'tick1.png',
   // tick2: 'tick2.png',
-  // circle: 'circle.png',
+  circle: 'circle.png',
   circle1: 'circle1.png',
   circle2: 'circle2.png',
   // loading: 'loading.gif',

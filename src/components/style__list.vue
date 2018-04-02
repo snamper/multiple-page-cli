@@ -8,9 +8,9 @@
         <div class="style-list__radio-group">
             <ui-radio-button 
                 class="style-list__radio"
-                v-for="(row, index) in styleList" 
+                v-for="(row, index) in openItem.styles" 
                 :key="index"
-                v-model="selectedValue"
+                v-model="selectedStyle"
                 :label="row.t">
                 {{row.t}}
             </ui-radio-button>
@@ -35,28 +35,50 @@
 </template>
 
 <script>
+import {mapState, mapMutations} from 'vuex'
 import {UiRadioButton, UiInputNumber} from '@/ui-lib/output'
 
 export default {
-    props: {
-        styleList: {
-            type: Array,
-            default: []
-        },
-        count: {
-            type: [String, Number],
-            default: 1
-        }
-    },
-    data() {
-        return {
-            selectedValue: this.styleList[0].t || '',
-            num: this.count
-        }
-    },
+    // props: {
+    //     styles: {
+    //         type: Array,
+    //         default: []
+    //     },
+    //     count: {
+    //         type: [String, Number],
+    //         default: 1
+    //     }
+    // },
     components: {
         UiRadioButton,
         UiInputNumber
+    },
+    data() {
+        return {
+            // selectedStyle: 'ad',
+        }
+    },
+    computed: {
+        ...mapState([
+            'openItem',
+        ]),
+        selectedStyle: {
+            get() {
+                return this.openItem && this.openItemp.selectedStyle || '';
+            },
+            set(val) {
+                this.openItem && (this.openItem.selectedStyle = val);
+            }
+        },
+        num: {
+            get() {
+                console.log(this.openItem.count)
+                return this.openItem && this.openItem.count || 1;
+            },
+            set(val) {
+                this.openItem.count = val;
+            }
+        }
     },
     mounted: function () {
         // console.log(this);
@@ -70,12 +92,10 @@ export default {
 .style-list__layout {
     @include flex-box(column, flex-start);
     margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 140px;
     position: absolute;
     bottom: 0;
-    // margin-bottom: 0;
-    // top: 50%;
-    // min-height: 50%;
-    // height: calc(50% - 100px);
     height: auto;
     min-height: auto;
     background: $white;
@@ -84,6 +104,8 @@ export default {
 .style-list__wrapper {
     background: $white;
     padding: 0 suit-size(2);
+    border: 0;
+    border-top: 1px solid #cccccc;
 }
 .style-list__wrapper__title {
     text-align: left;

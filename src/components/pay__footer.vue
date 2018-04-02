@@ -2,7 +2,7 @@
   <footer class="pay__footer">
     <div class="pay__footer__layout">
       <div class="black-333 bold">
-        总计<em>￥99999.00</em>
+        总计<em>￥{{totalPrice}}</em>
       </div>
       <a class="btn_primary">去结算</a>
     </div>
@@ -10,8 +10,14 @@
 </template>
 
 <script>
-export default {
+import {mapState, mapMutations} from 'vuex'
 
+export default {
+  computed: {
+    ...mapState([
+      'totalPrice'
+    ])
+  },
 }
 </script>
 

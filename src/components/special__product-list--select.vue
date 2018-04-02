@@ -2,26 +2,29 @@
 <div class="product-selectlist__container">
 
   <header class="product-selectlist__header">
-    <span class="left vc">
-      <icon icon="circle2"/>
+    <span class="left vc" 
+        @click="toggleSelected('')">
+      <icon :icon="allSelectedIcon"/>
       全选
     </span>
     <h2 class="bold">
       支持货到付款
     </h2>
-    <a class="btn_default right vc">取消</a>
+    <a class="btn_default right vc" 
+        @click="toggleProList(false)">取消</a>
   </header>
 
   <div class="wrapper">
     <div class="product-selectlist">
       <div class="product-selectlist__item" 
-            v-for="(row, index) in list" 
+            v-for="(row, index) in productList" 
             :key="index">
 
         <!-- <div class="product-selectlist__item__select-icon left vc"> -->
           <!-- <i class="icon icon-circle"></i> -->
-          <icon icon="circle2" 
-                class="product-selectlist__item__select-icon vc"/>
+          <icon :icon="row.selected ? 'circle1' : 'circle'" 
+                class="product-selectlist__item__select-icon vc" 
+                v-on:click.native="toggleSelected(row)"/>
         <!-- </div> -->
         <dl>
           <dt class="product-selectlist__item__img-wrapper">
@@ -33,9 +36,11 @@
             </h3>
             <p class="product-selectlist__item__operation bottom">
               <em>{{row.price}}</em>
-              <a class="operate btn_default right">
-                选择规格
-                <i class="icon icon-arrowdown"></i>
+              <a class="product-selectlist__item__operation-btn--right btn_default" 
+                  @click="toggleStyleList({show: true, item: row})">
+                {{selectedStyle}}
+                <icon class="right vc" 
+                      icon="more"/>
               </a>
             </p>
           </dd>
@@ -51,37 +56,44 @@
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions} from 'vuex'
 import icon from './icon'
 import payFooter from './pay__footer'
 
 // 该组件为商品列表的展示，多选购买
 export default {
-  props: {
-    productList: {
-      type: Array,
-      default: []
-    }
-  },
   components: {icon, payFooter},
   data() {
     return {
-      list: this.productList,
       icon: 'circle1',
-      // selected: true
     }
   },
   computed: {
-    allSelected: function () {
-      return this.selected
+    ...mapState([
+      'showProList',
+      'showStyleList',
+      'productList',
+      'selectedAll',
+    ]),
+    allSelectedIcon() {
+      return this.selectedAll ? 'circle1' : 'circle';
     },
-    selected: function () {
-      return this.selected
+    selectedStyle(row) {
+
+      return '选择规格';
     }
   },
   methods: {
+    ...mapMutations([
+      'toggleProList',
+      'toggleStyleList',
+    ]),
+    ...mapActions([
+      'toggleSelected',
+    ]),
     check: function () {
       this.selected = !this.selected
-    }
+    },
   }
 }
 </script>
@@ -192,6 +204,11 @@ export default {
     em {
       font-size: 28px;
     }
+  }
+  .product-selectlist__item__operation-btn--right {
+    position: absolute;
+    right: 0;
+    padding-right: 40px;
   }
 }
 
