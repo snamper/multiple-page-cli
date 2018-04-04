@@ -19,3 +19,8 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+ps: 
+1、 vue-devtools 这个chrome扩展程序，不能用cnpm，得用npm来安装
+2、 用了vue-awesome-swiper做轮播，要给.swiper-container 加高度（垂直轮播），不然会炸

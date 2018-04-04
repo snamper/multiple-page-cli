@@ -4,20 +4,25 @@
       <div class="black-333 bold">
         总计<em>￥{{totalPrice}}</em>
       </div>
-      <a class="btn_primary">去结算</a>
+      <a class="btn_primary" 
+          :href="payUrl">去结算</a>
     </div>
   </footer>
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex'
+// import {mapState, mapMutations} from 'vuex'
 
 export default {
-  computed: {
-    ...mapState([
-      'totalPrice'
-    ])
-  },
+  props: {
+    payUrl: String,
+    totalPrice: [String, Number],
+  }
+  // computed: {
+  //   ...mapState([
+  //     'totalPrice'
+  //   ])
+  // },
 }
 </script>
 

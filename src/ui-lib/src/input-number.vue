@@ -35,22 +35,23 @@ export default {
             currentValue: this.value
         }
     },
-    watch: {
-        'value'(val, oldValue) {
-            console.log('watch')
-            this.setCurrentValue(val);
-        }
-    },
+    // watch: {
+    //     'currentValue'(val, oldValue) {
+    //         // console.log('watch' + val + ',' + oldValue)
+    //         // this.$refs.input.setCurrentValue(val);
+    //         this.setCurrentValue(val);
+    //     }
+    // },
     methods: {
         decrease() {
             if (this.currentValue > 1) {
-                this.currentValue--
-                this.$emit('input', this.currentValue)
+                this.currentValue = this.currentValue - 1;                
+                this.setCurrentValue(this.currentValue);                
             }
         },
         increase() {
-            this.currentValue++
-            this.$emit('input', this.currentValue)
+            this.currentValue = this.currentValue + 1;
+            this.setCurrentValue(this.currentValue);
         },
         focus() {
             this.$refs.input.focus();
@@ -63,8 +64,10 @@ export default {
             this.setCurrentValue(newVal);
         },
         setCurrentValue(value) {
-            if (value === this.currentValue) return;
+            // if (value === this.currentValue) return;
             this.currentValue = value;
+            console.log('setCurrentValue' + value)
+            this.$emit('input', this.currentValue)
         }
     }
 }

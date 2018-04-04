@@ -3,7 +3,7 @@
 
   <header class="product-selectlist__header">
     <span class="left vc" 
-        @click="toggleSelected('')">
+        @click="toggleSelected">
       <icon :icon="allSelectedIcon"/>
       全选
     </span>
@@ -24,7 +24,7 @@
           <!-- <i class="icon icon-circle"></i> -->
           <icon :icon="row.selected ? 'circle1' : 'circle'" 
                 class="product-selectlist__item__select-icon vc" 
-                v-on:click.native="toggleSelected(row)"/>
+                v-on:click.native="toggleSelected({targetPro: row})"/>
         <!-- </div> -->
         <dl>
           <dt class="product-selectlist__item__img-wrapper">
@@ -37,8 +37,8 @@
             <p class="product-selectlist__item__operation bottom">
               <em>{{row.price}}</em>
               <a class="product-selectlist__item__operation-btn--right btn_default" 
-                  @click="toggleStyleList({show: true, item: row})">
-                {{selectedStyle}}
+                  @click="openStyleList({item: row})">
+                {{row.selectedStyle ? row.selectedStyle + row.count + '件' : '选择规格'}}
                 <icon class="right vc" 
                       icon="more"/>
               </a>
@@ -50,7 +50,9 @@
     </div>
   </div>
 
-  <pay-footer/>
+  <pay-footer 
+      :payUrl="payUrl"
+      :totalPrice="totalPrice"/>
 
 </div>
 </template>
@@ -74,22 +76,23 @@ export default {
       'showStyleList',
       'productList',
       'selectedAll',
+      'payUrl',
+      'totalPrice',
     ]),
     allSelectedIcon() {
       return this.selectedAll ? 'circle1' : 'circle';
     },
-    selectedStyle(row) {
-
+    selectedStyle() {
       return '选择规格';
     }
   },
   methods: {
     ...mapMutations([
       'toggleProList',
-      'toggleStyleList',
     ]),
     ...mapActions([
       'toggleSelected',
+      'openStyleList',
     ]),
     check: function () {
       this.selected = !this.selected

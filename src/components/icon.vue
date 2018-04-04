@@ -57,7 +57,7 @@ $icon-map: (
   // transhbin: 'trashbin.png',
   // selected: 'selected.png',
   tick1: 'tick1.png',
-  // tick2: 'tick2.png',
+  tick2: 'tick2.png',
   circle: 'circle.png',
   circle1: 'circle1.png',
   circle2: 'circle2.png',
@@ -69,7 +69,7 @@ $icon-map: (
   // good: 'good.png',
   cart: 'cart.png',
   // private: 'private.png',
-  // square: 'square.png',
+  square: 'square.png',
 );
 
 // 统一生成路径。。改的时候可以偷懒

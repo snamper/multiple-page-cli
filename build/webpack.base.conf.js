@@ -48,6 +48,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+
+        // http://idangero.us/swiper/get-started/
+        // swiper4.x.x 需要
+        exclude: /node_modules\/(?!(dom7|swiper)\/).*/,
+
         include: [resolve('src'), resolve('node_modules/webpack-dev-server/client')]
       },
       {

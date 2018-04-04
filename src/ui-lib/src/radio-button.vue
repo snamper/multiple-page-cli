@@ -46,7 +46,7 @@ export default {
         }
     },
     created() {
-        // this.$on('input', () => console.log('listen input'))
+        
     }
 }
 </script>

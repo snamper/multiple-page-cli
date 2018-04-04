@@ -1,7 +1,32 @@
 <template>
 <div class="product-viewlist">
+
+  <div class="product-viewlist__item product-viewlist__item--single"
+        v-if="productList.length == 1">
+      <dl>
+        <dt>
+          <img class="small-img" 
+                :src="productList[0].imgSrc"/>
+        </dt>
+        <dd>
+          <h4>
+            {{productList[0].t}}
+          </h4>
+          <p class="price">
+            <em>{{productList[0].price}}</em>
+            <del>{{productList[0].oldPrice}}</del>
+          </p>
+          <p class="operation">
+            <i class="icon icon-cart"></i>
+            <a class="operate btn_confirm">立即购买</a>
+          </p>
+        </dd>
+    </dl>
+  </div>
+
   <div class="product-viewlist__item" 
-        v-for="(row, index) in list" 
+        v-if="productList.length > 1"
+        v-for="(row, index) in productList" 
         :key="index">
 
     <dl>
@@ -29,6 +54,8 @@
 </template>
 
 <script>
+// import {mapState} from 'vuex'
+
 // 该组件为商品列表的展示，单个购买
 export default {
   props: {
@@ -39,9 +66,14 @@ export default {
   },
   data() {
     return {
-      list: this.productList
+      // list: this.productList
     }
-  }
+  },
+  // computed: {
+  //   ...mapState([
+  //     'productList'
+  //   ])
+  // }
 }
 </script>
 

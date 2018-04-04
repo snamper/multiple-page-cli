@@ -7,22 +7,22 @@
     </section>
     <section class="section-layout product-wrapper">
       <div class="section-header">
-        <h1 class="section-header__title brown-2">
-          <i class="icon icon-square"></i>
+        <h1 class="section-header__title">
+          <icon icon="square"/>          
           在线请购
-          <i class="icon icon-square"></i>
+          <icon icon="square"/>          
         </h1>
         <p class="section-header__sub-title tags">
           <span class="tag">
-            <i class="icon icon-tick2"></i>
+            <icon icon="tick2"/>
             支持货到付款
           </span>
           <span class="tag">
-            <i class="icon icon-tick2"></i>
+            <icon icon="tick2"/>
             大陆包邮
           </span>
           <span class="tag">
-            <i class="icon icon-tick2"></i>
+            <icon icon="tick2"/>
             7天无理由退换
           </span>
         </p>
@@ -36,13 +36,13 @@
     <section class="section-layout note-wrapper">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
-          <i class="icon icon-square"></i>
+          <icon icon="square"/>
             大家都在买
-          <i class="icon icon-square"></i>
+          <icon icon="square"/>
         </h1>
       </div>
 
-      <ul class="note-list">
+      <!-- <ul class="note-list">
         <li class="note-list__item"
             v-for="(row, index) in noteList" 
             :key="index">
@@ -62,17 +62,40 @@
             </span>
           </p>
         </li>
-      </ul>
+      </ul> -->
 
+      <div>
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(row, index) in noteList" :key="index" class="swiper-no-swiping">
+              <div class="note-list__item">
+                <h3 class="note-list__item__title black-666 bold">
+                  {{row.name}}
+                  <span>
+                    {{row.mobile}}
+                  </span>
+                  <span class="right">
+                    {{row.time}}
+                  </span>
+                </h3>
+                <p class="note-list__item__content black-999">
+                  {{row.address}}
+                  <span class="right red-2 bold">
+                    {{row.status}}
+                  </span>
+                </p>
+              </div>
+          </swiper-slide>
+        </swiper>
+      </div>
     </section>
 
     <section class="section-layout note-wrapper">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
-          <i class="icon icon-square"></i>
+          <icon icon="square"/>          
             来看看别人怎么说
-          <i class="icon icon-square"></i>      
-        </h1>    
+          <icon icon="square"/>          
+        </h1>
       </div>
 
       <ul class="note-list">
@@ -98,11 +121,9 @@
   </div>
   <!-- wrapper end -->
 
-  <special-footer/>
+  <special-footer :toBuy="toggleProList"/>
 
-  <transition 
-      name="dialogUp"
-    >
+  <transition name="dialogUp">
     <dialog-wrapper 
         opacity="visible" 
         v-if="showProList" >
@@ -110,13 +131,13 @@
     </dialog-wrapper>
   </transition>
 
-  <transition>
+  <transition name="dialogUp">
     <dialog-wrapper v-if="showStyleList" 
-        v-on:click.native.prevent.self="toggleStyleList({show: false})">
-      <style-list :style-list="styleList"/>
+        v-on:click.native.prevent.self="closeStyleList">
+      <style-list/>
       <dialog-footer>
         <a class="dialog__footer__btn--large btn_primary vhc" 
-            v-on:click.prevent="toggleStyleList({show: false})">确认</a>
+            v-on:click.prevent="confirmStyle">确认</a>
       </dialog-footer>
     </dialog-wrapper>
   </transition>
@@ -131,8 +152,14 @@ import productListSelect from '@/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
 import styleList from '@/components/style__list'
 import dialogFooter from '@/components/dialog__footer'
+import icon from '@/components/icon'
 
-import {mapState, mapMutations} from 'vuex'
+// require styles
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
+import {mapState, mapMutations, mapActions} from 'vuex'
+import {getSpecialSeo, getSpecialProductList, getSpecialCase} from '@/assets/js/xhr/service'
 
 export default {
   // 新专题模板v1
@@ -144,11 +171,22 @@ export default {
     productListView,
     productListSelect,
     styleList,
-    dialogFooter
+    dialogFooter,
+    icon,
+    swiper,
+    swiperSlide,
   },
   data() {
     return {
-      
+      swiperOption: {
+        direction: 'vertical', 
+        slidesPerView: 4,
+        loop: true,
+        noSwiping: true,
+        autoplay: {
+          delay: 1000
+        },
+      }
     }
   },
   computed: {
@@ -162,12 +200,40 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'setSpecialSeo',
+      'setSpecialProduct',
+      'setSpecialCase',
       'toggleProList',
-      'toggleStyleList',
+    ]),
+    ...mapActions([
+      'openStyleList',
+      'closeStyleList',
+      'confirmStyle',
     ]),
   },
-  mounted: function() {
+  mounted() {
     // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。
+
+    // 发请求
+    // SEO
+    getSpecialSeo({id: '1358'}).then((rsp) => {
+      console.log(rsp);
+
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
+    //
+    getSpecialProductList({id: '1358'}).then((rsp) => {
+      console.log(rsp)
+    })
+    
+    // //
+    getSpecialCase({id: '1358'}).then((rsp) => {
+      console.log(rsp)
+      // rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
+    })
   }
 }
 </script>
@@ -176,6 +242,10 @@ export default {
 @import '../../../assets/css/variable.scss';
 @import '../../../assets/css/mixin.scss';
 @import '../../../assets/css/common.scss';
+
+.swiper-container {
+  height: 520px;
+}
 
 .container {
   background: #f4efea;

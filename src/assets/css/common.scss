@@ -164,6 +164,7 @@
   @include line-height-center(86px);
   position: relative;
   font-weight: 600;
+  color: #b89f7b;
   .icon-square {
     position: relative;
     display: inline-block;
@@ -197,6 +198,7 @@
   position: relative;
   padding: 24px 40px;
   border-bottom: 1px solid $black-eee;
+  box-sizing: border-box;
 }
 .note-list__item__title {
   position: relative;
@@ -632,17 +634,12 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
 /*****************************
     过渡动画
 *****************************/
-.dialogUp-enter-active, .dialog-leave-active{
-  transition: all 15s;
+.dialogUp-enter-active, .dialogUp-leave-active{
+  transition: all .2s ease-out;
 }
-.dialog-enter, .dialog-leave-to{
-  transform: translate(50%, 50%);
+.dialogUp-enter, .dialogUp-leave-to{  
+  transform: translateY(100%);
 }
-
-
-
-
-
 
 // // ===================================== 表示以下内容一定要放在最后面的分割线 =============================================================
 

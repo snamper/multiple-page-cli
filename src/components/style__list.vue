@@ -120,7 +120,7 @@ export default {
         margin-bottom: suit-size(2);
     }
 }
-.style-list__wrapper__input-number {
+// .style-list__wrapper__input-number {
     
-}
+// }
 </style>

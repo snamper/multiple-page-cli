@@ -3,6 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+const proxy = require('./proxy.js')
 
 module.exports = {
   dev: {
@@ -11,7 +12,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // assetsPublicPath: 'https://s103.ggwan.com/shopv2/new_cart/img',
-    proxyTable: {},
+    proxyTable: proxy.proxyTable,
+
+    // https
+    // https: {
+    //   key: proxy.key,
+    //   cert: proxy.cert,
+    //   ca: proxy.ca,
+    // },
 
     // 开发环境文件夹
     // contentBasePath: path.resolve(__dirname, '/src/pages/mobile'),
