@@ -1,19 +1,18 @@
 <template>
   <div id="index">
-    <!-- <img src="../../assets/logo.png"> -->
-    <p> this is index hgg</p>
-    <!-- <HelloWorld/> -->
+
   </div>
 </template>
 
 <script>
-// import HelloWorld from '../../components/HelloWorld'
-// import {logTitle} from '../../assets/js/base'
+import UiRadioButton from '@/ui-lib/src/radio-button'
+import UiRadioButtonGroup from '@/ui-lib/src/radio-group'
 
 export default {
   name: 'index',
   components: {
-    // HelloWorld
+    UiRadioButton,
+    UiRadioButtonGroup
   },
   mounted: function () {
     // logTitle()

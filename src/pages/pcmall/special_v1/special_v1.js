@@ -15,86 +15,24 @@ Vue.config.productionTip = false
 
 let today = new Date().format('yyyy年MM月dd日');
 
+/**
+ * 关于这个新专题模板的vuex部分：
+ * 慢慢改，现在只有special__product-list--select里面拥有vuex的内容，而且比较多，先不动。
+ * 其他组件已经转为从props传数据了，从vuex剥离
+ */
+
 const store = new Vuex.Store({
   state: {
     productList: [
-      {
-        imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-        t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-        price: '258.00',
-        oldPrice: '258.00',
-        people: '2000人购买',
-        selected: false,
-        count: 1,
-        selectedStyle: '',        
-        styles: [
-          {
-            t: '生肖鼠女',
-            selected: true
-          },
-          {
-            t: '生肖我鼠女',
-          },
-          {
-            t: '生肖鼠问问女',
-          },
-          {
-            t: '生肖鼠女问问我我',
-          },
-          {
-            t: '生肖',
-          },
-          {
-            t: '生鼠女',
-          },
-          {
-            t: '生肖鼠女',
-          },
-        ],
-      },
       // {
-      //   imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-      //   t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
+      //   file: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
+      //   alt: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
       //   price: '258.00',
       //   oldPrice: '258.00',
       //   people: '2000人购买',
       //   selected: false,
-      //   count: 1,        
-      //   selectedStyle: '',                
-      //   styles: [
-      //     {
-      //       t: '生肖鼠女',
-      //       selected: true
-      //     },
-      //     {
-      //       t: '生肖我鼠女',
-      //     },
-      //     {
-      //       t: '生肖鼠问问女',
-      //     },
-      //     {
-      //       t: '生肖鼠女问问我我',
-      //     },
-      //     {
-      //       t: '生肖',
-      //     },
-      //     {
-      //       t: '生鼠女',
-      //     },
-      //     {
-      //       t: '生肖鼠女',
-      //     },
-      //   ],
-      // },
-      // {
-      //   imgSrc: 'https://sslresources.linghit.com/shopv2_1466155094.jpg',
-      //   t: '灵机独家设计开运六合转运珠银男女鸡年旺运送项链手链鸡年年链...',
-      //   price: '258.00',
-      //   oldPrice: '258.00',
-      //   people: '2000人购买',
-      //   selected: false,
-      //   count: 1,        
-      //   selectedStyle: '',                
+      //   count: 1,
+      //   selectedStyle: '',        
       //   styles: [
       //     {
       //       t: '生肖鼠女',
@@ -177,7 +115,7 @@ const store = new Vuex.Store({
       let price = 0;
       let list = state.productList;
       price = list.reduce((price, item) => {
-        item.selected && (price = price + (Number(item.price) || 0)*item.count);
+        item.selected && (price = price + (Number(item.price) || 0) * (item.count|| 1));
         return price;
       }, price)
       console.log(price)
@@ -197,9 +135,9 @@ const store = new Vuex.Store({
       state.noteList = data;
     },
 
-    setOpenItem(state, data = {}) {
-      state.openItem = data;
-    }
+    // setOpenItem(state, data = {}) {
+    //   state.openItem = data;
+    // }
   },
 
   actions: {

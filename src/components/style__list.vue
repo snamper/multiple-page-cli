@@ -35,20 +35,24 @@
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex'
+// import {mapState, mapMutations} from 'vuex'
 import {UiRadioButton, UiInputNumber} from '@/ui-lib/output'
 
 export default {
-    // props: {
-    //     styles: {
-    //         type: Array,
-    //         default: []
-    //     },
-    //     count: {
-    //         type: [String, Number],
-    //         default: 1
-    //     }
-    // },
+    props: {
+        // styles: {
+        //     type: Array,
+        //     default: []
+        // },
+        // count: {
+        //     type: [String, Number],
+        //     default: 1
+        // }
+        openItem: {
+            type: [Object],
+            default: {},
+        }
+    },
     components: {
         UiRadioButton,
         UiInputNumber
@@ -59,9 +63,9 @@ export default {
         }
     },
     computed: {
-        ...mapState([
-            'openItem',
-        ]),
+        // ...mapState([
+        //     'openItem',
+        // ]),
         selectedStyle: {
             get() {
                 return this.openItem && this.openItem.selectedStyle || '';

@@ -134,7 +134,7 @@
   <transition name="dialogUp">
     <dialog-wrapper v-if="showStyleList" 
         v-on:click.native.prevent.self="closeStyleList">
-      <style-list/>
+      <style-list :openItem="openItem"/>
       <dialog-footer>
         <a class="dialog__footer__btn--large btn_primary vhc" 
             v-on:click.prevent="confirmStyle">确认</a>
@@ -196,12 +196,13 @@ export default {
       'noteList',
       'showStyleList',
       'styleList',
+      'openItem',
     ])
   },
   methods: {
     ...mapMutations([
       'setSpecialSeo',
-      'setSpecialProduct',
+      'setSpecialProductList',
       'setSpecialCase',
       'toggleProList',
     ]),
@@ -217,7 +218,7 @@ export default {
     // 发请求
     // SEO
     getSpecialSeo({id: '1358'}).then((rsp) => {
-      console.log(rsp);
+      // console.log(rsp);
 
     })
     .catch((err) => {
@@ -227,11 +228,17 @@ export default {
     //
     getSpecialProductList({id: '1358'}).then((rsp) => {
       console.log(rsp)
+      if (rsp && rsp.productList) {
+        this.setSpecialProductList(rsp.productList);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
     })
     
     // //
     getSpecialCase({id: '1358'}).then((rsp) => {
-      console.log(rsp)
+      // console.log(rsp)
       // rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
     })
   }

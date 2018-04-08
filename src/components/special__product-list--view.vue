@@ -1,50 +1,29 @@
 <template>
 <div class="product-viewlist">
 
-  <div class="product-viewlist__item product-viewlist__item--single"
-        v-if="productList.length == 1">
-      <dl>
-        <dt>
-          <img class="small-img" 
-                :src="productList[0].imgSrc"/>
-        </dt>
-        <dd>
-          <h4>
-            {{productList[0].t}}
-          </h4>
-          <p class="price">
-            <em>{{productList[0].price}}</em>
-            <del>{{productList[0].oldPrice}}</del>
-          </p>
-          <p class="operation">
-            <i class="icon icon-cart"></i>
-            <a class="operate btn_confirm">立即购买</a>
-          </p>
-        </dd>
-    </dl>
-  </div>
-
-  <div class="product-viewlist__item" 
-        v-if="productList.length > 1"
+  <div class="product-viewlist__item"
+        :class="[productList.length == 1 ? 'product-viewlist__item--single': '']" 
         v-for="(row, index) in productList" 
         :key="index">
 
     <dl>
       <dt>
         <img class="small-img" 
-              :src="row.imgSrc"/>
+              :src="row.file"/>
       </dt>
       <dd>
         <h4>
-          {{row.t}}
+          {{row.alt}}
         </h4>
         <p class="price">
-          <em>{{row.price}}</em>
+          <em>¥ {{row.price}}</em>
           <del>{{row.oldPrice}}</del>
         </p>
         <p class="operation">
-          <i class="icon icon-cart"></i>
-          <a class="operate btn_confirm">立即购买</a>
+          <icon icon="cart" 
+                @click="addCart(row.itemid)"/>
+          <a class="operate btn_confirm" 
+              :href="row.url">立即购买</a>
         </p>
       </dd>
     </dl>
@@ -55,6 +34,7 @@
 
 <script>
 // import {mapState} from 'vuex'
+import icon from './icon'
 
 // 该组件为商品列表的展示，单个购买
 export default {
@@ -69,11 +49,16 @@ export default {
       // list: this.productList
     }
   },
-  // computed: {
-  //   ...mapState([
-  //     'productList'
-  //   ])
-  // }
+  components: {
+    icon,
+  },
+  methods: {
+    addCart(itemid) {
+      if (itemid || itemid === 0) {
+
+      }
+    }
+  }
 }
 </script>
 
@@ -110,6 +95,8 @@ export default {
     position: relative;
     overflow: hidden;
     margin-right: 40px;
+    border-radius: 4px;
+    overflow: hidden;
     img {
       @include square(240px);
     }
@@ -170,6 +157,22 @@ export default {
       padding: 0 30px;
       float: right;
     }
+  }
+}
+
+.product-viewlist__item--single {
+  dl {
+    @include flex-box(column);
+  }
+  dt {
+    @include square(700px);
+    margin-right: 0;
+    img {
+      @include square(700px);      
+    }
+  }
+  dd {
+    padding-bottom: 70px;
   }
 }
 </style>

@@ -58,6 +58,8 @@ $icon-map: (
   // selected: 'selected.png',
   tick1: 'tick1.png',
   tick2: 'tick2.png',
+  tick3: 'tick3.png',
+  tick4: 'tick4.png',  
   circle: 'circle.png',
   circle1: 'circle1.png',
   circle2: 'circle2.png',

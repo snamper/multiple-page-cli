@@ -4,7 +4,7 @@
   <header class="product-selectlist__header">
     <span class="left vc" 
         @click="toggleSelected">
-      <icon :icon="allSelectedIcon"/>
+      <icon :icon="selectedAll ? 'tick4' : 'circle'"/>
       全选
     </span>
     <h2 class="bold">
@@ -22,17 +22,17 @@
 
         <!-- <div class="product-selectlist__item__select-icon left vc"> -->
           <!-- <i class="icon icon-circle"></i> -->
-          <icon :icon="row.selected ? 'circle1' : 'circle'" 
+          <icon :icon="row.selected ? 'tick4' : 'circle'" 
                 class="product-selectlist__item__select-icon vc" 
                 v-on:click.native="toggleSelected({targetPro: row})"/>
         <!-- </div> -->
         <dl>
           <dt class="product-selectlist__item__img-wrapper">
-            <img :src="row.imgSrc"/>
+            <img :src="row.file"/>
           </dt>
           <dd class="product-selectlist__item__info-wrapper">
             <h3 class="product-selectlist__item__name bold">
-              {{row.t}}
+              {{row.alt}}
             </h3>
             <p class="product-selectlist__item__operation bottom">
               <em>{{row.price}}</em>
@@ -79,9 +79,9 @@ export default {
       'payUrl',
       'totalPrice',
     ]),
-    allSelectedIcon() {
-      return this.selectedAll ? 'circle1' : 'circle';
-    },
+    // allSelectedIcon() {
+    //   return this.selectedAll ? 'tick4' : 'circle';
+    // },
     selectedStyle() {
       return '选择规格';
     }
@@ -94,9 +94,6 @@ export default {
       'toggleSelected',
       'openStyleList',
     ]),
-    check: function () {
-      this.selected = !this.selected
-    },
   }
 }
 </script>
