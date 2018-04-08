@@ -38,7 +38,7 @@
               <em>{{row.price}}</em>
               <a class="product-selectlist__item__operation-btn--right btn_default" 
                   @click="openStyleList({item: row})">
-                {{row.selectedStyle ? row.selectedStyle + row.count + '件' : '选择规格'}}
+                {{row.selectedSku ? row.selectedSku + row.count + '件' : '选择规格'}}
                 <icon class="right vc" 
                       icon="more"/>
               </a>
@@ -73,7 +73,7 @@ export default {
   computed: {
     ...mapState([
       'showProList',
-      'showStyleList',
+      'showSkuList',
       'productList',
       'selectedAll',
       'payUrl',

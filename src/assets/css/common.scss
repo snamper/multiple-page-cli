@@ -35,16 +35,6 @@
   font-size: 20px;  
 }
 
-
-// 普通操作（文字，#666）
-// .operate_default {
-//   @include operate();  
-//   color: $black-666;
-// }
-// .operate_confirm {
-//   @include operate();  
-//   color: $red-1;
-// }
 // 普通操作（按钮，#666）
 .btn_default {
   @include operate();  

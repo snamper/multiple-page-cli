@@ -1,7 +1,8 @@
 <template>
 <label class="ui-radio-button" 
     :class="[
-        model === labelValue ? 'ui-radio-button--selected' : ''
+        {'ui-radio-button--selected' : model === label},
+        {'disabled' : isDisabled},
     ]"
     @click.stop.prevent="select">
     <input type="radio">
@@ -13,40 +14,63 @@
 import emitter from '../mixin/emitter'
 
 export default {
+    name: 'UiRadioButton',
     props: {
         value: {},
-        label: {}
+        label: {},
+        disabled: Boolean,
     },
     mixins: [emitter],
     data() {
         return {
-            // modelValue: this.model,
-            labelValue: this.label,
+            // labelValue: this.label,
         }
     },
     computed: {
+        _radioGroup() {
+            let parent = this.$parent;
+            while (parent) {
+                if (parent.$options.componentName !== 'UiRadioGroup') {
+                    parent = parent.$parent;
+                } else {
+                    return parent;
+                }
+            }
+            return false;
+        },
         model: {
-
             // https://cn.vuejs.org/v2/guide/components.html#%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E7%9A%84%E8%A1%A8%E5%8D%95%E8%BE%93%E5%85%A5%E7%BB%84%E4%BB%B6
             get() {
                 // 设置值
-                return this.value
+                return this._radioGroup ? this._radioGroup.value : this.value;
             },
             set(val) {
                 // 敲黑板！！数值带出组件的关键
                 // 通过 input 事件带出数值
-                this.$emit('input', val)
+                // this.$emit('input', val)
+                
+                if (this._radioGroup) {
+                    this.dispatch('UiRadioButton', 'input', [val]);
+                } else {
+                    this.$emit('input', val);
+                }
             }
+        },
+        isDisabled() {
+            return this.disabled;
         }
     },
     methods: {
         select() {
-            this.model = this.labelValue;
-            this.dispatch('radioChange', this.modelValue);
+            if (this._radioGroup) {
+                this.dispatch('UiRadioGroup', 'handleChange', [this.label]);
+            } else {
+                this.$emit('input', this.label);
+            }
         }
     },
-    created() {
-        
+    mounted() {
+        // console.log(this.disabled)
     }
 }
 </script>
@@ -54,6 +78,13 @@ export default {
 <style lang="scss" scoped>
 input {
     display: none;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    background: #eee;
+
 }
 
 .ui-radio-button {

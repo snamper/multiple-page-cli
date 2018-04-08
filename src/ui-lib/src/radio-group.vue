@@ -8,23 +8,21 @@
 import emitter from '../mixin/emitter'
 
 export default {
+    name: 'UiRadioGroup',
+    componentName: 'UiRadioGroup',
+
     props: {
         value: {}
     },
     
     mixins: [emitter],
 
-    computed: {
-        model: {
-            get() {
-                return this.value;
-            },
-            set(value) {
-                this.$emit('input', value);
-            }
-        }
-    },
-    mounted: {
+    created() {
+        this.$on('handleChange', value => {
+            this.$emit('input', value);
+        })   
+    }, 
+    mounted() {
 
     }
 }

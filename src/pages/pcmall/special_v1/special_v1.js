@@ -21,6 +21,8 @@ let today = new Date().format('yyyy年MM月dd日');
  * 其他组件已经转为从props传数据了，从vuex剥离
  */
 
+import {getSku} from '@/assets/js/xhr/service' 
+
 const store = new Vuex.Store({
   state: {
     productList: [
@@ -95,10 +97,11 @@ const store = new Vuex.Store({
       {name:"刘建萍",mobile:"137******86",address:"广东省清远市",status: '已发货',time: today},
       {name:"冯立明",mobile:"151******86",address:"山东省临沂市}",status: '已发货',time: today},
     ],
-    
+    caseList: [],
+
     showProList: false,
     selectedAll: false,
-    showStyleList: false,
+    showSkuList: false,
     openItem: {},
     totalPrice: 0,
     seo: {},
@@ -132,7 +135,7 @@ const store = new Vuex.Store({
 
     setSpecialCase(state, data = {}) {
       // state.case = data;
-      state.noteList = data;
+      state.caseList = data;
     },
 
     // setOpenItem(state, data = {}) {
@@ -155,21 +158,30 @@ const store = new Vuex.Store({
       commit('getTotalPrice');
     },
     openStyleList({state}, {item}) {
-      state.showStyleList = true;
-      if (item) {
-        state.openItem = item || {}
-      }
+      console.log(item)
+      let openItem = item || {};
+
+      // if (!openItem.skuList) {
+        getSku({id: openItem.itemId})
+        .then((rsp) => {
+          console.log(rsp);
+          openItem.skuList = rsp && rsp.data || {};
+          openItem.count = 1;
+        })
+      // }
+      .then(() => {
+        state.openItem = openItem || {};
+        state.showSkuList = true;
+      })
+
     },
     closeStyleList({state}) {
-      state.showStyleList = false;
+      state.showSkuList = false;
       state.openItem = {};
     },
     confirmStyle({state, commit, dispatch}) {
-      state.showStyleList = false;
+      state.showSkuList = false;
       dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
-      // .then(() => {
-      //   commit('getTotalPrice');
-      // })
     },
   }
 })

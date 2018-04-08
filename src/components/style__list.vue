@@ -8,12 +8,13 @@
         <div class="style-list__radio-group">
             <ui-radio-button 
                 class="style-list__radio"
-                v-for="(row, index) in openItem.styles" 
+                v-for="(row, index) in openItem.skuList" 
                 :key="index"
-                v-model="selectedStyle"
-                :label="row.t">
-                {{row.t}}
+                v-model="openItem.selectedSku"
+                :label="row[0]">
+                {{row[1]}}
             </ui-radio-button>
+            {{openItem.selectedSku}}
         </div>
     </section>
 
@@ -25,7 +26,7 @@
                     class="style-list__wrapper__input-number"
                     type="text"
                     placeholder="默认"
-                    v-model="num"
+                    v-model="openItem.count"
                     />
             </div>
         </div>
@@ -35,53 +36,23 @@
 </template>
 
 <script>
-// import {mapState, mapMutations} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 import {UiRadioButton, UiInputNumber} from '@/ui-lib/output'
 
 export default {
-    props: {
-        // styles: {
-        //     type: Array,
-        //     default: []
-        // },
-        // count: {
-        //     type: [String, Number],
-        //     default: 1
-        // }
-        openItem: {
-            type: [Object],
-            default: {},
-        }
-    },
     components: {
         UiRadioButton,
         UiInputNumber
     },
-    data() {
-        return {
-            // selectedStyle: '',
-        }
-    },
     computed: {
-        // ...mapState([
-        //     'openItem',
-        // ]),
-        selectedStyle: {
-            get() {
-                return this.openItem && this.openItem.selectedStyle || '';
-            },
-            set(val) {
-                this.openItem && (this.openItem.selectedStyle = val);
-            }
-        },
-        num: {
-            get() {
-                console.log(this.openItem.count)
-                return this.openItem && this.openItem.count || 1;
-            },
-            set(val) {
-                this.openItem.count = val;
-            }
+        ...mapState([
+            'openItem',
+
+        ]),
+    },
+    watch: {
+        'openItem.selectedSku': (val) => {
+            
         }
     },
     mounted: function () {

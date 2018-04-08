@@ -38,6 +38,22 @@ var common = {
         }
 
         return defaultText;
+    },
+
+    /**
+     * 专题的url都是下面这种格式的
+     * http://testshop.linghit.com/specialtemplate/speical/1362.html
+     * 
+     * id不在search里面，因此特地写一个方法获取专题的id。。。
+     */
+    getSpecialId: function () {
+        let reg = /\/(\w+)\.html/;
+        let path = location.path || '';
+        // let path = 'http://testshop.linghit.com/specialtemplate/speical/1362.html';
+
+        let result = path.match(reg);
+        let specialId = result && result[1] || '';
+        return specialId;
     }
 }
 

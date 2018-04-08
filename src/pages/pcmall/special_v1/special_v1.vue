@@ -42,29 +42,7 @@
         </h1>
       </div>
 
-      <!-- <ul class="note-list">
-        <li class="note-list__item"
-            v-for="(row, index) in noteList" 
-            :key="index">
-          <h3 class="note-list__item__title black-666 bold">
-            {{row.name}}
-            <span>
-              {{row.mobile}}
-            </span>
-            <span class="right">
-              {{row.time}}
-            </span>
-          </h3>
-          <p class="note-list__item__content black-999">
-            {{row.address}}
-            <span class="right red-2 bold">
-              {{row.status}}
-            </span>
-          </p>
-        </li>
-      </ul> -->
-
-      <div>
+      <!-- <div>
         <swiper :options="swiperOption">
           <swiper-slide v-for="(row, index) in noteList" :key="index" class="swiper-no-swiping">
               <div class="note-list__item">
@@ -86,7 +64,7 @@
               </div>
           </swiper-slide>
         </swiper>
-      </div>
+      </div> -->
     </section>
 
     <section class="section-layout note-wrapper">
@@ -100,10 +78,10 @@
 
       <ul class="note-list">
         <li class="note-list__item" 
-            v-for="(row,index) in noteList" 
+            v-for="(row,index) in caseList" 
             :key="index">
           <h3 class="note-list__item__title black-666 bold">
-            {{row.name}}
+            {{row.alt}}
             <span>
               {{row.sex}}
               {{row.age}}岁
@@ -112,7 +90,7 @@
               {{row.address}}
             </span>
             <p class="note-list__item__content black-999">
-              {{row.content}}
+              {{row.skuname}}
             </p>
           </h3>
         </li>
@@ -132,9 +110,9 @@
   </transition>
 
   <transition name="dialogUp">
-    <dialog-wrapper v-if="showStyleList" 
+    <dialog-wrapper v-if="showSkuList" 
         v-on:click.native.prevent.self="closeStyleList">
-      <style-list :openItem="openItem"/>
+      <style-list/>
       <dialog-footer>
         <a class="dialog__footer__btn--large btn_primary vhc" 
             v-on:click.prevent="confirmStyle">确认</a>
@@ -194,7 +172,8 @@ export default {
       'showProList',
       'productList',
       'noteList',
-      'showStyleList',
+      'caseList',
+      'showSkuList',
       'styleList',
       'openItem',
     ])
@@ -238,8 +217,12 @@ export default {
     
     // //
     getSpecialCase({id: '1358'}).then((rsp) => {
-      // console.log(rsp)
-      // rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
+      console.log(rsp)
+      rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
+    })
+
+    this.$on('openItemChanged', (data) => {
+      console.log(data);
     })
   }
 }
