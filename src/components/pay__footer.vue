@@ -5,24 +5,32 @@
         总计<em>￥{{totalPrice}}</em>
       </div>
       <a class="btn_primary" 
-          :href="payUrl">去结算</a>
+          @click.prevent.self="clickFn">去结算</a>
     </div>
   </footer>
 </template>
 
 <script>
-// import {mapState, mapMutations} from 'vuex'
-
 export default {
   props: {
-    payUrl: String,
+    // payUrl: String,
+    payFn: Function,
     totalPrice: [String, Number],
+  },
+  methods: {
+    clickFn(e) {
+      console.log('done')
+      let srcBtn = e.srcElement;
+      if (srcBtn.disabled) {
+        return;
+      }
+      srcBtn.disabled = true;
+      this.payFn()
+      .then(() => {
+        srcBtn.disabled = false;
+      })
+    }
   }
-  // computed: {
-  //   ...mapState([
-  //     'totalPrice'
-  //   ])
-  // },
 }
 </script>
 

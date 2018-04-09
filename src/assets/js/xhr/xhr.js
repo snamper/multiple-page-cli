@@ -4,7 +4,8 @@
 
 import axios from 'axios'
 import base from '../base'
-import { resolve } from 'url';
+import { resolve } from 'url'
+import qs from 'qs'
 
 
 class XHR {
@@ -61,14 +62,18 @@ class XHR {
 }
 
 export const request = (url = '', method = 'get', data = {}) => {
+    console.log(data);
     return new Promise((resolve, reject) => {
             axios({
                 headers: {
-                    'Content-Type': 'text/html; charset=utf-8'
+                    // 'Content-Type': 'application/json; charset=utf-8;'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 url: url, 
                 method: method,
-                data: data
+
+                // php后台，需要用qs模块进行转换，数据才能post过去
+                data: qs.stringify(data),
             })
             .then((rsp) => {
                 // console.log(rsp)

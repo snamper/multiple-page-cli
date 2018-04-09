@@ -21,7 +21,7 @@ let today = new Date().format('yyyy年MM月dd日');
  * 其他组件已经转为从props传数据了，从vuex剥离
  */
 
-import {getSku} from '@/assets/js/xhr/service' 
+import {getSku, postSpeicalOrder, specialAddCart} from '@/assets/js/xhr/service' 
 
 const store = new Vuex.Store({
   state: {
@@ -106,12 +106,30 @@ const store = new Vuex.Store({
     totalPrice: 0,
     seo: {},
     case: {},
-    payUrl: '123123123',
+
+    // origin: 来源，打开skuList的入口按钮。购物车：cart，单品立即购买：buy，商品列表打开：selectList
+    origin: 'buy',  
   },
 
   mutations: {
-    toggleProList(state, show) {
+    toggleProList(state, show = false) {
       state.showProList = show;
+    },
+    toggleSkuList(state, show = false) {
+      state.showSkuList = show;
+    },
+
+    // 全选
+    toggleSelectedAll(state, data = {}) {
+      state.selectedAll = data.selectedAll || false;
+      state.productList.every((item) => {
+        item.selected = data.selectedAll;
+        return true;
+      })
+    },
+
+    setSelectedAll(state, selectedAll){
+      state.selectedAll = selectedAll;
     },
 
     getTotalPrice(state) {
@@ -134,55 +152,120 @@ const store = new Vuex.Store({
     },
 
     setSpecialCase(state, data = {}) {
-      // state.case = data;
       state.caseList = data;
     },
 
-    // setOpenItem(state, data = {}) {
-    //   state.openItem = data;
-    // }
+    setOpenItem(state, data = {}) {
+      state.openItem = data;
+    },
+
+    changeOrigin(state, origin = 'buy') {
+      state.origin = origin
+    },
+
+    updateProduct(state, {targetPro, selected}) {
+      let i;
+      for(i = 0; i < state.productList.length; i++) {
+        let item = state.productList[i];
+        if (item.itemId === targetPro.itemId) {
+          item.selected = selected || !!!targetPro.selected;
+          break;
+        }
+      }
+      state.productList.splice(i, 1, targetPro);
+    }
+
   },
 
   actions: {
     toggleSelected({state, commit}, {targetPro, selected}) {
       if (!targetPro) {
-        state.selectedAll = !state.selectedAll;
-        state.productList.every((item) => {
-          item.selected = state.selectedAll;
-          return true;
-        })
+        commit('toggleSelectedAll', {selectedAll: !state.selectedAll})
+
       } else {
-        targetPro.selected = selected || !targetPro.selected;
-        state.selectedAll = state.productList.every((item) => item.selected);
+        // targetPro.selected = selected || !targetPro.selected;
+        commit('updateProduct', {targetPro: targetPro, selected: selected});
+
+        let selectedAll = state.productList.every((item) => item.selected);
+        commit('setSelectedAll', selectedAll)
       }
       commit('getTotalPrice');
     },
-    openStyleList({state}, {item}) {
-      console.log(item)
-      let openItem = item || {};
 
-      // if (!openItem.skuList) {
+    // item: 商品
+    openSkuList({state, commit}, {item, origin}) {
+      // console.log(item)
+      let openItem = item || {};
+      commit('changeOrigin', origin);
+
+      if (!openItem.skuList) {
         getSku({id: openItem.itemId})
         .then((rsp) => {
-          console.log(rsp);
           openItem.skuList = rsp && rsp.data || {};
-          openItem.count = 1;
+          openItem.count = item.count || 1;
         })
-      // }
-      .then(() => {
-        state.openItem = openItem || {};
-        state.showSkuList = true;
-      })
+        .then(() => {
+          commit('setOpenItem', openItem)
+          commit('toggleSkuList', true);
+        })
+      } else {
+        // state.openItem = openItem || {};
+        commit('setOpenItem', openItem)
+        commit('toggleSkuList', true);        
+      }
+    },
 
+    closeskuList({state, commit}) {
+      commit('toggleSkuList', false);      
+      commit('setOpenItem', {});
     },
-    closeStyleList({state}) {
-      state.showSkuList = false;
-      state.openItem = {};
-    },
-    confirmStyle({state, commit, dispatch}) {
-      state.showSkuList = false;
+
+    confirmStyle({state, commit, dispatch}, {origin}) {
+      commit('toggleSkuList', false);
       dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
+
+      // 根据不同来源入口，进行不同的处理
+      // 购物车，调接口
+      if (origin === 'cart') {
+        console.log('cart')
+        let openItem = state.openItem;
+        let postData = {
+          id: openItem.itemId,
+          num: openItem.count,
+          type: openItem.selectedSku,
+          typename: openItem.selectedSkuText,
+        }
+        specialAddCart(postData)
+        .then((rsp) => {
+          console.log(rsp)
+        })
+      }
+      if (origin === 'buy') {
+        console.log('buy')
+        dispatch('postSpeicalOrder');
+      }
+      if (origin === 'selectList') {
+        console.log('selectList')
+      }
     },
+
+    postSpeicalOrder({state}, data = {}) {
+      let postData = {goods: []};
+      let list = state.productList;
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i];
+        if (item.selected) {
+          postData.goods.push({
+            orderId: item.itemId,
+            sku: item.selectedSku || '',
+            skuname: item.selectedSkuText || '',
+            num: item.count || 1,
+          })
+        }
+      }
+      
+      return postSpeicalOrder(postData);
+    }
   }
 })
 

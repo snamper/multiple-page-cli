@@ -93,19 +93,23 @@ input {
     height: 56px;
     line-height: 56px;
     font-size: 26px;
-    padding: 0 20px;
+    padding: 0 30px;
     color: #666;
     border: 1px solid #666;
     border-radius: 4px;
 }
+.ui-radio-button--selected {
+    border-color: #bc2228;
+    color: #bc2228;
+}
 .ui-radio-button--selected::after {
     content: '';
     position: absolute;
-    right: 0;
+    right: -1px;
     bottom: 0;
-    height: 20px;
-    width: 20px;
-    background-image: url('../image/logo.png');
+    height: 30px;
+    width: 30px;
+    background-image: url('../image/icon_tick3.png');
     background-size: contain;
 }
 </style>

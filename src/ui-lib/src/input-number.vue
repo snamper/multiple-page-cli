@@ -22,6 +22,7 @@
 
 <script>
 export default {
+    name: 'UiInputNumber',
     props: {
         type: {
             type: String,
@@ -64,11 +65,9 @@ export default {
             this.setCurrentValue(newVal);
         },
         setCurrentValue(value) {
-            // if (value === this.currentValue) return;
             this.currentValue = value;
-            console.log('setCurrentValue' + value)
-            this.$emit('input', this.currentValue)
-        }
+            this.$emit('input', value)
+        },
     }
 }
 </script>

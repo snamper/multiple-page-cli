@@ -29,7 +29,7 @@
       </div>
 
       <!-- 商品列表 -->
-      <product-list-view :product-list="productList"/>
+      <product-list-view :product-list="productList" :openSkuList="openSkuList"/>
 
     </section>
 
@@ -106,16 +106,22 @@
         opacity="visible" 
         v-if="showProList" >
       <product-list-select/>
+      <dialog-footer>
+          <pay-footer 
+            :totalPrice="totalPrice" 
+            :payFn="postSpeicalOrder"
+            />
+      </dialog-footer>
     </dialog-wrapper>
   </transition>
 
   <transition name="dialogUp">
     <dialog-wrapper v-if="showSkuList" 
-        v-on:click.native.prevent.self="closeStyleList">
-      <style-list/>
+        v-on:click.native.prevent.self="closeskuList">
+      <sku-list :open-item="openItem"/>
       <dialog-footer>
         <a class="dialog__footer__btn--large btn_primary vhc" 
-            v-on:click.prevent="confirmStyle">确认</a>
+            v-on:click.prevent="confirmStyle({origin: origin})">确认</a>
       </dialog-footer>
     </dialog-wrapper>
   </transition>
@@ -125,12 +131,13 @@
 <script>
 import specialHeader from '@/components/special__header'
 import specialFooter from '@/components/special__footer'
-import productListView from '@/components/special__product-list--view'
-import productListSelect from '@/components/special__product-list--select'
+import productListView from '@/pages/pcmall/special_v1/components/special__product-list--view'
+import productListSelect from '@/pages/pcmall/special_v1/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
-import styleList from '@/components/style__list'
+import skuList from '@/pages/pcmall/special_v1/components/sku-list'
 import dialogFooter from '@/components/dialog__footer'
 import icon from '@/components/icon'
+import payFooter from '@/components/pay__footer'
 
 // require styles
 import 'swiper/dist/css/swiper.css'
@@ -148,11 +155,12 @@ export default {
     dialogWrapper, 
     productListView,
     productListSelect,
-    styleList,
+    skuList,
     dialogFooter,
     icon,
     swiper,
     swiperSlide,
+    payFooter
   },
   data() {
     return {
@@ -174,8 +182,11 @@ export default {
       'noteList',
       'caseList',
       'showSkuList',
-      'styleList',
+      'skuList',
       'openItem',
+      'origin',
+      'totalPrice',
+      
     ])
   },
   methods: {
@@ -186,9 +197,11 @@ export default {
       'toggleProList',
     ]),
     ...mapActions([
-      'openStyleList',
-      'closeStyleList',
+      'openSkuList',
+      'closeskuList',
       'confirmStyle',
+      'postSpeicalOrder',
+      
     ]),
   },
   mounted() {
