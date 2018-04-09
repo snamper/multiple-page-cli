@@ -1,23 +1,55 @@
 <template>
   <div id="first">
-    <!-- <img src="../../assets/logo.png"> -->
-    <p> this is first</p>
-    hello wtf
-    <!-- <HelloWorld/> -->
-  <i class="icon icon-home"></i>
-  <a class="operate btn-confirm"></a>
-    
+    <div>
+      <p>{{list.name}}</p>
+      <p>{{list.key}}</p>
+      <p>{{list.value}}</p>
+      <div>
+        {{list.skus[0]}}
+      </div>
+
+      <p>-----------------------</p>
+      <div v-for="(row, index) in list.skus">
+        {{row.key}} --- {{row.value}}
+        <button @click="add(row)">btn-{{row.key}}</button>
+        <ui-input-number v-model="row.key"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// import HelloWorld from '../../components/HelloWorld'
-// import {logTitle} from '../../assets/js/base'
+import UiInputNumber from '@/ui-lib/src/input-number'
 
 export default {
   name: 'first',
   components: {
-    // HelloWorld
+    UiInputNumber
+  },
+  data() {
+    return {
+      list: {
+        name: 'list',
+        key: 'pro',
+        value: 'no.6',
+        skus: [
+          {
+            key: 0,
+            value: 'one',
+          },
+          {
+            key: 1,
+            value: 'two',
+          },
+        ]
+      }
+    }
+  },
+  methods: {
+    add(item) {
+      item.key++;
+
+    }
   },
   mounted: function () {
     // logTitle();
