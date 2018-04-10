@@ -9,11 +9,14 @@ import App from './special_v1.vue'
 import '@/assets/css/middleware.scss';
 import '@/ui-lib/output'
 
+import Message from '@/ui-lib/src/message/index'
+
+
 Vue.use(Vuex)
+Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false
 
-let today = new Date().format('yyyy年MM月dd日');
 
 /**
  * 关于这个新专题模板的vuex部分：
@@ -23,6 +26,7 @@ let today = new Date().format('yyyy年MM月dd日');
 
 import {getSku, postSpeicalOrder, specialAddCart} from '@/assets/js/xhr/service' 
 
+let today = new Date().format('yyyy年MM月dd日');
 const store = new Vuex.Store({
   state: {
     productList: [
@@ -159,6 +163,7 @@ const store = new Vuex.Store({
       state.openItem = data;
     },
 
+    // 调出选择款式
     changeOrigin(state, origin = 'buy') {
       state.origin = origin
     },
@@ -206,12 +211,18 @@ const store = new Vuex.Store({
         })
         .then(() => {
           commit('setOpenItem', openItem)
-          commit('toggleSkuList', true);
+
+          // 有款式才调出skuList
+          if (openItem.skuList && openItem.skuList.length) {
+            commit('toggleSkuList', true);
+          }
         })
       } else {
         // state.openItem = openItem || {};
         commit('setOpenItem', openItem)
-        commit('toggleSkuList', true);        
+        if (openItem.skuList && openItem.skuList.length) {
+          commit('toggleSkuList', true);
+        }    
       }
     },
 
@@ -221,7 +232,8 @@ const store = new Vuex.Store({
     },
 
     confirmStyle({state, commit, dispatch}, {origin}) {
-      commit('toggleSkuList', false);
+
+      // 选中商品，同时将打开的商品同步到商品列表中
       dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
 
       // 根据不同来源入口，进行不同的处理
@@ -240,21 +252,33 @@ const store = new Vuex.Store({
           console.log(rsp)
         })
       }
+      // 首页单品中的立即请购按钮
       if (origin === 'buy') {
         console.log('buy')
         dispatch('postSpeicalOrder');
       }
+      // 选择商品列表唤起的规格弹窗
       if (origin === 'selectList') {
         console.log('selectList')
+        // 关闭款式弹窗
+        commit('toggleSkuList', false);
       }
     },
 
     postSpeicalOrder({state}, data = {}) {
       let postData = {goods: []};
       let list = state.productList;
+
       for (let i = 0; i < list.length; i++) {
         let item = list[i];
         if (item.selected) {
+
+          // 预留，对于有款式但是没选的商品，校验，目前是根据商品id发请求获取款式，还得想想怎么弄
+          if (item.skuList && item.skuList.length && !item.selectedSku) {
+            alert('请选择规格');
+            return;
+          }
+
           postData.goods.push({
             orderId: item.itemId,
             sku: item.selectedSku || '',
@@ -263,8 +287,19 @@ const store = new Vuex.Store({
           })
         }
       }
-      
-      return postSpeicalOrder(postData);
+
+      if (!postData.goods.length) {
+        alert('请选择商品')
+        return;
+      }
+
+      return postSpeicalOrder(postData)
+              .then((rsp) => {
+                console.log(rsp)
+                if (rsp) {
+                  rsp.url && (window.location.href = 'https://testshop.linghit.com' + rsp.url);
+                }
+              })
     }
   }
 })

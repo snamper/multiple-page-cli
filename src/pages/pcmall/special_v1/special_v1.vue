@@ -7,7 +7,7 @@
     </section>
     <section class="section-layout product-wrapper">
       <div class="section-header">
-        <h1 class="section-header__title">
+        <h1 class="section-header__title" @click="click">
           <icon icon="square"/>          
           在线请购
           <icon icon="square"/>          
@@ -134,7 +134,7 @@ import specialFooter from '@/components/special__footer'
 import productListView from '@/pages/pcmall/special_v1/components/special__product-list--view'
 import productListSelect from '@/pages/pcmall/special_v1/components/special__product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
-import skuList from '@/pages/pcmall/special_v1/components/sku-list'
+import skuList from '@/components/sku-list'
 import dialogFooter from '@/components/dialog__footer'
 import icon from '@/components/icon'
 import payFooter from '@/components/pay__footer'
@@ -145,6 +145,8 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import {mapState, mapMutations, mapActions} from 'vuex'
 import {getSpecialSeo, getSpecialProductList, getSpecialCase} from '@/assets/js/xhr/service'
+
+import Loading from '@/ui-lib/src/loading/index'
 
 export default {
   // 新专题模板v1
@@ -203,33 +205,53 @@ export default {
       'postSpeicalOrder',
       
     ]),
+    click() {
+      this.$message('这个是message');      
+    }
   },
   mounted() {
     // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。
+    let loading = null;
 
     // 发请求
     // SEO
-    getSpecialSeo({id: '1358'}).then((rsp) => {
-      // console.log(rsp);
+    getSpecialSeo({id: '1366'}).then((rsp) => {
+      console.log(rsp);
+      if (rsp.data) {
+        let data = rsp.data;
+        document.querySelector('title').innerHTML = data.title;
+      }
 
     })
     .catch((err) => {
       console.log(err);
     })
 
-    //
-    getSpecialProductList({id: '1358'}).then((rsp) => {
+    // 获取商品列表
+    // getSpecialProductList({id: '1358'}).then((rsp) => {
+    //   console.log(rsp)
+      // if (rsp && rsp.productList) {
+      //   this.setSpecialProductList(rsp.productList);
+      // }
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // })
+
+    new Promise((resolve, reject) => {
+      loading = Loading();
+      resolve(getSpecialProductList({id: '1366'}));
+    })
+    .then((rsp) => {
       console.log(rsp)
       if (rsp && rsp.productList) {
         this.setSpecialProductList(rsp.productList);
       }
-    })
-    .catch((err) => {
-      console.log(err);
+      loading.close();
     })
     
     // //
-    getSpecialCase({id: '1358'}).then((rsp) => {
+    getSpecialCase({id: '1366'}).then((rsp) => {
       console.log(rsp)
       rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
     })
