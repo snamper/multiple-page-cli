@@ -1,13 +1,14 @@
 <template>
 <div id="special_v1" class="container">
-  <special-header/>
+  <special-header v-if="showHeaderNav"/>
   <div class="wrapper">
-    <section class="special-img-list">
-      <img src="https://sslresources.linghit.com/shopv2_1508482864.jpg"/>
+    <section class="special-img-list" v-html="contentdata">
     </section>
-    <section class="section-layout product-wrapper">
+      <!-- <img src="https://sslresources.linghit.com/shopv2_1508482864.jpg"/> -->
+
+    <section class="section-layout product-wrapper" v-if="showProductList">
       <div class="section-header">
-        <h1 class="section-header__title" @click="click">
+        <h1 class="section-header__title">
           <icon icon="square"/>          
           在线请购
           <icon icon="square"/>          
@@ -29,11 +30,12 @@
       </div>
 
       <!-- 商品列表 -->
-      <product-list-view :product-list="productList" :openSkuList="openSkuList"/>
+      <!-- <product-list-view :product-list="productList" :openSkuList="openSkuListDialog"/> -->
+      <product-list-view/>      
 
     </section>
 
-    <section class="section-layout note-wrapper">
+    <section class="section-layout note-wrapper" v-if="showBuyRecord">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
           <icon icon="square"/>
@@ -42,7 +44,8 @@
         </h1>
       </div>
 
-      <!-- <div>
+      <!-- 滚动轮播 -->
+      <div>
         <swiper :options="swiperOption">
           <swiper-slide v-for="(row, index) in noteList" :key="index" class="swiper-no-swiping">
               <div class="note-list__item">
@@ -64,10 +67,10 @@
               </div>
           </swiper-slide>
         </swiper>
-      </div> -->
+      </div>
     </section>
 
-    <section class="section-layout note-wrapper">
+    <section class="section-layout note-wrapper" v-if="showSpecialCase">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
           <icon icon="square"/>          
@@ -99,7 +102,7 @@
   </div>
   <!-- wrapper end -->
 
-  <special-footer :toBuy="toggleProList"/>
+  <special-footer :toBuy="toggleProList" v-if="showProductList"/>
 
   <transition name="dialogUp">
     <dialog-wrapper 
@@ -109,7 +112,7 @@
       <dialog-footer>
           <pay-footer 
             :totalPrice="totalPrice" 
-            :payFn="postSpeicalOrder"
+            :payFn="postOrder"
             />
       </dialog-footer>
     </dialog-wrapper>
@@ -118,10 +121,10 @@
   <transition name="dialogUp">
     <dialog-wrapper v-if="showSkuList" 
         v-on:click.native.prevent.self="closeskuList">
-      <sku-list :open-item="openItem"/>
+      <sku-list :item="openItem" v-on:skuChange="skuChange"/>
       <dialog-footer>
         <a class="dialog__footer__btn--large btn_primary vhc" 
-            v-on:click.prevent="confirmStyle({origin: origin})">确认</a>
+            v-on:click.prevent="setItemSku">确认</a>
       </dialog-footer>
     </dialog-wrapper>
   </transition>
@@ -129,6 +132,9 @@
 </template>
 
 <script>
+import {getSpecialId} from '@/assets/js/common'
+import {entityToString} from '@/assets/js/base'
+
 import specialHeader from '@/components/special__header'
 import specialFooter from '@/components/special__footer'
 import productListView from '@/pages/pcmall/special_v1/components/special__product-list--view'
@@ -144,7 +150,7 @@ import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import {mapState, mapMutations, mapActions} from 'vuex'
-import {getSpecialSeo, getSpecialProductList, getSpecialCase} from '@/assets/js/xhr/service'
+import {getSpecialSeo, getSpecialProductList, getSpecialCase, getSpecialContent} from '@/assets/js/xhr/service'
 
 import Loading from '@/ui-lib/src/loading/index'
 
@@ -174,7 +180,14 @@ export default {
         autoplay: {
           delay: 1000
         },
-      }
+      },
+      loading: null,
+      
+      // 显示的模块标记
+      // 1.顶部导航 2.在线下单 3.产品列表 4.订购记录 5.真实案例 6.网页底部信息 7.更多推荐
+      // 【2和3好像差不多。。只用2就好了
+      modalData: [],
+      contentdata: '',
     }
   },
   computed: {
@@ -188,8 +201,27 @@ export default {
       'openItem',
       'origin',
       'totalPrice',
-      
-    ])
+    ]),
+    // 是否显示顶部导航
+    showHeaderNav() {
+      return this.modalData.indexOf('1') >= 0;
+    },
+    // 是否显示商品列表+下单
+    showProductList() {
+      return this.modalData.indexOf('2') >= 0;
+    },
+    // 是否显示购买记录
+    showBuyRecord() {
+      return this.modalData.indexOf('4') >= 0;
+    },
+    // 是否显示真实案例
+    showSpecialCase() {
+      return this.modalData.indexOf('5') >= 0;
+    },
+    // 是否显示底部信息
+    showBottomInfo() {
+      return this.modalData.indexOf('6') >= 0;
+    },
   },
   methods: {
     ...mapMutations([
@@ -197,68 +229,84 @@ export default {
       'setSpecialProductList',
       'setSpecialCase',
       'toggleProList',
+      'setOpenItem',
     ]),
     ...mapActions([
-      'openSkuList',
+      // 'openSkuList',
       'closeskuList',
-      'confirmStyle',
+      'confirmSku',
       'postSpeicalOrder',
-      
     ]),
-    click() {
-      this.$message('这个是message');      
+    setItemSku() {
+      new Promise((resolve, reject) => {
+        this.loading = Loading();
+        resolve(this.confirmSku({origin: this.origin}));
+      })
+      .then((rsp) => {
+        // console.log(rsp);
+        this.loading.close();
+        this.$message(rsp.tip || rsp);
+      })
+      .catch((err) => {
+        this.$message(err);
+        this.loading.close;        
+      })
+    },
+
+    // 接收skuList组件回传的item数据
+    skuChange(val) {
+      this.setOpenItem(val);
+    },
+
+    postOrder() {
+      return new Promise((resolve, reject) => {
+        resolve(this.postSpeicalOrder());
+      })
     }
   },
   mounted() {
     // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。
-    let loading = null;
+    const id = getSpecialId() || 1366;
 
     // 发请求
     // SEO
-    getSpecialSeo({id: '1366'}).then((rsp) => {
+    getSpecialSeo({id: id}).then((rsp) => {
       console.log(rsp);
       if (rsp.data) {
         let data = rsp.data;
         document.querySelector('title').innerHTML = data.title;
       }
-
     })
     .catch((err) => {
       console.log(err);
     })
 
     // 获取商品列表
-    // getSpecialProductList({id: '1358'}).then((rsp) => {
-    //   console.log(rsp)
-      // if (rsp && rsp.productList) {
-      //   this.setSpecialProductList(rsp.productList);
-      // }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
-
     new Promise((resolve, reject) => {
-      loading = Loading();
-      resolve(getSpecialProductList({id: '1366'}));
+      this.loading = Loading();
+      resolve(getSpecialProductList({id: id}));
     })
     .then((rsp) => {
-      console.log(rsp)
+      // console.log(rsp)
       if (rsp && rsp.productList) {
         this.setSpecialProductList(rsp.productList);
       }
-      loading.close();
+      this.loading.close();
     })
     
-    // //
-    getSpecialCase({id: '1366'}).then((rsp) => {
-      console.log(rsp)
+    // 案例 + 模块
+    getSpecialCase({id: id}).then((rsp) => {
+      // console.log(rsp)
       rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
+      rsp.modata && (this.modalData = rsp.modata);
     })
 
-    this.$on('openItemChanged', (data) => {
-      console.log(data);
+    // 获取专题内容
+    getSpecialContent({id: id}).then((rsp) => {
+      console.log(rsp)
+      rsp.contentdata && (this.contentdata = entityToString(rsp.contentdata));
     })
+
   }
 }
 </script>
@@ -274,6 +322,7 @@ export default {
 
 .container {
   background: #f4efea;
+  position: relative;
 }
 
 .special-img-list {

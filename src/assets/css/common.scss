@@ -94,6 +94,8 @@
 *****************************/
 .container {
   height: 100%;
+  max-width: 23.4375rem;
+  margin: 0 auto;
 }
 
 /*****************************
@@ -110,6 +112,7 @@
   margin-top: 100px;
   min-height: 1130px; // for the browsers that don't support the calc() function
   min-height: calc(100vh - 200px);
+  max-width: 23.4375rem;
 }
 // 下面两块为定制出另外两个壳，该思路可行，定制容器
 
@@ -579,6 +582,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
 .footer{
   @include fixed();
   top: unset;
+  width: 100%;
   height: 100px;
   overflow: hidden;
   text-align: center;

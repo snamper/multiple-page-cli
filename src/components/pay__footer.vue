@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     clickFn(e) {
-      console.log('done')
       let srcBtn = e.srcElement;
       if (srcBtn.disabled) {
         return;
@@ -27,6 +26,7 @@ export default {
       srcBtn.disabled = true;
       this.payFn()
       .then(() => {
+        // console.log('has pay')
         srcBtn.disabled = false;
       })
     }

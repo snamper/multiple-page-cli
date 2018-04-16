@@ -128,20 +128,21 @@
   width: 100%;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  margin: 0 auto;
   border-bottom: 1px solid $black-eee;
   z-index: 20;
+  max-width: 23.4375rem;
 }
 @mixin page-footer () {
   // height: 90px;
   @include line-height-center(90px);
   position: fixed;
-  left: 0;
-  right: 0;
   bottom: 0;
+  width: 100%;  
+  margin: 0 auto;  
   background: $white;
   color: $black-666;
   border-top: 1px solid $black-eee;
   z-index: 20;
+  max-width: 23.4375rem;  
 }

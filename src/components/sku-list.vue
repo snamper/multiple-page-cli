@@ -36,43 +36,46 @@
 
 <script>
 // import {mapState, mapMutations} from 'vuex'
+import _ from 'lodash'
 import {UiRadioButton, UiInputNumber} from '@/ui-lib/output'
 import {specialAddCart} from '@/assets/js/xhr/service'
 
 export default {
     props: {
-        openItem: [Object],
+        item: [Object],
     },
     components: {
         UiRadioButton,
         UiInputNumber
     },
-    // computed: {
-    //     ...mapState([
-    //         'openItem'
-    //     ]),
-    // },
+    data() {
+        return {
+            openItem: _.cloneDeep(this.item) || {},
+        }
+    },
     methods: {
-        // ...mapMutations([
-        //     'setOpenItem',
-        // ])
+
     },
     watch: {
-        'openItem.selectedSku': function (val) {
-            let text = '';
-            let list = this.openItem.skuList;
-            if (list) {
-                for (let i = 0; i < list.length; i++) {
-                    let sku = list[i];
-                    if (sku[0] === val) {
-                        text = sku[1];
-                        break;
-                    }
-                }
-                this.openItem.selectedSkuText = text;
-            }
-            // this.setOpenItem(this.openItem)
-        }
+        'openItem': {
+            handler: function (val) {
+                        let text = '';
+                        let list = this.openItem.skuList;
+                        if (list) {
+                            for (let i = 0; i < list.length; i++) {
+                                let sku = list[i];
+                                if (sku[0] === val.selectedSku) {
+                                    text = sku[1];
+                                    break;
+                                }
+                            }
+                            this.openItem.selectedSkuText = text;
+                        }
+                        this.$emit('skuChange', this.openItem)
+                        console.log(this.openItem)
+                    },
+            deep: true,
+        },
     },
     mounted: function () {
 

@@ -10,6 +10,7 @@
       <dt>
         <img class="small-img" 
               :src="row.file"/>
+        <span>2000人购买</span>
       </dt>
       <dd>
         <h4>
@@ -36,22 +37,17 @@
 <script>
 import {mapState, mapMutations, mapActions} from 'vuex'
 import icon from '@/components/icon'
+import Loading from '@/ui-lib/src/loading/index'
+
 
 // 该组件为商品列表的展示，单个购买
 export default {
-  // props: {
-  //   productList: {
-  //     type: Array,
-  //     default: [],
-  //   },
-  //   openSkuList: Function,
-  // },
   components: {
     icon,
   },
   data() {
     return {
-      // list: this.productList
+      loading: null,
     }
   },
   computed: {
@@ -64,7 +60,14 @@ export default {
       'openSkuList',
     ]),
     openSku(item, origin) {
-      this.openSkuList({item: item, origin: origin})
+      let data = {item: item, origin: origin};
+      new Promise((resolve, reject) => {
+        this.loading = Loading();        
+        resolve(this.openSkuList(data));
+      })
+      .then((rsp) => {
+        this.loading.close();
+      })
     }
   }
 }
@@ -107,6 +110,10 @@ export default {
     overflow: hidden;
     img {
       @include square(240px);
+    }
+    span {
+      position: absolute;
+      // top
     }
   }
   dd {

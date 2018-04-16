@@ -49,7 +49,7 @@
             fontSizeMatchDeviceWidth();
         } else {    //在pc上优雅显示
             document.documentElement.style.fontSize = '24px';
-            var container = document.querySelector('.container');
+            var container = document.querySelector('html');
             if (container) {
                 container.style.cssText = 'max-width: 23.4375rem; min-width: 23.4375rem;margin: 0 auto;';
             }

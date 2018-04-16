@@ -7,7 +7,7 @@ import Vuex from 'vuex'
 import App from './special_v1.vue'
 
 import '@/assets/css/middleware.scss';
-import '@/ui-lib/output'
+import '@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC'
 
 import Message from '@/ui-lib/src/message/index'
 
@@ -19,12 +19,12 @@ Vue.config.productionTip = false
 
 
 /**
- * 关于这个新专题模板的vuex部分：
- * 慢慢改，现在只有special__product-list--select里面拥有vuex的内容，而且比较多，先不动。
- * 其他组件已经转为从props传数据了，从vuex剥离
+ * 放在外面的组件已经转为从props传数据了，从vuex剥离
  */
 
 import {getSku, postSpeicalOrder, specialAddCart} from '@/assets/js/xhr/service' 
+import {localhost} from '@/assets/js/config'
+import {home} from '@/assets/js/base'
 
 let today = new Date().format('yyyy年MM月dd日');
 const store = new Vuex.Store({
@@ -66,15 +66,6 @@ const store = new Vuex.Store({
       // },
     ],
 
-
-    // noteList: [
-    //   {
-    //     name: '周公山',
-    //     sex: '女',
-    //     age: '28',
-    //     content: '测2017年的感情运说下半年有正桃花，果然这个月就遇到现在的男朋友了，真的好开心！还挺准的，哈哈！'
-    //   },
-    // ],
     noteList: [
       {name:"蒋蔚",mobile:"186******89",address:"广西壮族自治区",status: '已发货',time: today},
       {name:"胡春梅",mobile:"137******25",address:"贵州省凯里市",status: '已发货',time: today},
@@ -168,16 +159,18 @@ const store = new Vuex.Store({
       state.origin = origin
     },
 
-    updateProduct(state, {targetPro, selected}) {
+    // 更新商品列表信息
+    updateProduct(state, {targetPro = {}, selected}) {
       let i;
+      let newItem = targetPro;
       for(i = 0; i < state.productList.length; i++) {
         let item = state.productList[i];
         if (item.itemId === targetPro.itemId) {
-          item.selected = selected || !!!targetPro.selected;
+          newItem.selected = selected || !!!targetPro.selected;
           break;
         }
       }
-      state.productList.splice(i, 1, targetPro);
+      state.productList.splice(i, 1, newItem);
     }
 
   },
@@ -186,9 +179,7 @@ const store = new Vuex.Store({
     toggleSelected({state, commit}, {targetPro, selected}) {
       if (!targetPro) {
         commit('toggleSelectedAll', {selectedAll: !state.selectedAll})
-
       } else {
-        // targetPro.selected = selected || !targetPro.selected;
         commit('updateProduct', {targetPro: targetPro, selected: selected});
 
         let selectedAll = state.productList.every((item) => item.selected);
@@ -203,27 +194,26 @@ const store = new Vuex.Store({
       let openItem = item || {};
       commit('changeOrigin', origin);
 
-      if (!openItem.skuList) {
-        getSku({id: openItem.itemId})
-        .then((rsp) => {
-          openItem.skuList = rsp && rsp.data || {};
+      return new Promise((resolve, reject) => {
+        if (!openItem.skuList) {
+          resolve(getSku({id: openItem.itemId}));
+        }
+        resolve();
+      })
+      .then((rsp) => {
+        if (rsp) {
+          openItem.skuList = rsp.data || {};
           openItem.count = item.count || 1;
-        })
-        .then(() => {
-          commit('setOpenItem', openItem)
-
-          // 有款式才调出skuList
-          if (openItem.skuList && openItem.skuList.length) {
-            commit('toggleSkuList', true);
-          }
-        })
-      } else {
-        // state.openItem = openItem || {};
+        }
+      })
+      .then(() => {
         commit('setOpenItem', openItem)
-        if (openItem.skuList && openItem.skuList.length) {
+        // 有款式才调出skuList
+        // if (openItem.skuCount) {
           commit('toggleSkuList', true);
-        }    
-      }
+        // }
+        return Promise.resolve();
+      })
     },
 
     closeskuList({state, commit}) {
@@ -231,78 +221,87 @@ const store = new Vuex.Store({
       commit('setOpenItem', {});
     },
 
-    confirmStyle({state, commit, dispatch}, {origin}) {
-
-      // 选中商品，同时将打开的商品同步到商品列表中
-      dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
-
-      // 根据不同来源入口，进行不同的处理
-      // 购物车，调接口
-      if (origin === 'cart') {
-        console.log('cart')
-        let openItem = state.openItem;
-        let postData = {
-          id: openItem.itemId,
-          num: openItem.count,
-          type: openItem.selectedSku,
-          typename: openItem.selectedSkuText,
-        }
-        specialAddCart(postData)
-        .then((rsp) => {
-          console.log(rsp)
+    confirmSku({state, commit, dispatch}, {origin}) {
+      return dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
+        .then(() => {
+          // 根据不同来源入口，进行不同的处理
+          // 购物车，调接口
+          if (origin === 'cart') {
+            // console.log('cart')
+            let openItem = state.openItem;
+            let postData = {
+              id: openItem.itemId,
+              num: openItem.count,
+              type: openItem.selectedSku,
+              typename: openItem.selectedSkuText,
+            }
+            return specialAddCart(postData)
+                    .then((rsp) => {
+                      commit('toggleSkuList', false);
+                      return Promise.resolve(rsp.tip || '成功加入购物车');                      
+                    })
+          }
+          // 首页单品中的立即请购按钮
+          if (origin === 'buy') {
+            // console.log('buy')
+            let openItem = state.openItem;
+            if (openItem.skuCount && !openItem.selectedSku) return Promise.reject('请选择规格');
+            return dispatch('postSpeicalOrder', [state.openItem]);
+          }
+          // 选择商品列表唤起的规格弹窗
+          if (origin === 'selectList') {
+            // console.log('selectList')
+            // 关闭款式弹窗
+            commit('toggleSkuList', false);
+            return Promise.resolve('confirm');
+          }
         })
-      }
-      // 首页单品中的立即请购按钮
-      if (origin === 'buy') {
-        console.log('buy')
-        dispatch('postSpeicalOrder');
-      }
-      // 选择商品列表唤起的规格弹窗
-      if (origin === 'selectList') {
-        console.log('selectList')
-        // 关闭款式弹窗
-        commit('toggleSkuList', false);
-      }
+
     },
 
     postSpeicalOrder({state}, data = {}) {
       let postData = {goods: []};
-      let list = state.productList;
+      let list = data || state.productList;
 
-      for (let i = 0; i < list.length; i++) {
-        let item = list[i];
-        if (item.selected) {
-
-          // 预留，对于有款式但是没选的商品，校验，目前是根据商品id发请求获取款式，还得想想怎么弄
-          if (item.skuList && item.skuList.length && !item.selectedSku) {
-            alert('请选择规格');
-            return;
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i];
+          if (item.selected) {
+  
+            // 对于有款式但是没选的商品，校验，商品数据中的skuCount字段标示规格数量
+            if (item.skuCount && !item.selectedSku) {
+              reject('请选择规格');
+              return;
+            }
+  
+            postData.goods.push({
+              orderId: item.itemId,
+              sku: item.selectedSku || '',
+              skuname: item.selectedSkuText || '',
+              num: item.count || 1,
+            })
           }
-
-          postData.goods.push({
-            orderId: item.itemId,
-            sku: item.selectedSku || '',
-            skuname: item.selectedSkuText || '',
-            num: item.count || 1,
-          })
         }
-      }
-
-      if (!postData.goods.length) {
-        alert('请选择商品')
-        return;
-      }
-
-      return postSpeicalOrder(postData)
-              .then((rsp) => {
-                console.log(rsp)
-                if (rsp) {
-                  rsp.url && (window.location.href = 'https://testshop.linghit.com' + rsp.url);
-                }
-              })
-    }
+        if (!postData.goods.length) {
+          reject('请选择商品');
+          return;
+        }
+        resolve(postData);
+      })
+      .then((data) => {
+        return postSpeicalOrder(data);
+      })
+      .then((rsp) => {
+        if (rsp) {
+          rsp.url && (window.location.href = (localhost ? 'https://testshop.linghit.com' : home()) + '/' + rsp.url);
+          // rsp.url && (window.location.href = ('https://testshop.linghit.com') + rsp.url);
+        }
+        return rsp || {};
+      })
+    },
   }
 })
+
 
 new Vue({
   el: '#app',

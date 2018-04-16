@@ -3,18 +3,21 @@
 
   <div class="special-footer__nav">
     <div class="special-footer__nav__item bdright">
+      <a :href="customServiceHref"></a>
       <icon icon="kefu"/>
       <h4 class="black-666">
         客服
       </h4>
     </div>
     <div class="special-footer__nav__item">
+      <a :href="cartHref"></a>
       <icon icon="cart"/>
       <h4 class="black-666">
         购物车
       </h4>
     </div>
     <div class="special-footer__nav__item btn-brown">
+      <a :href="customServicePhone"></a>
       <h1>电话下单</h1>
     </div>
     <div class="special-footer__nav__item btn-red" 
@@ -28,6 +31,8 @@
 
 <script>
 // import {mapState, mapMutations} from 'vuex'
+import {home} from '@/assets/js/base'
+import {customServicePhone} from '@/assets/js/config'
 import icon from './icon'
 
 export default {
@@ -36,6 +41,13 @@ export default {
   },
   components: {
     icon
+  },
+  data() {
+    return {
+      customServiceHref: 'https://shoplinghit.qiyukf.com/client?k=519bff0bdccf6c8cf2b98f15a94def0f&wp=1?channel=mlinghit',
+      cartHref: `${home()}/index.php?s=shop&c=cart`,
+      customServicePhone: `tel:${customServicePhone}`,
+    }
   },
   methods: {
     // ...mapMutations([
@@ -60,9 +72,10 @@ export default {
   @include flex-box();
 }
 .special-footer__nav__item {
+  @include flex-box (column, space-around, center);
   flex: 1 0 auto;
   width: 124px;
-  @include flex-box (column, space-around, center);
+  position: relative;
   .icon {
     display: inline-block;
     position: relative;
@@ -71,6 +84,9 @@ export default {
   h4 {
     @include line-height-center(24px);
     margin-bottom: 3px;
+  }
+  a {
+    @include absolute();
   }
 }
 

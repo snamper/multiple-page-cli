@@ -37,9 +37,9 @@
             <p class="product-selectlist__item__operation bottom">
               <em>{{row.price}}</em>
               <a class="product-selectlist__item__operation-btn--right btn_default" 
-                  @click="openSkuList({item: row, origin: 'selectList'})">
-                {{skuText(row)}}
-                <!-- {{row.selectedSku}} + {{row.count}} -->
+                  @click="openSku(row)" 
+                  v-if="row.skuCount">
+                {{getSkuText(row)}}
                 <icon class="right vc" 
                       icon="more"/>
               </a>
@@ -57,6 +57,8 @@
 <script>
 import {mapState, mapMutations, mapActions} from 'vuex'
 import icon from '@/components/icon'
+import Loading from '@/ui-lib/src/loading/index'
+
 
 // 该组件为商品列表的展示，多选购买
 export default {
@@ -64,6 +66,7 @@ export default {
   data() {
     return {
       icon: 'circle1',
+      loading: null,
     }
   },
   computed: {
@@ -82,7 +85,8 @@ export default {
       'toggleSelected',
       'openSkuList',
     ]),
-    skuText(row = {}) {
+
+    getSkuText(row = {}) {
       let text = '';
       if(row) {
         // text = (row.selectedSku ? row.selectedSku : '') + (row.count ? row.count : 0) + '件' + '选择规格';
@@ -92,7 +96,17 @@ export default {
       }
       return text;
     },
-    
+
+    openSku(row) {
+      let data = {item: row, origin: 'selectList'};
+      new Promise((resolve, reject) => {
+        this.loading = Loading();        
+        resolve(this.openSkuList(data));
+      })
+      .then((rsp) => {
+        this.loading.close();
+      })
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
 <header class="special-header">
 
     <div class="special-header__logo">
-      <a>
+      <a :href="logoHref">
         <img src="https://s103.ggwan.com/shopv2/special/images/logo_special.png"/>
       </a>
     </div>
@@ -19,30 +19,30 @@
 </template>
 
 <script>
-import middleware from '@/assets/js/middleware.js'
-let {base} = middleware
+import {home} from '@/assets/js/base.js'
 
 export default {
   data() {
     return {
+      logoHref: `${home()}?channel=mlinghit`,
 
       // 顶部导航列表
       list: [
         {
           t: '首页',
-          href: `${base.home()}/special/single2015/411.html`
+          href: `${home()}?channel=mlinghit`
         },
         {
           t: '生肖流年',
-          href: `${base.home()}/special/single2015/411.html`          
+          href: `${home()}/special/zhuanti/1816.html?channel=mlinghit`
         },
         {
           t: '本命佛',
-          href: `${base.home()}/special/single2015/411.html`          
+          href: `${home()}/shop/cat/31.html?channel=mlinghit`          
         },
         {
           t: '招财转运',
-          href: `${base.home()}/special/single2015/411.html`          
+          href: `https://user.linghit.com/login?redirect_uri=https://shop.linghit.com/login.html&source=3002&channel=mlinghit`          
         }
       ]
     }
@@ -58,15 +58,16 @@ export default {
 @import '../assets/css/mixin.scss';
 
 .special-header {
-  @include line-height-center(100px);
-  background: $white-2;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  border-bottom: 1px solid $black-eee;
-  z-index: 20;
+  @include page-header();
+  // @include line-height-center(100px);
+  // background: $white-2;
+  // width: 100%;
+  // position: fixed;
+  // top: -100px;
+  // left: 0;
+  // right: 0;
+  // border-bottom: 1px solid $black-eee;
+  // z-index: 20;
 }
 .special-header__logo {
   @include absolute();

@@ -24,92 +24,100 @@ Date.prototype.format = Date.prototype.format || function(format) {
     return format;
 }
 
-const base = {
-    typeof : function (source) {
-        if (!source) {
-            return;
-        }
+import {localhost} from './config'
 
-        var type;
-        if (typeof source !== 'object') {
-            type = typeof source;
-        } else {
-            switch (Object.prototype.toString.call(source)) {
-                case '[object Object]':
-                    type = 'object';
-                    break;
-                case '[object Array]':
-                    type = 'array';
-                    break;
-                // 待补充 Date、RegExp 等。。现在比较赶
+export function getTypeOf (source) {
+    if (!source) {
+        return;
+    }
+
+    var type;
+    if (typeof source !== 'object') {
+        type = typeof source;
+    } else {
+        switch (Object.prototype.toString.call(source)) {
+            case '[object Object]':
+                type = 'object';
+                break;
+            case '[object Array]':
+                type = 'array';
+                break;
+            // 待补充 Date、RegExp 等。。现在比较赶
+        }
+    }
+    return type;    
+}
+
+export function getTypeMap (source) {
+    var typeMap = {};
+    if ($b.getBaseType(source) === 'array') {
+        for (var i = 0; i < source.length; i++) {
+            typeMap[$b.getBaseType(source[i])] = source[i]
+        }
+    }
+    return typeMap;
+}
+
+export function getUrlParams (key) {
+    var search = window.location.search || '';
+    var paramsCache = [];
+    var result = {};
+    if (search) {
+        paramsCache = search.slice(1).split('&')
+        for(var i = 0; i < paramsCache.length; i++) {
+            var row = paramsCache[i].split('=')
+            if (key && key === row[0]) {
+                return row[1];
             }
+            result[row[0]] = row[1];
         }
-        return type;    
-    },
+    }
+    return result;
+}
 
-    getTypeMap : function (source) {
-        var typeMap = {};
-        if ($b.getBaseType(source) === 'array') {
-            for (var i = 0; i < source.length; i++) {
-                typeMap[$b.getBaseType(source[i])] = source[i]
-            }
-        }
-        return typeMap;
-    },
-
-    getUrlParams : function (key) {
-        var search = window.location.search || '';
-        var paramsCache = [];
-        var result = {};
-        if (search) {
-            paramsCache = search.slice(1).split('&')
-            for(var i = 0; i < paramsCache.length; i++) {
-                var row = paramsCache[i].split('=')
-                if (key && key === row[0]) {
-                    return row[1];
-                }
-                result[row[0]] = row[1];
-            }
-        }
-        return result;
-    },
-
-    // 在原来项目中copy过来的，感觉不是很好
-    //cookies设置
-    setCookie : function (name, value) {		
-        var argv = arguments;
-        var argc = arguments.length;
-        var expires = (argc > 2) ? argv[2] : null;
-        var LargeExpDate = new Date ();    
-        if(expires!=null) {
-            LargeExpDate.setTime(LargeExpDate.getTime() + (expires*1000*3600*24));
-        }
-        document.cookie = name + "=" + encodeURIComponent (value)+((expires == null) ? "" : ("; expires=" +LargeExpDate.toGMTString()));
-    },
+// 在原来项目中copy过来的，感觉不是很好
+//cookies设置
+export function setCookie (name, value) {
+    var argv = arguments;
+    var argc = arguments.length;
+    var expires = (argc > 2) ? argv[2] : null;
+    var LargeExpDate = new Date ();    
+    if(expires!=null) {
+        LargeExpDate.setTime(LargeExpDate.getTime() + (expires*1000*3600*24));
+    }
+    document.cookie = name + "=" + encodeURIComponent (value)+((expires == null) ? "" : ("; expires=" +LargeExpDate.toGMTString()));
+}
 
     //cookies读取
-    getCookie : function (Name) {
-        var search = Name + "=";
-        if(document.cookie.length > 0) {
-            offset = document.cookie.indexOf(search)
-            if(offset != -1) {
-                offset += search.length
-                end = document.cookie.indexOf(";", offset)
-                if(end == -1) {
-                    end = document.cookie.length
-                }
-                return decodeURIComponent(document.cookie.substring(offset, end))
+export function getCookie (Name) {
+    var search = Name + "=";
+    if(document.cookie.length > 0) {
+        offset = document.cookie.indexOf(search)
+        if(offset != -1) {
+            offset += search.length
+            end = document.cookie.indexOf(";", offset)
+            if(end == -1) {
+                end = document.cookie.length
             }
-            else{
-                return "";
-            }
+            return decodeURIComponent(document.cookie.substring(offset, end))
         }
-    },
-
-    home: function () {
-        let location = window.location;
-        return `${location.protocol}//${location.host}`;
+        else{
+            return "";
+        }
     }
-};
+}
 
-export default base;
+// 获取域名
+export function home () {
+    let location = window.location;
+    return localhost ? 'https://testshop.linghit.com' : `${location.protocol}//${location.host}`;
+}
+
+// 将html实体转换为字符
+export function entityToString(entity = '') {
+    let div = document.createElement('div');
+    div.innerHTML = entity;
+
+    let res = div.innerText || div.textContent;
+    return res;
+}
