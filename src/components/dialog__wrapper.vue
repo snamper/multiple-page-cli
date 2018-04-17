@@ -29,7 +29,7 @@ export default {
 @import '../assets/css/mixin';
 
 .dialog__wrapper {
-  @include fixed();
+  @include fixedPC();
   background: $white-1;
   z-index: 30;
 }

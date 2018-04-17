@@ -53,6 +53,13 @@
   bottom: $bottom;
   left: $left;
 }
+@mixin fixedPC () {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 23.4375rem;
+}
 
 // 常用的
 @mixin line-height-center ($height: 100%, $line-height: $height, $align: center) {

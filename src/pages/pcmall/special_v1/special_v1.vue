@@ -2,9 +2,8 @@
 <div id="special_v1" class="container">
   <special-header v-if="showHeaderNav"/>
   <div class="wrapper">
-    <section class="special-img-list" v-html="contentdata">
-    </section>
-      <!-- <img src="https://sslresources.linghit.com/shopv2_1508482864.jpg"/> -->
+    <section class="special-img-list" v-html="contentdata"></section>
+    <!-- <img src="https://sslresources.linghit.com/shopv2_1508482864.jpg"/> -->
 
     <section class="section-layout product-wrapper" v-if="showProductList">
       <div class="section-header">
@@ -249,7 +248,7 @@ export default {
       })
       .catch((err) => {
         this.$message(err);
-        this.loading.close;        
+        this.loading.close();        
       })
     },
 
@@ -311,6 +310,15 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.special-img-list {
+  width: 100%;
+  img {
+    width: 100%;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 @import '../../../assets/css/variable.scss';
 @import '../../../assets/css/mixin.scss';
@@ -323,12 +331,6 @@ export default {
 .container {
   background: #f4efea;
   position: relative;
-}
-
-.special-img-list {
-  img {
-    width: 100%;
-  }
 }
 
 // 对product-wrapper 独立定制一部分
