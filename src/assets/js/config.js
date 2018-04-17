@@ -2,8 +2,8 @@
 // 全局变量配置
 
 
-// 是否本地 localhost
-export const localhost = false
+// 是否本地 localhost (判断是连 测服:true 还是 动态配url:false)
+export const localhost = true
 
 // cookie中获取用户信息的key
 export const userInfoCookieKey = 'linghit_b1bf4_member_info'
