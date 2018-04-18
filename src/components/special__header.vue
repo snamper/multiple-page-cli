@@ -59,24 +59,22 @@ export default {
 
 .special-header {
   @include page-header();
-  // @include line-height-center(100px);
-  // background: $white-2;
-  // width: 100%;
-  // position: fixed;
-  // top: -100px;
-  // left: 0;
-  // right: 0;
-  // border-bottom: 1px solid $black-eee;
-  // z-index: 20;
+  @include flex-box();
+  @include fixedPC();
+  width: 100%;
 }
 .special-header__logo {
-  @include absolute();
+  // @include absolute();
+  position: relative;
   right: unset;
-  width: 160px;
+  // width: 160px;
+  flex: 0 1 160px;
   overflow: hidden;
   margin: 0 20px;
   a {
-    @include absolute();
+    // @include absolute();
+    display: block;
+    height: 100%;
   }
   img {
     position: absolute;
@@ -86,19 +84,18 @@ export default {
   }
 }
 .special-header__nav {
-  display: flex;
+  @include flex-box(row, space-between);
   height: 100%;
-  padding-left: 200px;
   font-size: 28px;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: stretch;
+  flex: 1 1 auto;
   li {
     text-align: center;
     width: 50%;
     position: relative;
     a {
-      @include absolute();
+      // @include absolute();
+      display: block;
+      width: 100%;
       height: 100%;
       color: $black-666;
     }

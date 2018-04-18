@@ -38,7 +38,7 @@
               <em>{{row.price}}</em>
               <a class="product-selectlist__item__operation-btn--right btn_default" 
                   @click="openSku(row)" 
-                  v-if="row.skuCount">
+                >
                 {{getSkuText(row)}}
                 <icon class="right vc" 
                       icon="more"/>
@@ -69,31 +69,39 @@ export default {
       loading: null,
     }
   },
+  props: {
+    productList: Array,
+    selectedAll: Boolean,
+    toggleProList: Function,
+    toggleSelected: Function,
+    openSkuList: Function,
+  },
   computed: {
-    ...mapState([
-      'showProList',
-      'showSkuList',
-      'productList',
-      'selectedAll',
-    ]),
+    // ...mapState([
+    //   'productList',
+    //   'selectedAll',
+    // ]),
   },
   methods: {
-    ...mapMutations([
-      'toggleProList',
-    ]),
-    ...mapActions([
-      'toggleSelected',
-      'openSkuList',
-    ]),
+    // ...mapMutations([
+    //   'toggleProList',
+    // ]),
+    // ...mapActions([
+    //   'toggleSelected',
+    //   'openSkuList',
+    // ]),
 
     getSkuText(row = {}) {
       let text = '';
+      let skuText = '';
+      let countText = '';
       if(row) {
-        // text = (row.selectedSku ? row.selectedSku : '') + (row.count ? row.count : 0) + '件' + '选择规格';
-        text = row.selectedSkuText + row.count + '件';
-        !row.count && (text = '选择数量');
-        !row.selectedSkuText && (text = '选择规格');
+        if (row.skuCount > 0) {
+          skuText = row.selectedSkuText || '选择规格';
+        }
+        countText = `数量${row.count}件`;
       }
+      text = `${skuText ? skuText + ',' : ''}${countText}`;
       return text;
     },
 
@@ -112,9 +120,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/variable.scss';
-@import '../../../../assets/css/mixin.scss';
-@import '../../../../assets/css/common.scss';
+@import '../assets/css/variable.scss';
+@import '../assets/css/mixin.scss';
+@import '../assets/css/common.scss';
 
 .wrapper {
   height: 90%;

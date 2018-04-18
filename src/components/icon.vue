@@ -48,7 +48,7 @@ export default {
 // 神奇的 map 结构，拯救以后改 icon 路径的我
 // 官网没细写，看这个 => https://www.w3cplus.com/preprocessor/sass-maps.html
 $icon-map: (
-  // back: 'back.jpg',
+  back: 'back.jpg',
   // truck: 'truck.jpg',
   more: 'more.jpg',
   // location: 'location.jpg',
@@ -72,6 +72,7 @@ $icon-map: (
   cart: 'cart.png',
   // private: 'private.png',
   square: 'square.png',
+  phone: 'phone.png',
 );
 
 // 统一生成路径。。改的时候可以偷懒

@@ -7,7 +7,7 @@ import Vuex from 'vuex'
 import App from './special_v1.vue'
 
 import '@/assets/css/middleware.scss';
-import '@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC'
+// import '@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC'
 
 import Message from '@/ui-lib/src/message/index'
 
@@ -99,6 +99,7 @@ const store = new Vuex.Store({
     showSkuList: false,
     openItem: {},
     totalPrice: 0,
+    cartCount: 0,
     seo: {},
     case: {},
 
@@ -152,6 +153,10 @@ const store = new Vuex.Store({
 
     setOpenItem(state, data = {}) {
       state.openItem = data;
+    },
+
+    setCartCount(state, count) {
+      state.cartCount = count || 0;
     },
 
     // 调出选择款式
@@ -238,6 +243,7 @@ const store = new Vuex.Store({
             return specialAddCart(postData)
                     .then((rsp) => {
                       commit('toggleSkuList', false);
+                      commit('setCartCount', rsp.totalnum || 0);
                       return Promise.resolve(rsp.tip || '成功加入购物车');                      
                     })
           }
@@ -253,7 +259,7 @@ const store = new Vuex.Store({
             // console.log('selectList')
             // 关闭款式弹窗
             commit('toggleSkuList', false);
-            return Promise.resolve('confirm');
+            return Promise.resolve('操作成功');
           }
         })
 
@@ -261,7 +267,7 @@ const store = new Vuex.Store({
 
     postSpeicalOrder({state}, data = {}) {
       let postData = {goods: []};
-      let list = data || state.productList;
+      let list = state.productList || data;
 
       return new Promise((resolve, reject) => {
         for (let i = 0; i < list.length; i++) {
@@ -270,8 +276,7 @@ const store = new Vuex.Store({
   
             // 对于有款式但是没选的商品，校验，商品数据中的skuCount字段标示规格数量
             if (item.skuCount && !item.selectedSku) {
-              reject('请选择规格');
-              return;
+              return reject('请选择规格');
             }
   
             postData.goods.push({
@@ -283,12 +288,12 @@ const store = new Vuex.Store({
           }
         }
         if (!postData.goods.length) {
-          reject('请选择商品');
-          return;
+          return reject('请选择商品');
         }
-        resolve(postData);
+        return resolve(postData);
       })
       .then((data) => {
+        // debugger
         return postSpeicalOrder(data);
       })
       .then((rsp) => {
@@ -297,6 +302,10 @@ const store = new Vuex.Store({
           // rsp.url && (window.location.href = ('https://testshop.linghit.com') + rsp.url);
         }
         return rsp || {};
+      })
+      .catch(err => {
+        console.log(err)
+        return Promise.reject(err);
       })
     },
   }

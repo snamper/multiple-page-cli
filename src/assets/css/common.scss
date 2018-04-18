@@ -34,6 +34,10 @@
   @include operate();
   font-size: 20px;  
 }
+.operate_large {
+  @include operate();
+  font-size: 28px;
+}
 
 // 普通操作（按钮，#666）
 .btn_default {
@@ -68,6 +72,10 @@
   text-align: center;
 }
 
+.position {
+  @include absolute();
+}
+
 
 /** ================================================================
 *      以下为各种列表或容器的基本样式（可理解为壳）
@@ -94,8 +102,9 @@
 *****************************/
 .container {
   height: 100%;
-  max-width: 23.4375rem;
+  overflow: hidden;
   margin: 0 auto;
+  position: relative;  
 }
 
 /*****************************
@@ -112,7 +121,6 @@
   margin-top: 100px;
   min-height: 1130px; // for the browsers that don't support the calc() function
   min-height: calc(100vh - 200px);
-  max-width: 23.4375rem;
 }
 // 下面两块为定制出另外两个壳，该思路可行，定制容器
 
@@ -163,6 +171,12 @@
     display: inline-block;
     vertical-align: sub;
   }
+}
+.section-header__sub-title {
+
+}
+.section-header__plain-title {
+  text-align: left;
 }
 
 /*****************************
@@ -276,7 +290,6 @@
 // 模式变为：
 // 主体内容容器块section-layout
 // 列表块 *-list
-// 再下面的列表项 *-list_item (中划线区分内容与模式，下划线区分父与子块
 
 /*****************************
         .tabs
@@ -580,12 +593,16 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explor
     footer
 *****************************/
 .footer{
-  @include fixedPC();
+  @include fixed();
+  // @include fixedPC();
   top: unset;
+  bottom: 0;
   width: 100%;
   height: 100px;
   overflow: hidden;
   text-align: center;
+  background: #fff;
+  border-top: 1px solid #ccc;
   ul{
     display: flex;
     flex-flow: row nowrap;

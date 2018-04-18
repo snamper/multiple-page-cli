@@ -30,7 +30,9 @@
 
       <!-- 商品列表 -->
       <!-- <product-list-view :product-list="productList" :openSkuList="openSkuListDialog"/> -->
-      <product-list-view/>      
+      <product-list-view 
+        :openSkuList="openSkuList" 
+        :productList="productList"/>      
 
     </section>
 
@@ -72,7 +74,7 @@
     <section class="section-layout note-wrapper" v-if="showSpecialCase">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
-          <icon icon="square"/>          
+          <icon icon="square"/>
             来看看别人怎么说
           <icon icon="square"/>          
         </h1>
@@ -83,16 +85,12 @@
             v-for="(row,index) in caseList" 
             :key="index">
           <h3 class="note-list__item__title black-666 bold">
-            {{row.alt}}
+            {{row.name}}
             <span>
-              {{row.sex}}
-              {{row.age}}岁
-            </span>
-            <span class="right">
-              {{row.address}}
+              {{randomAge()}}岁
             </span>
             <p class="note-list__item__content black-999">
-              {{row.skuname}}
+              {{row.content}}
             </p>
           </h3>
         </li>
@@ -101,13 +99,22 @@
   </div>
   <!-- wrapper end -->
 
-  <special-footer :toBuy="toggleProList" v-if="showProductList"/>
+  <special-footer 
+    :toBuy="toggleProList" 
+    :count="cartCount"
+    v-if="showProductList"
+    />
 
   <transition name="dialogUp">
     <dialog-wrapper 
         opacity="visible" 
         v-if="showProList" >
-      <product-list-select/>
+      <product-list-select 
+        :productList="productList" 
+        :selectedAll="selectedAll" 
+        :toggleProList="toggleProList" 
+        :toggleSelected="toggleSelected" 
+        :openSkuList="openSkuList"/>
       <dialog-footer>
           <pay-footer 
             :totalPrice="totalPrice" 
@@ -121,11 +128,15 @@
     <dialog-wrapper v-if="showSkuList" 
         v-on:click.native.prevent.self="closeskuList">
       <sku-list :item="openItem" v-on:skuChange="skuChange"/>
-      <dialog-footer>
+      <dialog-footer height="high">
         <a class="dialog__footer__btn--large btn_primary vhc" 
             v-on:click.prevent="setItemSku">确认</a>
       </dialog-footer>
     </dialog-wrapper>
+  </transition>
+
+  <transition name="dialogUp">
+    <order-form/>
   </transition>
 </div>
 </template>
@@ -136,13 +147,14 @@ import {entityToString} from '@/assets/js/base'
 
 import specialHeader from '@/components/special__header'
 import specialFooter from '@/components/special__footer'
-import productListView from '@/pages/pcmall/special_v1/components/special__product-list--view'
-import productListSelect from '@/pages/pcmall/special_v1/components/special__product-list--select'
+import productListView from '@/components/product-list--view'
+import productListSelect from '@/components/product-list--select'
 import dialogWrapper from '@/components/dialog__wrapper'
 import skuList from '@/components/sku-list'
 import dialogFooter from '@/components/dialog__footer'
 import icon from '@/components/icon'
 import payFooter from '@/components/pay__footer'
+import orderForm from '@/components/order-form'
 
 // require styles
 import 'swiper/dist/css/swiper.css'
@@ -167,7 +179,8 @@ export default {
     icon,
     swiper,
     swiperSlide,
-    payFooter
+    payFooter,
+    orderForm
   },
   data() {
     return {
@@ -193,6 +206,7 @@ export default {
     ...mapState([
       'showProList',
       'productList',
+      'selectedAll',
       'noteList',
       'caseList',
       'showSkuList',
@@ -200,6 +214,7 @@ export default {
       'openItem',
       'origin',
       'totalPrice',
+      'cartCount',
     ]),
     // 是否显示顶部导航
     showHeaderNav() {
@@ -231,11 +246,15 @@ export default {
       'setOpenItem',
     ]),
     ...mapActions([
-      // 'openSkuList',
+      'openSkuList',
       'closeskuList',
       'confirmSku',
       'postSpeicalOrder',
+      'toggleSelected',
     ]),
+    randomAge() {
+      return Math.round(28 + Math.random() * 17);
+    },
     setItemSku() {
       new Promise((resolve, reject) => {
         this.loading = Loading();
@@ -244,7 +263,7 @@ export default {
       .then((rsp) => {
         // console.log(rsp);
         this.loading.close();
-        this.$message(rsp.tip || rsp);
+        rsp && this.$message(rsp.tip || rsp);
       })
       .catch((err) => {
         this.$message(err);
@@ -264,6 +283,9 @@ export default {
     }
   },
   mounted() {
+
+    require('@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC')
+
     // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。
     const id = getSpecialId() || 1366;
 
@@ -295,14 +317,14 @@ export default {
     
     // 案例 + 模块
     getSpecialCase({id: id}).then((rsp) => {
-      // console.log(rsp)
+      console.log(rsp)
       rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
       rsp.modata && (this.modalData = rsp.modata);
     })
 
     // 获取专题内容
     getSpecialContent({id: id}).then((rsp) => {
-      console.log(rsp)
+      // console.log(rsp)
       rsp.contentdata && (this.contentdata = entityToString(rsp.contentdata));
     })
 
@@ -330,7 +352,6 @@ export default {
 
 .container {
   background: #f4efea;
-  position: relative;
 }
 
 // 对product-wrapper 独立定制一部分

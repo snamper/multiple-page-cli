@@ -3,9 +3,10 @@
     <div 
       class="ui-message" 
       v-show="visiable"
+      @click="close"
     >
       {{message}}
-      <i class="icon icon-close" @click="close">X</i>
+      <!-- <i class="icon icon-close" @click="close">X</i> -->
     </div>
   </transition>
 </template>
@@ -19,6 +20,7 @@ export default {
       onClose: null,
       timer: null,
       duration: 3000,
+      message: null,
     }
   },
   watch: {
@@ -66,7 +68,7 @@ export default {
 
 <style scoped>
 .ui-message-fade-enter, .ui-message-fade-leave-to {
-  top: 0 !important;
+  /* top: 0 !important; */
   opacity: 0.6;
 }
 .ui-message-fade-enter-active, .ui-message-fade-leave-active {
@@ -75,14 +77,16 @@ export default {
 
 .ui-message {
   position: fixed;
-  top: 20px;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%, -50%);
   z-index: 100000;
   text-align: center;
-  background: #fff;
+  /* background: #fff; */
+  background: rgba(0,0,0,0.7);
+  color: #fff;
   border-radius: 6px;
-  padding: 10px 50px 10px 20px;
+  padding: 30px 40px 30px 40px;
   font-size: 32px;
   border: 1px solid #ccc;
 }

@@ -121,6 +121,8 @@ body, input, textarea {
 	color: #333;
 	// font-size: pxtorem(24px);
 	font-size: 24px;
+	border: 0;
+	outline: 0;
 }
 
 i, b, small, strong, em, del {
@@ -264,6 +266,56 @@ p, span {
 }
 .mrbottom-0 {
 	margin-bottom: 0;
+}
+.mrh-0 {	// margin-horizon
+	margin-left: 0;
+	margin-right: 0;
+}
+.mrh-1 {
+	margin-left: suit-size(1);
+	margin-right: suit-size(1);
+}
+.mrh-2 {
+	margin-left: suit-size(2);
+	margin-right: suit-size(2);
+}
+.mrv-0 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.mrv-1 {
+	margin-top: suit-size(1);
+	margin-bottom: suit-size(1);
+}
+.mrv-2 {
+	margin-top: suit-size(2);
+	margin-bottom: suit-size(2);
+}
+
+// padding
+.pdh-0 {	// padding-horizon
+	padding-left: 0;
+	padding-right: 0;
+}
+.pdh-1 {
+	padding-left: suit-size(1);
+	padding-right: suit-size(1);
+}
+.pdh-2 {
+	padding-left: suit-size(2);
+	padding-right: suit-size(2);
+}
+.pdv-0 {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.pdv-1 {
+	padding-top: sui¡t-size(1);
+	padding-bottom: suit-size(1);
+}
+.pdv-2 {
+	padding-top: suit-size(2);
+	padding-bottom: suit-size(2);
 }
 
 // 垂直水平居中

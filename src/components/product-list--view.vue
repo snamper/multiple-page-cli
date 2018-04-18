@@ -35,13 +35,17 @@
 </template>
 
 <script>
-import {mapState, mapMutations, mapActions} from 'vuex'
+// import {mapState, mapMutations, mapActions} from 'vuex'
 import icon from '@/components/icon'
 import Loading from '@/ui-lib/src/loading/index'
 
 
 // 该组件为商品列表的展示，单个购买
 export default {
+  props: {
+    productList: Array,
+    openSkuList: Function,
+  },
   components: {
     icon,
   },
@@ -51,14 +55,14 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'productList'
-    ])
+    // ...mapState([
+    //   'productList'
+    // ])
   },
   methods: {
-    ...mapActions([
-      'openSkuList',
-    ]),
+    // ...mapActions([
+    //   'openSkuList',
+    // ]),
     openSku(item, origin) {
       let data = {item: item, origin: origin};
       new Promise((resolve, reject) => {
@@ -74,9 +78,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/variable.scss';
-@import '../../../../assets/css/mixin.scss';
-@import '../../../../assets/css/common.scss';
+@import '../assets/css/variable.scss';
+@import '../assets/css/mixin.scss';
+@import '../assets/css/common.scss';
 
 .product-viewlist {
   overflow: hidden;

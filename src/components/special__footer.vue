@@ -11,7 +11,10 @@
     </div>
     <div class="special-footer__nav__item">
       <a :href="cartHref"></a>
-      <icon icon="cart"/>
+      <p>
+        <icon icon="cart"/>
+        <b v-if="count">{{count}}</b>
+      </p>
       <h4 class="black-666">
         购物车
       </h4>
@@ -38,6 +41,7 @@ import icon from './icon'
 export default {
   props: {
     toBuy: Function,
+    count: [String, Number]
   },
   components: {
     icon
@@ -67,6 +71,7 @@ export default {
 
 .special-footer{
   @include page-footer();
+  @include fixedPC();
 }
 .special-footer__nav {
   @include flex-box();
@@ -77,9 +82,21 @@ export default {
   width: 124px;
   position: relative;
   .icon {
-    display: inline-block;
     position: relative;
     height: 1.5rem;
+  }
+  b {
+    @include line-height-center(30px);
+    display: inline-block;
+    background: $red-1;
+    color: $white;
+    border-radius: 50%;
+    min-width: 24px;
+    max-width: 64px;
+    padding: 2px 4px;
+    position: absolute;
+    top: 0;
+    right: 4px;
   }
   h4 {
     @include line-height-center(24px);

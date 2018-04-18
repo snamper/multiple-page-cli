@@ -7,9 +7,9 @@ let instance;
 let instances = [];   // message队列
 let seed = 1;         // 标记message顺序
 
-const Message = function (options) {
+const Message = function (options = {}) {
   if (Vue.prototype.$isServer) return;
-  options = options || {};
+  // options = options || {};
   if (typeof options === 'string') {
     options = {
       message: options

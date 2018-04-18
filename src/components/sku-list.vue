@@ -1,6 +1,9 @@
 <template>
 <div class="wrapper style-list__layout">
-    <section class="section-layout style-list__wrapper">
+
+    <section class="section-layout style-list__wrapper" 
+        v-if="openItem.skuCount > 0"
+        >
         <div class="section-header">
             <h1 class="style-list__wrapper__title section-header__title bold">规格</h1>
         </div>
@@ -92,12 +95,14 @@ export default {
     @include flex-box(column, flex-start);
     margin-top: 0;
     margin-bottom: 0;
-    padding-bottom: 140px;
     position: absolute;
     bottom: 0;
     height: auto;
     min-height: auto;
     background: $white;
+    max-height: 60%;
+    overflow: scroll;
+    margin: 0 auto 140px;
 }
 
 .style-list__wrapper {

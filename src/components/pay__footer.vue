@@ -17,17 +17,20 @@ export default {
     payFn: Function,
     totalPrice: [String, Number],
   },
+  data() {
+    return {
+      btnDisabled: false
+    }
+  },
   methods: {
-    clickFn(e) {
-      let srcBtn = e.srcElement;
-      if (srcBtn.disabled) {
-        return;
-      }
-      srcBtn.disabled = true;
+    clickFn() {
+      console.log('click')
       this.payFn()
       .then(() => {
-        // console.log('has pay')
-        srcBtn.disabled = false;
+        console.log('has pay')
+      })
+      .catch(err => {
+        this.$message(err)
       })
     }
   }
@@ -40,6 +43,7 @@ export default {
 
 .pay__footer {
   @include page-footer();
+  @include fixedPC();
 }
 
 .pay__footer__layout {

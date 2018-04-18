@@ -54,11 +54,11 @@
   left: $left;
 }
 @mixin fixedPC () {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 23.4375rem;
+  @media screen and (min-width: 420px) {
+    max-width: 23.4375rem;
+    min-width: 23.4375rem;
+    margin: 0 auto;   
+  }
 }
 
 // 常用的
@@ -132,13 +132,12 @@
 @mixin page-header () {
   @include line-height-center(100px);
   background: $white-2;
-  width: 100%;
+  // width: 100%;
   position: fixed;
   top: 0;
   margin: 0 auto;
   border-bottom: 1px solid $black-eee;
   z-index: 20;
-  max-width: 23.4375rem;
 }
 @mixin page-footer () {
   // height: 90px;
@@ -151,5 +150,4 @@
   color: $black-666;
   border-top: 1px solid $black-eee;
   z-index: 20;
-  max-width: 23.4375rem;  
 }

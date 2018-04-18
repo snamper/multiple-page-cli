@@ -1,12 +1,26 @@
 <template>
 <header class="header page-header">
-
+  <icon icon="back" @click="back"/>
+  <h1 class="page-header__title">
+    <slot></slot>
+  </h1>
 </header>
 </template>
 
 <script>
+import icon from '@/components/icon'
 export default {
-
+  components: {
+    icon
+  },
+  props: {
+    backFn: Function
+  },
+  methods: {
+    back() {
+      this.backFn && this.backFn() || history.back();
+    }
+  }
 }
 </script>
 
@@ -23,12 +37,12 @@ export default {
   right: 0;
   border-bottom: 1px solid $black-eee;
   z-index: 20;
-  .left {
-      position: absolute;
-      top: 0;
-      width: 100px;
-      height: 100px;
-  }
+  // .left {
+  //     position: absolute;
+  //     top: 0;
+  //     width: 100px;
+  //     height: 100px;
+  // }
   .icon-back {
       display: block;
       height: 100px;
@@ -41,6 +55,9 @@ export default {
     top: 0;
     @include line-height-center(100px);
   }
+}
+.page-header__title {
+  font-weight: 600;
 }
 
 .header__title {
