@@ -19,13 +19,10 @@
       <div class="product-selectlist__item" 
             v-for="(row, index) in productList" 
             :key="index">
+        <icon :icon="row.selected ? 'tick4' : 'circle'" 
+              class="product-selectlist__item__select-icon vc" 
+              @click="toggleSelected({targetPro: row})"/>
 
-        <!-- <div class="product-selectlist__item__select-icon left vc"> -->
-          <!-- <i class="icon icon-circle"></i> -->
-          <icon :icon="row.selected ? 'tick4' : 'circle'" 
-                class="product-selectlist__item__select-icon vc" 
-                v-on:click.native="toggleSelected({targetPro: row})"/>
-        <!-- </div> -->
         <dl>
           <dt class="product-selectlist__item__img-wrapper">
             <img :src="row.file"/>
@@ -76,21 +73,7 @@ export default {
     toggleSelected: Function,
     openSkuList: Function,
   },
-  computed: {
-    // ...mapState([
-    //   'productList',
-    //   'selectedAll',
-    // ]),
-  },
   methods: {
-    // ...mapMutations([
-    //   'toggleProList',
-    // ]),
-    // ...mapActions([
-    //   'toggleSelected',
-    //   'openSkuList',
-    // ]),
-
     getSkuText(row = {}) {
       let text = '';
       let skuText = '';

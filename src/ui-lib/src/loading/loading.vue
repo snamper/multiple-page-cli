@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .icon {
   /* position: absolute; */
   /* display: block; */
@@ -34,6 +34,8 @@ export default {
   /* top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); */
+  left: 50%;
+  transform: translateX(-50%);
   background-image: url('./icon_loading.gif');
 }
 

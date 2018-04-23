@@ -2,9 +2,6 @@
 // 全局变量配置
 
 
-// 是否本地 localhost (判断是连 测服:true 还是 动态配url:false)
-export const localhost = true
-
 // cookie中获取用户信息的key
 export const userInfoCookieKey = 'linghit_b1bf4_member_info'
 // 从找出的cookie中获取用户id的正则
@@ -14,6 +11,9 @@ export const userIdReg = /(s:2:"id";s:18:")([0-9]{18})/i
 // orderStatusToQueryLogistics: [1,2],
 
 // followerStatusToQueryLogistics: [2,3,4,5,6,7,8,9],
+
+// 联系电话的校验
+export const mobileRegExp = /^[\d-\+]{1,20}$/;
 
 // 客服电话
 export const customServicePhone = '400-150-0558'

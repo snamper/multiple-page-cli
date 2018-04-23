@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import emitter from '../mixin/emitter'
+import emitter from '../../mixin/emitter'
 
 export default {
     name: 'UiRadioButton',
@@ -44,17 +44,13 @@ export default {
                 // 设置值
                 return this._radioGroup ? this._radioGroup.value : this.value;
             },
-            set(val) {
-                // 敲黑板！！数值带出组件的关键
-                // 通过 input 事件带出数值
-                // this.$emit('input', val)
-                
-                if (this._radioGroup) {
-                    this.dispatch('UiRadioButton', 'input', [val]);
-                } else {
-                    this.$emit('input', val);
-                }
-            }
+            // set(val) {
+            //     if (this._radioGroup) {
+            //         this.dispatch('UiRadioGroup', 'radio-value-change', [val]);
+            //     } else {
+            //         this.$emit('input', val);
+            //     }
+            // }
         },
         isDisabled() {
             return this.disabled;
@@ -109,7 +105,7 @@ input {
     bottom: 0;
     height: 30px;
     width: 30px;
-    background-image: url('../image/icon_tick3.png');
+    background-image: url('../../image/icon_tick3.png');
     background-size: contain;
 }
 </style>

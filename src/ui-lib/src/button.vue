@@ -1,5 +1,6 @@
 <template>
 <button class="ui-button" 
+        @click="handleClick"
         :class="[
             btnSize, 
             btnType,
@@ -35,6 +36,11 @@ export default {
         },
         isDisabled() {
             return this.disabled;
+        }
+    },
+    methods: {
+        handleClick() {
+            this.$emit('click', this);
         }
     }
 }

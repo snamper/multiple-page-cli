@@ -1,5 +1,5 @@
 <template>
-<i :class="className">
+<i :class="className" @click="click">
   <slot></slot>
 </i>
 </template>
@@ -21,12 +21,17 @@ export default {
     className() {
       return `icon icon-${this.icon}`;
     }
+  },
+  methods: {
+    click() {
+      this.$emit('click');
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-@charset 'utf-8';
+<style lang="scss">
+@import '../assets/css/common.scss';
 
 /*
  *  放icon的

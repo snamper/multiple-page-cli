@@ -14,11 +14,12 @@ export default {
     icon
   },
   props: {
-    backFn: Function
+    // backFn: Function
   },
   methods: {
     back() {
-      this.backFn && this.backFn() || history.back();
+      // this.backFn && this.backFn() || history.back();
+      this.$emit('backFn');
     }
   }
 }

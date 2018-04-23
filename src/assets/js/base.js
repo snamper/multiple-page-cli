@@ -24,7 +24,6 @@ Date.prototype.format = Date.prototype.format || function(format) {
     return format;
 }
 
-import {localhost} from './config'
 
 export function getTypeOf (source) {
     if (!source) {
@@ -110,7 +109,8 @@ export function getCookie (Name) {
 // 获取域名
 export function home () {
     let location = window.location;
-    return localhost ? 'https://testshop.linghit.com' : `${location.protocol}//${location.host}`;
+    let host = location.host;
+    return host.includes('localhost') ? 'https://testshop.linghit.com' : `${location.protocol}//${location.host}`;    
 }
 
 // 将html实体转换为字符
@@ -120,4 +120,7 @@ export function entityToString(entity = '') {
 
     let res = div.innerText || div.textContent;
     return res;
+}
+export function trim(str) {
+    return (str || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
 }

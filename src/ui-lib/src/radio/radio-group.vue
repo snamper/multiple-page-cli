@@ -5,34 +5,35 @@
 </template>
 
 <script>
-import emitter from '../mixin/emitter'
+// import emitter from '../../mixin/emitter'
 
 export default {
     name: 'UiRadioGroup',
     componentName: 'UiRadioGroup',
 
     props: {
-        value: {}
+        value: {},
+        type: String,
     },
     
-    mixins: [emitter],
+    // mixins: [emitter],
 
     created() {
-        this.$on('handleChange', value => {
-            this.$emit('input', value);
-        })   
+    
     }, 
     mounted() {
-
+        this.$on('handleChange', value => {
+            this.$emit('input', value);
+        })
     }
 }
 </script>
 
 <style scoped>
 .ui-radio-group {
-    border: 1px solid #eee;
+    /* border: 1px solid #eee; */
     width: 100%;
-    display: inline-block;
+    /* display: inline-block; */
     font-size: 0;
     line-height: 1;
     vertical-align: middle;

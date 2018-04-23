@@ -54,15 +54,7 @@ export default {
       loading: null,
     }
   },
-  computed: {
-    // ...mapState([
-    //   'productList'
-    // ])
-  },
   methods: {
-    // ...mapActions([
-    //   'openSkuList',
-    // ]),
     openSku(item, origin) {
       let data = {item: item, origin: origin};
       new Promise((resolve, reject) => {
@@ -80,7 +72,7 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/css/variable.scss';
 @import '../assets/css/mixin.scss';
-@import '../assets/css/common.scss';
+// @import '../assets/css/common.scss';
 
 .product-viewlist {
   overflow: hidden;

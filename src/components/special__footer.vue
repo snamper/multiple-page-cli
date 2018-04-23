@@ -11,10 +11,8 @@
     </div>
     <div class="special-footer__nav__item">
       <a :href="cartHref"></a>
-      <p>
-        <icon icon="cart"/>
-        <b v-if="count">{{count}}</b>
-      </p>
+      <icon icon="cart"/>
+      <b v-if="count">{{count}}</b>
       <h4 class="black-666">
         购物车
       </h4>
@@ -33,14 +31,13 @@
 </template>
 
 <script>
-// import {mapState, mapMutations} from 'vuex'
 import {home} from '@/assets/js/base'
 import {customServicePhone} from '@/assets/js/config'
 import icon from './icon'
 
 export default {
   props: {
-    toBuy: Function,
+    clickBuy: Function,
     count: [String, Number]
   },
   components: {
@@ -54,11 +51,8 @@ export default {
     }
   },
   methods: {
-    // ...mapMutations([
-    //   'toggleProList'
-    // ])
     buy() {
-      this.toBuy(true);
+      this.$emit('clickBuy');
     }
   }
 }
@@ -99,7 +93,7 @@ export default {
     right: 4px;
   }
   h4 {
-    @include line-height-center(24px);
+    @include line-height-center(0px);
     margin-bottom: 3px;
   }
   a {

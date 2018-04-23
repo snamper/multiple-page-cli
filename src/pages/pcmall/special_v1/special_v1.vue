@@ -99,51 +99,48 @@
   </div>
   <!-- wrapper end -->
 
+  <!-- 专题footer -->
   <special-footer 
-    :toBuy="toggleProList" 
+    @clickBuy="openProductDialog" 
     :count="cartCount"
     v-if="showProductList"
-    />
+  />
 
-  <transition name="dialogUp">
-    <dialog-wrapper 
-        opacity="visible" 
-        v-if="showProList" >
-      <product-list-select 
-        :productList="productList" 
-        :selectedAll="selectedAll" 
-        :toggleProList="toggleProList" 
-        :toggleSelected="toggleSelected" 
-        :openSkuList="openSkuList"/>
-      <dialog-footer>
-          <pay-footer 
-            :totalPrice="totalPrice" 
-            :payFn="postOrder"
-            />
-      </dialog-footer>
-    </dialog-wrapper>
-  </transition>
+  <!-- 商品选择列表 -->
+  <dialog-wrapper 
+      opacity="visible" 
+      v-if="showProductDialog" >
+    <product-list-select 
+      :productList="productList" 
+      :selectedAll="selectedAll" 
+      :toggleProList="closeProductDialog" 
+      :toggleSelected="toggleSelected" 
+      :openSkuList="openSkuList"/>
+    <dialog-footer>
+        <pay-footer 
+          :totalPrice="totalPrice" 
+          :payFn="toForm"
+          />
+    </dialog-footer>
+  </dialog-wrapper>
 
-  <transition name="dialogUp">
-    <dialog-wrapper v-if="showSkuList" 
-        v-on:click.native.prevent.self="closeskuList">
-      <sku-list :item="openItem" v-on:skuChange="skuChange"/>
-      <dialog-footer height="high">
-        <a class="dialog__footer__btn--large btn_primary vhc" 
-            v-on:click.prevent="setItemSku">确认</a>
-      </dialog-footer>
-    </dialog-wrapper>
-  </transition>
+  <!-- 规格选择弹窗 -->
+  <dialog-wrapper v-if="showSkuList" @close="closeskuList">
+    <sku-list :item="openItem" v-on:skuChange="skuChange"/>
+    <dialog-footer height="high">
+      <a class="dialog__footer__btn--large btn_primary vhc" 
+          v-on:click.prevent="setItemSku">确认</a>
+    </dialog-footer>
+  </dialog-wrapper>
 
-  <transition name="dialogUp">
-    <order-form/>
-  </transition>
+  <!-- 表单弹窗 -->
+  <order-form @confirmForm="postOrder" @back="closeForm" v-show="showForm"/>
 </div>
 </template>
 
 <script>
 import {getSpecialId} from '@/assets/js/common'
-import {entityToString} from '@/assets/js/base'
+import {entityToString, getUrlParams} from '@/assets/js/base'
 
 import specialHeader from '@/components/special__header'
 import specialFooter from '@/components/special__footer'
@@ -200,11 +197,16 @@ export default {
       // 【2和3好像差不多。。只用2就好了
       modalData: [],
       contentdata: '',
+      channel: '',
+      channelMark: '',
+
+      // 是否显示表单
+      showForm: false,
+      showProductDialog: false,
     }
   },
   computed: {
     ...mapState([
-      'showProList',
       'productList',
       'selectedAll',
       'noteList',
@@ -239,10 +241,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setSpecialSeo',
       'setSpecialProductList',
       'setSpecialCase',
-      'toggleProList',
       'setOpenItem',
     ]),
     ...mapActions([
@@ -252,22 +252,40 @@ export default {
       'postSpeicalOrder',
       'toggleSelected',
     ]),
+
+    // 开关商品选择列表
+    openProductDialog() {
+      this.showProductDialog = true;
+    },
+    closeProductDialog() {
+      this.showProductDialog = false;
+    },
+    // 开关表单
+    openForm() {
+      this.showForm = true;
+    },
+    closeForm() {
+      this.showForm = false;
+    },
+
+    // 输出随机数（年龄
     randomAge() {
       return Math.round(28 + Math.random() * 17);
     },
+
     setItemSku() {
       new Promise((resolve, reject) => {
         this.loading = Loading();
-        resolve(this.confirmSku({origin: this.origin}));
+        return resolve(this.confirmSku({origin: this.origin}));
       })
       .then((rsp) => {
-        // console.log(rsp);
         this.loading.close();
         rsp && this.$message(rsp.tip || rsp);
+        this.origin === 'buy' && this.openForm();
       })
       .catch((err) => {
         this.$message(err);
-        this.loading.close();        
+        this.loading.close();
       })
     },
 
@@ -276,9 +294,55 @@ export default {
       this.setOpenItem(val);
     },
 
-    postOrder() {
+    // 提交订单请求
+    postOrder(data) {
+      if (!data) return;
+      let formData = data;
+      formData.channel_mark = this.channelMark;
+      formData.channel = this.channel;
       return new Promise((resolve, reject) => {
-        resolve(this.postSpeicalOrder());
+        resolve(this.postSpeicalOrder(formData));
+      })
+      .then((rsp) => {
+        this.$message(rsp.tip || rsp);
+      })
+      .catch((err) => {
+        this.$message(err.tip || err);
+      })
+    },
+
+    // 选择商品列表，进入表单
+    toForm() {
+      let list = this.productList;
+      let goods = [];
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < list.length; i++) {
+          let item = list[i];
+          if (item.selected) {
+  
+            // 对于有款式但是没选的商品，校验，商品数据中的skuCount字段标示规格数量
+            if (item.skuCount && !item.selectedSku) {
+              return reject('请选择规格');
+            }
+  
+            goods.push({
+              orderId: item.itemId,
+              sku: item.selectedSku || '',
+              skuname: item.selectedSkuText || '',
+              num: item.count || 1,
+            })
+          }
+        }
+        if (!goods.length) {
+          return reject('请选择商品');
+        }
+        return resolve();
+      })
+      .then(() => {
+        this.openForm();
+      })
+      .catch(err => {
+        this.$message(err);
       })
     }
   },
@@ -286,15 +350,16 @@ export default {
 
     require('@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC')
 
-    // 关于SEO，想使用nuxt的，暂时搭不出来。用渲染方式顶着。。
+    // 关于SEO，先用着渲染方式。。
     const id = getSpecialId() || 1366;
+    this.channel = getUrlParams('channel');
 
     // 发请求
     // SEO
     getSpecialSeo({id: id}).then((rsp) => {
-      console.log(rsp);
       if (rsp.data) {
         let data = rsp.data;
+        this.channelMark = data.channelmark;
         document.querySelector('title').innerHTML = data.title;
       }
     })
@@ -333,18 +398,8 @@ export default {
 </script>
 
 <style lang="scss">
-.special-img-list {
-  width: 100%;
-  img {
-    width: 100%;
-  }
-}
-</style>
-
-<style lang="scss" scoped>
 @import '../../../assets/css/variable.scss';
 @import '../../../assets/css/mixin.scss';
-@import '../../../assets/css/common.scss';
 
 .swiper-container {
   height: 520px;
@@ -366,5 +421,11 @@ export default {
   background: $white;
   border-radius: 10px;
   border: 2px solid $black-eee;
+}
+.special-img-list {
+  width: 100%;
+  img {
+    width: 100%;
+  }
 }
 </style>
