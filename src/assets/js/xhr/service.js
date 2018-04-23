@@ -17,7 +17,7 @@ export const getSpecialCase = (data = {}) => request(`${home()}/index.php?s=shop
 export const getSku = (data) => request(`${home()}/index.php?s=shop&c=special&a=getsku`, 'post', data);
 
 // 新版专题提交订单接口
-export const postSpeicalOrder = (data) => request(`${home()}/index.php?s=shop&c=special&a=order`, 'post', data);
+export const postSpeicalOrder = (data) => request(`${home()}/index.php?s=shop&c=special&a=newspecial`, 'post', data);
 
 // 专题，单件商品加入购物车
 export const specialAddCart = (data) => request(`${home()}/index.php?s=shop&c=cart&a=add`, 'post', data);

@@ -8,16 +8,20 @@
             <h1 class="style-list__wrapper__title section-header__title bold">规格</h1>
         </div>
 
-        <div class="style-list__radio-group">
+        <!-- <div class="style-list__radio-group"> -->
+        <ui-radio-group 
+            class="style-list__radio-group"
+            v-model="openItem.selectedSku"
+        >
             <ui-radio-button 
                 class="style-list__radio"
                 v-for="(row, index) in openItem.skuList" 
                 :key="index"
-                v-model="openItem.selectedSku"
                 :label="row[0]">
                 {{row[1]}}
             </ui-radio-button>
-        </div>
+        </ui-radio-group>
+        <!-- </div> -->
     </section>
 
     <section class="section-layout style-list__wrapper">
@@ -40,7 +44,7 @@
 <script>
 // import {mapState, mapMutations} from 'vuex'
 import _ from 'lodash'
-import {UiRadioButton, UiInputNumber} from '@/ui-lib/output'
+import {UiRadioGroup, UiRadioButton, UiInputNumber} from '@/ui-lib/output'
 import {specialAddCart} from '@/assets/js/xhr/service'
 
 export default {
@@ -48,6 +52,7 @@ export default {
         item: [Object],
     },
     components: {
+        UiRadioGroup,
         UiRadioButton,
         UiInputNumber
     },

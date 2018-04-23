@@ -23,7 +23,6 @@ Vue.config.productionTip = false
  */
 
 import {getSku, postSpeicalOrder, specialAddCart} from '@/assets/js/xhr/service' 
-import {localhost} from '@/assets/js/config'
 import {home} from '@/assets/js/base'
 
 let today = new Date().format('yyyy年MM月dd日');
@@ -94,23 +93,18 @@ const store = new Vuex.Store({
     ],
     caseList: [],
 
-    showProList: false,
     selectedAll: false,
     showSkuList: false,
     openItem: {},
     totalPrice: 0,
     cartCount: 0,
-    seo: {},
     case: {},
 
     // origin: 来源，打开skuList的入口按钮。购物车：cart，单品立即购买：buy，商品列表打开：selectList
-    origin: 'buy',  
+    origin: 'buy',
   },
 
   mutations: {
-    toggleProList(state, show = false) {
-      state.showProList = show;
-    },
     toggleSkuList(state, show = false) {
       state.showSkuList = show;
     },
@@ -139,10 +133,6 @@ const store = new Vuex.Store({
       state.totalPrice = price;
     },
 
-    setSpecialSeo(state, data = {}) {
-      state.seo = data;
-    },
-
     setSpecialProductList(state, data = {}) {
       state.productList = data;
     },
@@ -166,6 +156,10 @@ const store = new Vuex.Store({
 
     // 更新商品列表信息
     updateProduct(state, {targetPro = {}, selected}) {
+      if(targetPro.selected && targetPro.skuCount > 0 && !targetPro.selectedSku) {
+        return;
+      }
+
       let i;
       let newItem = targetPro;
       for(i = 0; i < state.productList.length; i++) {
@@ -227,8 +221,17 @@ const store = new Vuex.Store({
     },
 
     confirmSku({state, commit, dispatch}, {origin}) {
-      return dispatch('toggleSelected', {targetPro: state.openItem, selected: true})
-        .then(() => {
+      return new Promise((resolve, reject) => {
+        // 只要点规格的确认，马上检查有没有选规格
+        let openItem = state.openItem;
+        if (openItem.skuCount && !openItem.selectedSku) return reject('请选择规格');
+        return resolve();
+      })
+      .then(() => {
+        // 检查完没问题了，就更新商品数据
+        return Promise.resolve(dispatch('toggleSelected', {targetPro: state.openItem, selected: true}))
+      })
+      .then(() => {
           // 根据不同来源入口，进行不同的处理
           // 购物车，调接口
           if (origin === 'cart') {
@@ -249,14 +252,10 @@ const store = new Vuex.Store({
           }
           // 首页单品中的立即请购按钮
           if (origin === 'buy') {
-            // console.log('buy')
-            let openItem = state.openItem;
-            if (openItem.skuCount && !openItem.selectedSku) return Promise.reject('请选择规格');
-            return dispatch('postSpeicalOrder', [state.openItem]);
+            return Promise.resolve();
           }
           // 选择商品列表唤起的规格弹窗
           if (origin === 'selectList') {
-            // console.log('selectList')
             // 关闭款式弹窗
             commit('toggleSkuList', false);
             return Promise.resolve('操作成功');
@@ -267,7 +266,8 @@ const store = new Vuex.Store({
 
     postSpeicalOrder({state}, data = {}) {
       let postData = {goods: []};
-      let list = state.productList || data;
+      let formData = data || {};
+      let list = state.productList;
 
       return new Promise((resolve, reject) => {
         for (let i = 0; i < list.length; i++) {
@@ -290,16 +290,17 @@ const store = new Vuex.Store({
         if (!postData.goods.length) {
           return reject('请选择商品');
         }
-        return resolve(postData);
+
+        // 加入表单数据
+        let resolveData = Object.assign({}, postData, formData);
+        return resolve(resolveData);
       })
       .then((data) => {
-        // debugger
         return postSpeicalOrder(data);
       })
       .then((rsp) => {
         if (rsp) {
-          rsp.url && (window.location.href = (localhost ? 'https://testshop.linghit.com' : home()) + '/' + rsp.url);
-          // rsp.url && (window.location.href = ('https://testshop.linghit.com') + rsp.url);
+          rsp.url && (window.location.href = home() + '/' + rsp.url);
         }
         return rsp || {};
       })

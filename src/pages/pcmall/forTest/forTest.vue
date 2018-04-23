@@ -6,11 +6,11 @@
       </ui-radio-button>
     <!-- </ui-radio-button-group> -->
 
-    <ui-radio-button-group v-model="result">
+    <ui-radio-group v-model="result">
       <ui-radio-button v-for="row in list" :key="row.v" :label="row.t">
         {{row.t}}
       </ui-radio-button>
-    </ui-radio-button-group>
+    </ui-radio-group>
     {{result}}
 
     <ui-button type="confirm" size="small">
@@ -26,9 +26,7 @@
 </template>
 
 <script>
-import UiRadioButton from '@/ui-lib/src/radio-button'
-import UiRadioButtonGroup from '@/ui-lib/src/radio-group'
-import UiButton from '@/ui-lib/src/button'
+import {UiRadioGroup, UiRadioButton, UiButton} from '@/ui-lib/output'
 
 export default {
   name: 'index',
@@ -53,7 +51,7 @@ export default {
   },
   components: {
     UiRadioButton,
-    UiRadioButtonGroup,
+    UiRadioGroup,
     UiButton,
   },
   mounted: function () {

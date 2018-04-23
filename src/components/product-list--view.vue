@@ -54,15 +54,7 @@ export default {
       loading: null,
     }
   },
-  computed: {
-    // ...mapState([
-    //   'productList'
-    // ])
-  },
   methods: {
-    // ...mapActions([
-    //   'openSkuList',
-    // ]),
     openSku(item, origin) {
       let data = {item: item, origin: origin};
       new Promise((resolve, reject) => {

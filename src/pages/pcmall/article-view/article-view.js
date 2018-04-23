@@ -6,17 +6,16 @@ import Vue from 'vue'
 import App from './article-view.vue'
 
 import '@/assets/css/middleware.scss';
-import '@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC'
+// import '@/assets/js/commonFontsizeMatchDeviceWidthAdaptatePC'
 
 import Message from '@/ui-lib/src/message/index'
-
 
 Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false
 
 new Vue({
-    el: '#app',
-    components: {App},
-    template: '<App/>',
+  el: '#app',
+  components: { App },
+  template: '<App/>'
 })

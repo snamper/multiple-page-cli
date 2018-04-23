@@ -1,13 +1,18 @@
 <template>
-<div class="dialog__wrapper" :class="bg">
-  <slot>提示：该组件是一个全屏弹窗，需要嵌套其他组件</slot>
-</div>
+<transition name="dialogUp">
+  <div 
+    class="dialog__wrapper" 
+    :class="bg"
+    @click.self="close"
+  >
+    <slot>提示：该组件是一个全屏弹窗，需要嵌套其他组件</slot>
+  </div>
+</transition>
 </template>
 
 <script>
 export default {
   props: {
-
     // 是否半透明
     // @default 'trans' 半透明
     //          'visible' 不透明
@@ -16,10 +21,23 @@ export default {
       default: 'trans'
     }
   },
+  data() {
+    return {
+
+    }
+  },
   computed: {
     bg: function () {
       return this.opacity;
     }
+  },
+  methods: {
+    close() {
+      this.$emit('close');
+    }
+  },
+  mounted() {
+    
   }
 }
 </script>
@@ -27,6 +45,7 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/css/variable';
 @import '../assets/css/mixin';
+@import '../assets/css/common';
 
 .dialog__wrapper {
   @include fixed();

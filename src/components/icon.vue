@@ -1,5 +1,5 @@
 <template>
-<i :class="className">
+<i :class="className" @click="click">
   <slot></slot>
 </i>
 </template>
@@ -20,6 +20,11 @@ export default {
   computed: {
     className() {
       return `icon icon-${this.icon}`;
+    }
+  },
+  methods: {
+    click() {
+      this.$emit('click');
     }
   }
 }

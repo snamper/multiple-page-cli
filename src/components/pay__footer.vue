@@ -24,13 +24,12 @@ export default {
   },
   methods: {
     clickFn() {
-      console.log('click')
-      this.payFn()
+      return Promise.resolve(this.payFn())
       .then(() => {
-        console.log('has pay')
+        return Promise.resolve();
       })
       .catch(err => {
-        this.$message(err)
+        return Promise.reject(err);
       })
     }
   }
