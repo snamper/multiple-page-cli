@@ -156,6 +156,10 @@ const store = new Vuex.Store({
 
     // 更新商品列表信息
     updateProduct(state, {targetPro = {}, selected}) {
+      if(targetPro.selected && targetPro.skuCount > 0 && !targetPro.selectedSku) {
+        return;
+      }
+
       let i;
       let newItem = targetPro;
       for(i = 0; i < state.productList.length; i++) {
