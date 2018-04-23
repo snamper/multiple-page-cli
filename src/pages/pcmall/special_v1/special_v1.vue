@@ -101,11 +101,7 @@
 
   <!-- 专题footer -->
   <special-footer 
-<<<<<<< HEAD
     @clickBuy="openProductDialog" 
-=======
-    :toBuy="openProductDialog" 
->>>>>>> refs/remotes/origin/master
     :count="cartCount"
     v-if="showProductList"
   />
