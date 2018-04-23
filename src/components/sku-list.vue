@@ -1,50 +1,62 @@
 <template>
-<div class="wrapper style-list__layout">
+<dialog-wrapper @close="close">
+    <div class="wrapper style-list__layout">
 
-    <section class="section-layout style-list__wrapper" 
-        v-if="openItem.skuCount > 0"
-        >
-        <div class="section-header">
-            <h1 class="style-list__wrapper__title section-header__title bold">规格</h1>
-        </div>
-
-        <!-- <div class="style-list__radio-group"> -->
-        <ui-radio-group 
-            class="style-list__radio-group"
-            v-model="openItem.selectedSku"
-        >
-            <ui-radio-button 
-                class="style-list__radio"
-                v-for="(row, index) in openItem.skuList" 
-                :key="index"
-                :label="row[0]">
-                {{row[1]}}
-            </ui-radio-button>
-        </ui-radio-group>
-        <!-- </div> -->
-    </section>
-
-    <section class="section-layout style-list__wrapper">
-        <div class="section-header">
-            <h1 class="style-list__wrapper__title section-header__title bold">数量</h1>
-            <div class="right vc">
-                <ui-input-number 
-                    class="style-list__wrapper__input-number"
-                    type="text"
-                    placeholder="默认"
-                    v-model="openItem.count"
-                    />
+        <section class="section-layout style-list__wrapper" 
+            v-if="openItem.skuCount > 0"
+            >
+            <div class="section-header">
+                <h1 class="style-list__wrapper__title section-header__title bold">规格</h1>
             </div>
-        </div>
-    </section>
 
-</div>
+            <ui-radio-group 
+                class="style-list__radio-group"
+                v-model="openItem.selectedSku"
+            >
+                <ui-radio-button 
+                    class="style-list__radio"
+                    v-for="(row, index) in openItem.skuList.data" 
+                    :key="index"
+                    :label="row[0]"
+                >
+                    {{row[1]}}
+                </ui-radio-button>
+            </ui-radio-group>
+        </section>
+
+        <section class="section-layout style-list__wrapper">
+            <div class="section-header">
+                <h1 class="style-list__wrapper__title section-header__title bold">数量</h1>
+                <div class="right vc">
+                    <ui-input-number 
+                        class="style-list__wrapper__input-number"
+                        type="text"
+                        placeholder="默认"
+                        v-model="openItem.count"
+                        />
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <dialog-footer height="high">
+        <a class="dialog__footer__btn--large btn_primary vhc" 
+            @click="confirm"
+        >
+            确认
+        </a>
+    </dialog-footer>
+</dialog-wrapper>
 </template>
 
 <script>
 // import {mapState, mapMutations} from 'vuex'
 import _ from 'lodash'
 import {UiRadioGroup, UiRadioButton, UiInputNumber} from '@/ui-lib/output'
+import dialogWrapper from '@/components/dialog__wrapper'
+import dialogFooter from '@/components/dialog__footer'
+
 import {specialAddCart} from '@/assets/js/xhr/service'
 
 export default {
@@ -54,7 +66,9 @@ export default {
     components: {
         UiRadioGroup,
         UiRadioButton,
-        UiInputNumber
+        UiInputNumber,
+        dialogWrapper,
+        dialogFooter,
     },
     data() {
         return {
@@ -62,13 +76,20 @@ export default {
         }
     },
     methods: {
-
+        close() {
+            this.$emit('close');
+        },
+        confirm() {
+            if (this.openItem.skuCount && !this.openItem.selectedSku) return this.$message('请选择规格');
+            this.close();
+            this.$emit('confirm', this.openItem);
+        }
     },
     watch: {
         'openItem': {
             handler: function (val) {
                         let text = '';
-                        let list = this.openItem.skuList;
+                        let list = this.openItem.skuList.data;
                         if (list) {
                             for (let i = 0; i < list.length; i++) {
                                 let sku = list[i];
@@ -79,8 +100,6 @@ export default {
                             }
                             this.openItem.selectedSkuText = text;
                         }
-                        this.$emit('skuChange', this.openItem)
-                        console.log(this.openItem)
                     },
             deep: true,
         },
@@ -94,7 +113,6 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/css/variable.scss';
 @import '../assets/css/mixin.scss';
-@import '../assets/css/common.scss';
 
 .style-list__layout {
     @include flex-box(column, flex-start);

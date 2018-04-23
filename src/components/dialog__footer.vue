@@ -1,5 +1,5 @@
 <template>
-<footer class="footer dialog__footer" :class="[{'high': height === 'high'}]">
+<footer class="dialog__footer" :class="[{'high': height === 'high'}]">
     <slot></slot>
 </footer>
 </template>
@@ -22,6 +22,10 @@ export default {
 .dialog__footer {
     @include line-height-center(90px);
     @include fixedPC();
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
 }
 .high {
     @include line-height-center(140px);

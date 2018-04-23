@@ -1,79 +1,134 @@
 <template>
-<div class="product-selectlist__container">
+<dialog-wrapper opacity="visible">
+  <div class="product-selectlist__container">
 
-  <header class="product-selectlist__header">
-    <span class="left vc" 
-        @click="toggleSelected">
-      <icon :icon="selectedAll ? 'tick4' : 'circle'"/>
-      全选
-    </span>
-    <h2 class="bold">
-      支持货到付款
-    </h2>
-    <a class="btn_default right vc" 
-        @click="toggleProList(false)">取消</a>
-  </header>
+    <header class="product-selectlist__header">
+      <span class="left vc" @click="toggleSelected()">
+        <icon :icon="selectedAll ? 'tick4' : 'circle'"/>
+        全选
+      </span>
+      <h2 class="bold">
+        支持货到付款
+      </h2>
+      <a class="btn_default right vc" 
+          @click="close">取消</a>
+    </header>
 
-  <div class="wrapper">
-    <div class="product-selectlist">
-      <div class="product-selectlist__item" 
-            v-for="(row, index) in productList" 
-            :key="index">
-        <icon :icon="row.selected ? 'tick4' : 'circle'" 
-              class="product-selectlist__item__select-icon vc" 
-              @click="toggleSelected({targetPro: row})"/>
+    <div class="wrapper">
+      <div class="product-selectlist">
+        <div class="product-selectlist__item" 
+              v-for="(row, index) in list" 
+              :key="index">
+          <icon 
+            :icon="row.selected ? 'tick4' : 'circle'" 
+            class="product-selectlist__item__select-icon vc" 
+            @click="toggleSelected(row)"
+          />
 
-        <dl>
-          <dt class="product-selectlist__item__img-wrapper">
-            <img :src="row.file"/>
-          </dt>
-          <dd class="product-selectlist__item__info-wrapper">
-            <h3 class="product-selectlist__item__name bold">
-              {{row.alt}}
-            </h3>
-            <p class="product-selectlist__item__operation bottom">
-              <em>{{row.price}}</em>
-              <a class="product-selectlist__item__operation-btn--right btn_default" 
-                  @click="openSku(row)" 
-                >
-                {{getSkuText(row)}}
-                <icon class="right vc" 
-                      icon="more"/>
-              </a>
-            </p>
-          </dd>
-        </dl>
+          <dl>
+            <dt class="product-selectlist__item__img-wrapper">
+              <img :src="row.file"/>
+            </dt>
+            <dd class="product-selectlist__item__info-wrapper">
+              <h3 class="product-selectlist__item__name bold">
+                {{row.alt}}
+              </h3>
+              <p class="product-selectlist__item__operation bottom">
+                <em>{{row.price}}</em>
+                <a class="product-selectlist__item__operation-btn--right btn_default" 
+                    @click="openSkuDialog(row)" 
+                  >
+                  {{getSkuText(row)}}
+                  <icon class="right vc" 
+                        icon="more"/>
+                </a>
+              </p>
+            </dd>
+          </dl>
 
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>
+  <dialog-footer>
+    <pay-footer 
+      :totalPrice="totalPrice" 
+      @clickPay="clickPayBtn"
+    />
+  </dialog-footer>
+</dialog-wrapper>
 </template>
 
 <script>
-import {mapState, mapMutations, mapActions} from 'vuex'
+import dialogWrapper from '@/components/dialog__wrapper'
+import dialogFooter from '@/components/dialog__footer'
+import payFooter from '@/components/pay__footer'
 import icon from '@/components/icon'
 import Loading from '@/ui-lib/src/loading/index'
 
+import _ from 'lodash'
 
 // 该组件为商品列表的展示，多选购买
 export default {
-  components: {icon},
+  props: {
+    productList: Array,
+    clickPay: Function,
+  },
+  components: {
+    icon,
+    dialogWrapper,
+    dialogFooter,
+    payFooter,
+  },
   data() {
+    // let list = _.cloneDeep(this.productList);
+    // list.every((item) => {
+    //   item.selected = false;
+    //   return true;
+    // });
     return {
+      // list: list,
       icon: 'circle1',
       loading: null,
     }
   },
-  props: {
-    productList: Array,
-    selectedAll: Boolean,
-    toggleProList: Function,
-    toggleSelected: Function,
-    openSkuList: Function,
+  computed: {
+    // 注意。这里没有深拷贝一个list作为子组件私有属性。
+    // 利用了引用赋值的特点，达成数组中各种属性改变时，父子组件的状态同步
+    list() {
+      return this.productList;
+    },
+    selectedAll() {
+      let list = this.list;
+      return list.every((item) => item.selected);
+    },
+    totalPrice() {
+      let price = this.list.reduce((preItem, item) => {
+        return preItem + (item.selected ? item.price * item.count : 0);
+      }, 0);
+      return price;
+    }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
+    toggleSelected(item) {
+      // debugger
+      // 单选
+      if (item) {
+        item.selected = !!!item.selected;
+      } else {
+        // 全选
+        let result = !this.selectedAll;
+        this.list.every(item => {
+          item.selected = result;
+          return true;
+        });
+      }
+    },
+
     getSkuText(row = {}) {
       let text = '';
       let skuText = '';
@@ -88,15 +143,21 @@ export default {
       return text;
     },
 
-    openSku(row) {
-      let data = {item: row, origin: 'selectList'};
-      new Promise((resolve, reject) => {
-        this.loading = Loading();        
-        resolve(this.openSkuList(data));
-      })
-      .then((rsp) => {
-        this.loading.close();
-      })
+    openSkuDialog(item) {
+      this.$emit('openSkuDialog', {item: item, origin: 'selectList'});
+    },
+
+    clickPayBtn() {
+      let list = this.list;
+      let selectCount = 0;
+      for (let i = 0, len = list.length; i < len; i++) {
+        let item = list[i];
+        if (item.selected) {
+          selectCount++;
+          if (item.skuCount && !item.selectedSku) return this.$message('请选择规格');
+        }
+      }
+      return selectCount <= 0 && this.$message('请选择商品') || this.$emit('clickPay');
     }
   }
 }

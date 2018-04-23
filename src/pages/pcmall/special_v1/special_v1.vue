@@ -29,10 +29,10 @@
       </div>
 
       <!-- 商品列表 -->
-      <!-- <product-list-view :product-list="productList" :openSkuList="openSkuListDialog"/> -->
       <product-list-view 
-        :openSkuList="openSkuList" 
-        :productList="productList"/>      
+        @openSkuDialog="openSkuDialog" 
+        :productList="productList"
+      />
 
     </section>
 
@@ -71,7 +71,7 @@
       </div>
     </section>
 
-    <section class="section-layout note-wrapper" v-if="showSpecialCase">
+    <section class="section-layout note-wrapper" v-if="showcases">
       <div class="section-header bdbottom">
         <h1 class="section-header__title">
           <icon icon="square"/>
@@ -107,31 +107,21 @@
   />
 
   <!-- 商品选择列表 -->
-  <dialog-wrapper 
-      opacity="visible" 
-      v-if="showProductDialog" >
-    <product-list-select 
-      :productList="productList" 
-      :selectedAll="selectedAll" 
-      :toggleProList="closeProductDialog" 
-      :toggleSelected="toggleSelected" 
-      :openSkuList="openSkuList"/>
-    <dialog-footer>
-        <pay-footer 
-          :totalPrice="totalPrice" 
-          :payFn="toForm"
-          />
-    </dialog-footer>
-  </dialog-wrapper>
+  <product-list-select 
+    v-if="showProductDialog"
+    :productList="productList" 
+    @close="closeProductDialog" 
+    @openSkuDialog="openSkuDialog"
+    @clickPay="openForm"
+  />
 
   <!-- 规格选择弹窗 -->
-  <dialog-wrapper v-if="showSkuList" @close="closeskuList">
-    <sku-list :item="openItem" v-on:skuChange="skuChange"/>
-    <dialog-footer height="high">
-      <a class="dialog__footer__btn--large btn_primary vhc" 
-          v-on:click.prevent="setItemSku">确认</a>
-    </dialog-footer>
-  </dialog-wrapper>
+  <sku-list 
+    v-if="showSkuDialog"
+    :item="openItem" 
+    @close="closeSkuDialog"
+    @confirm="setItemSku"
+  />
 
   <!-- 表单弹窗 -->
   <order-form @confirmForm="postOrder" @back="closeForm" v-show="showForm"/>
@@ -157,7 +147,8 @@ import orderForm from '@/components/order-form'
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-import {mapState, mapMutations, mapActions} from 'vuex'
+// import {mapState, mapMutations, mapActions} from 'vuex'
+import specialBuy from '@/components/mixin/specialBuy'
 import {getSpecialSeo, getSpecialProductList, getSpecialCase, getSpecialContent} from '@/assets/js/xhr/service'
 
 import Loading from '@/ui-lib/src/loading/index'
@@ -165,6 +156,7 @@ import Loading from '@/ui-lib/src/loading/index'
 export default {
   // 新专题模板v1
   name: 'special_v1',
+  mixins: [specialBuy],
   components: {
     specialHeader, 
     specialFooter, 
@@ -196,28 +188,11 @@ export default {
       // 1.顶部导航 2.在线下单 3.产品列表 4.订购记录 5.真实案例 6.网页底部信息 7.更多推荐
       // 【2和3好像差不多。。只用2就好了
       modalData: [],
+      caseList: [],
       contentdata: '',
-      channel: '',
-      channelMark: '',
-
-      // 是否显示表单
-      showForm: false,
-      showProductDialog: false,
     }
   },
   computed: {
-    ...mapState([
-      'productList',
-      'selectedAll',
-      'noteList',
-      'caseList',
-      'showSkuList',
-      'skuList',
-      'openItem',
-      'origin',
-      'totalPrice',
-      'cartCount',
-    ]),
     // 是否显示顶部导航
     showHeaderNav() {
       return this.modalData.indexOf('1') >= 0;
@@ -231,7 +206,7 @@ export default {
       return this.modalData.indexOf('4') >= 0;
     },
     // 是否显示真实案例
-    showSpecialCase() {
+    showcases() {
       return this.modalData.indexOf('5') >= 0;
     },
     // 是否显示底部信息
@@ -240,111 +215,11 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
-      'setSpecialProductList',
-      'setSpecialCase',
-      'setOpenItem',
-    ]),
-    ...mapActions([
-      'openSkuList',
-      'closeskuList',
-      'confirmSku',
-      'postSpeicalOrder',
-      'toggleSelected',
-    ]),
-
-    // 开关商品选择列表
-    openProductDialog() {
-      this.showProductDialog = true;
-    },
-    closeProductDialog() {
-      this.showProductDialog = false;
-    },
-    // 开关表单
-    openForm() {
-      this.showForm = true;
-    },
-    closeForm() {
-      this.showForm = false;
-    },
-
     // 输出随机数（年龄
     randomAge() {
       return Math.round(28 + Math.random() * 17);
     },
 
-    setItemSku() {
-      new Promise((resolve, reject) => {
-        this.loading = Loading();
-        return resolve(this.confirmSku({origin: this.origin}));
-      })
-      .then((rsp) => {
-        this.loading.close();
-        rsp && this.$message(rsp.tip || rsp);
-        this.origin === 'buy' && this.openForm();
-      })
-      .catch((err) => {
-        this.$message(err);
-        this.loading.close();
-      })
-    },
-
-    // 接收skuList组件回传的item数据
-    skuChange(val) {
-      this.setOpenItem(val);
-    },
-
-    // 提交订单请求
-    postOrder(data) {
-      if (!data) return;
-      let formData = data;
-      formData.channel_mark = this.channelMark;
-      formData.channel = this.channel;
-      return new Promise((resolve, reject) => {
-        resolve(this.postSpeicalOrder(formData));
-      })
-      .then((rsp) => {
-        this.$message(rsp.tip || rsp);
-      })
-      .catch((err) => {
-        this.$message(err.tip || err);
-      })
-    },
-
-    // 选择商品列表，进入表单
-    toForm() {
-      let list = this.productList;
-      let goods = [];
-      return new Promise((resolve, reject) => {
-        for (let i = 0; i < list.length; i++) {
-          let item = list[i];
-          if (item.selected) {
-  
-            // 对于有款式但是没选的商品，校验，商品数据中的skuCount字段标示规格数量
-            if (item.skuCount && !item.selectedSku) {
-              return reject('请选择规格');
-            }
-  
-            goods.push({
-              orderId: item.itemId,
-              sku: item.selectedSku || '',
-              skuname: item.selectedSkuText || '',
-              num: item.count || 1,
-            })
-          }
-        }
-        if (!goods.length) {
-          return reject('请选择商品');
-        }
-        return resolve();
-      })
-      .then(() => {
-        this.openForm();
-      })
-      .catch(err => {
-        this.$message(err);
-      })
-    }
   },
   mounted() {
 
@@ -352,14 +227,14 @@ export default {
 
     // 关于SEO，先用着渲染方式。。
     const id = getSpecialId() || 1366;
-    this.channel = getUrlParams('channel');
 
     // 发请求
     // SEO
     getSpecialSeo({id: id}).then((rsp) => {
       if (rsp.data) {
         let data = rsp.data;
-        this.channelMark = data.channelmark;
+        // console.log(data)
+        this.setChannelMark(data.channelmark || '');
         document.querySelector('title').innerHTML = data.title;
       }
     })
@@ -373,17 +248,20 @@ export default {
       resolve(getSpecialProductList({id: id}));
     })
     .then((rsp) => {
-      // console.log(rsp)
       if (rsp && rsp.productList) {
-        this.setSpecialProductList(rsp.productList);
+        let list = rsp.productList;
+        for (let i = 0; i < list.length; i++) {
+          list[i].selected = false;
+          this.productList.splice(i, 0, list[i]);
+        }
       }
       this.loading.close();
     })
     
     // 案例 + 模块
     getSpecialCase({id: id}).then((rsp) => {
-      console.log(rsp)
-      rsp && rsp.anlidata && this.setSpecialCase(rsp.anlidata);
+      // console.log(rsp)
+      rsp && rsp.anlidata && (this.caseList = rsp.anlidata);
       rsp.modata && (this.modalData = rsp.modata);
     })
 

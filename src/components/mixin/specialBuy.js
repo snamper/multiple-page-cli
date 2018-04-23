@@ -1,4 +1,7 @@
-import {postSpeicalOrder, specialAddCart} from '@/assets/js/xhr/service'
+import {getUrlParams} from '@/assets/js/base'
+import {getSpecialId} from '@/assets/js/common'
+import {postSpeicalOrder, specialAddCart, getSku, getSpecialSeo} from '@/assets/js/xhr/service'
+import Loading from '@/ui-lib/src/loading/index'
 
 const today = new Date().format('yyyy年MM月dd日');
 export default {
@@ -32,39 +35,39 @@ export default {
               ],
             productList: [],
             caseList: [],
+            id: getSpecialId() || 1366,
+            cartCount: 0,
+            channel: '',
+            channelMark: '',
             
             selectedAll: false,
+            loading: null,
 
-            openBuyOrigin: 'buy',   // 打开选择规格的来源。立即购买buy，购物车cart，商品列表selectList
+            openSkuOrigin: 'buy',   // 打开选择规格的来源。立即购买buy，购物车cart，商品列表selectList
             showSkuDialog: false,
             showProductDialog: false,
             showForm: false,
-
-            openItem: {},
-            // totalPrice: 0,
-            // cartCount: 0,
-            seo: {},
-            case: {},
-        
+            
             // origin: 来源，打开skuList的入口按钮。购物车：cart，单品立即购买：buy，商品列表打开：selectList
             origin: 'buy',
+            openItem: {},
         }
     },
     computed: {
-        cartCount() {
-            return 0;
-        },
         totalPrice() {
             return 0;
         }
     },
     methods: {
+        setChannelMark (channelMark = '') {
+            this.channelMark = channelMark;            
+        },
         // 商品选择列表
         openProductDialog() {
-            this.showProList = true;
+            this.showProductDialog = true;
         },
         closeProductDialog() {
-            this.showProList = false;
+            this.showProductDialog = false;
         },
         // 表单
         openForm() {
@@ -75,52 +78,45 @@ export default {
         },
 
         // 打开规格窗口，需要商品id去后台获取规格
-        async openSkuDialog(item, origin) {
+        async openSkuDialog({item, origin}) {
             if (!item || !origin) return;
         
+            // 打开loading
+            this.loading = Loading();
             // 更改打开源。获取规格
-            this.origin = origin;
+            this.openSkuOrigin = origin;
             if (!item.skuList) {
                 item.skuList = await getSku({id: item.itemId});
             }
             !item.count && (item.count = 1);
 
-            // 设置打开商品。打开弹窗
+            // 设置打开商品。打开弹窗。关闭loading
             this.openItem = item;
             this.showSkuDialog = true;
-            return item;
+            this.loading.close();
         },
         closeSkuDialog() {
             this.showSkuDialog = false;
-            this.openItem = {};
+            // this.openItem = {};
         },
         // 确认规格
-        async setItemSku() {
-            let openItem = this.openItem;
+        async setItemSku(item) {
             // 检查有没有选规格
-            if (openItem.skuCount && !openItem.selectedSku) return await Promise.reject('请选择规格');
+            if (item.skuCount && !item.selectedSku) return await Promise.reject('请选择规格');
+            
+            // 更新对应商品
+            item.selected = true;
+            this.updateProduct(item);
 
             // 根据不同来源入口，执行不同操作
             // 单品中的立即请购
-            if (this.origin === 'buy') {
-                return await this.postOrder();
+            if (this.openSkuOrigin === 'buy') {
+                return await this.openForm();
             }
-            if (this.origin === 'cart') {
+            if (this.openSkuOrigin === 'cart') {
                 return await this.addCart();
             }
-            if (this.origin === 'selectList') {
-                this.openItem.selected = true;
-
-                // 更新对应商品
-                let i;
-                let list = this.productList;
-                let len = list.length;
-                for (i = 0; i < len; i++) {
-                    if (openItem.itemid === list[i].itemid) {
-                        list.splice(i, 0, openItem);
-                        break;
-                    }
-                }
+            if (this.openSkuOrigin === 'selectList') {
 
                 this.closeSkuDialog();
                 return Promise.resolve();
@@ -130,16 +126,21 @@ export default {
         // 下单
         async postOrder(formData) {
             // data为表单传进来的地址信息
-            if (!formData || !this.productList) return await Promise.reject('没有选择商品');
+            if (!this.productList) return this.$message('没有商品信息，请刷新');
+            if (!formData) return this.$message('没有表单信息，请刷新');
             
+            let postData = {
+                channel: this.channel,
+                channel_mark: this.channelMark
+            };
             let productData = {goods:[]};
-            let postData = {};
             let rsp;
             let list = this.productList;
+            // 获取商品
             for (let i = 0; i < list.length; i++) {
                 let item = list[i];
                 if (item.selected) {
-                  postData.goods.push({
+                    productData.goods.push({
                     orderId: item.itemId,
                     sku: item.selectedSku || '',
                     skuname: item.selectedSkuText || '',
@@ -148,14 +149,16 @@ export default {
                 }
             }
             
+            // 拼合数据，发送请求
             Object.assign(postData, productData, formData);
-            rsp = await postSpeicalOrder(postData)
-                        .catch((e) => {
-                            console.log(e);
-                        });
-            if (rsp.url) {
-                // rsp.url && (window.location.href = home() + '/' + rsp.url);
-            }
+            await postSpeicalOrder(postData)
+                    .then((rsp) => {
+                        rsp && this.$message(rsp.tip || rsp.data || rsp);
+                        // rsp.url && (window.location.href = home() + '/' + rsp.url);
+                    })
+                    .catch((e) => {
+                        this.$message(e);
+                    });
         },
 
         // 加入购物车
@@ -169,10 +172,18 @@ export default {
               typename: item.selectedSkuText,
             };
 
-            return await specialAddCart(postData)
+            this.loading = Loading();
+            let rsp = await specialAddCart(postData)
                             .catch((e) => {
-                                console.log(e);
+                                this.loading.close();            
+                                return this.$message(e);
                             })
+            this.loading.close();
+            if (rsp) {
+                this.cartCount = rsp.totalnum || 0;
+                this.$message(rsp.tip || rsp);
+                return Promise.resolve();
+            }
         },
 
         // 商品选择列表中，去结算时，检查商品信息是否齐全
@@ -193,6 +204,23 @@ export default {
                 return this.$message('请选择商品');
             }
             this.openForm();
+        },
+
+        // 更新商品列表信息
+        updateProduct(newItem = {}) {
+            let i;
+            let list = this.productList;
+            for(i = 0; i < list.length; i++) {
+                let item = list[i];
+                if (item.itemId === newItem.itemId) {
+                    list.splice(i, 1, newItem);
+                    return;
+                }
+            }
         }
+    },
+    mounted() {
+        this.channel = getUrlParams('channel');
+        
     }
 }

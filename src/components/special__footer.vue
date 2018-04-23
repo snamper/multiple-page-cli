@@ -98,6 +98,7 @@ export default {
   }
   a {
     @include absolute();
+    z-index: 1;
   }
 }
 

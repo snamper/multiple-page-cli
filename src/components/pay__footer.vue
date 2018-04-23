@@ -5,7 +5,7 @@
         总计<em>￥{{totalPrice}}</em>
       </div>
       <a class="btn_primary" 
-          @click.prevent.self="clickFn">去结算</a>
+          @click="clickFn">去结算</a>
     </div>
   </footer>
 </template>
@@ -24,13 +24,7 @@ export default {
   },
   methods: {
     clickFn() {
-      return Promise.resolve(this.payFn())
-      .then(() => {
-        return Promise.resolve();
-      })
-      .catch(err => {
-        return Promise.reject(err);
-      })
+      this.$emit('clickPay')
     }
   }
 }

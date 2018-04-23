@@ -44,7 +44,6 @@ import Loading from '@/ui-lib/src/loading/index'
 export default {
   props: {
     productList: Array,
-    openSkuList: Function,
   },
   components: {
     icon,
@@ -57,13 +56,7 @@ export default {
   methods: {
     openSku(item, origin) {
       let data = {item: item, origin: origin};
-      new Promise((resolve, reject) => {
-        this.loading = Loading();        
-        resolve(this.openSkuList(data));
-      })
-      .then((rsp) => {
-        this.loading.close();
-      })
+      this.$emit('openSkuDialog', data);
     }
   }
 }

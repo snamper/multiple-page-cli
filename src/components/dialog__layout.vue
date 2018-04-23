@@ -5,7 +5,7 @@
         {'dialog__layout--padding': this.padding},
     ]"
 >
-    <slot>这是弹窗中的布局块</slot>
+    <slot>这是弹窗中的布局块(默认靠下，用于半屏背景半透明弹窗中)</slot>
 </div>
 </template>
 
