@@ -6,8 +6,9 @@ const vueLoaderConfig = require('./vue-loader.conf')
 const webpackConfig = require('./webpack.config.js')
 const webpack = require('webpack')
 
-const pxtorem = require('postcss-pxtorem')
+// const pxtorem = require('postcss-pxtorem')
 
+// console.log(webpackConfig);
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)

@@ -14,6 +14,8 @@ const designDefaultWidth = 750;
 // 缩放比
 const ratio =  designDefaultWidth / deviceDefaultWidth;
 
+// 判断是PC文件还是mobile文件，对应是否使用pxtorem
+// const isMobile
 
 // https://github.com/michael-ciniawsky/postcss-load-config
 
@@ -22,7 +24,9 @@ module.exports = {
     "postcss-import": {},
     "postcss-url": {},
     // to edit target browsers: use "browserslist" field in package.json
-    "autoprefixer": {},
+    "autoprefixer": {
+      remove: false
+    },
 
     /**
      * 用法： https://www.npmjs.com/package/postcss-pxtorem

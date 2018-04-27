@@ -33,35 +33,36 @@ const getEntries = function (globPath) {
     files.forEach(function (filePath) {
         // 取倒数第二层（views下面文件夹）做包名
         let split = filePath.split('/')
+        let directory = split[split.length - 4];
         let name = split[split.length - 2]
 
-        entries[name] = './' + filePath;
+        // entries[name] = './' + filePath;
+        entries[directory + '/' + name] = './' + filePath;  // 'pcmall/index': './' 
     })
 
     return entries;
 }
 
-let entries = getEntries('src/pages/**/**/*.js');
+let entries = getEntries('src/**/pages/**/**/*.js');
+// console.log(entries);
 
 Object.keys(entries).forEach(function (name) {
     
+    let fileName = name.split('/')[1];
     let srcPath = entries[name]
-    let isPcmall = srcPath.indexOf('pcmall') >= 0 ? 'pcmall' : 'mobile'
+    // let isPcmall = srcPath.indexOf('pcmall') >= 0 ? 'pcmall' : 'mobile'
+    let isPcmall = name.split('/')[0];
 
     // devServer 中设置contentBase: false 后，内存中文件目录相当于在项目根目录。
     // 同时开发环境中，开头千万不要带'/'。。。死的很难看。。。睡觉睡觉orz
     let targetPath = process.env.NODE_ENV === 'production'
-        ? utils.assetsHtmlPath(`/${isPcmall}/${name}.html`)
-        : `${isPcmall}/${name}.html`
+        ? utils.assetsHtmlPath(`/${isPcmall}/${fileName}.html`)
+        : `${isPcmall}/${fileName}.html`
         
-    let templatePath = process.env.NODE_ENV === 'production' 
-        ? path.join(__dirname, `../src/pages/${isPcmall}/${name}/${name}.html`)
-        : path.join(__dirname, `../src/pages/${isPcmall}/${name}/${name}.html`)
-
-    console.log(targetPath)
+    let templatePath = path.join(__dirname, `../src/${isPcmall}/pages/${fileName}/${fileName}.html`)
 
     // 每个页面生成一个entry，如果需要hotupdate，在这里修改entry
-    webpackConfig.entry[name] = srcPath
+    webpackConfig.entry[fileName] = srcPath
 
     // 每个页面生成一个html
     let plugin = new HtmlWebpackPlugin({
@@ -78,7 +79,7 @@ Object.keys(entries).forEach(function (name) {
         inject: true,
 
         // 每个html引用的js模块，也可以在这里加上vendor等公共模块
-        chunks: ['manifest', 'vendor', 'common', 'app', name],
+        chunks: ['manifest', 'vendor', 'common', 'app', fileName],
     })
 
     webpackConfig.plugins.push(plugin);

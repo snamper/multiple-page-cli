@@ -101,7 +101,7 @@ module.exports = new Promise((resolve, reject) => {
         : undefined
       }))
 
-      console.log(devWebpackConfig)
+      // console.log(devWebpackConfig)
       resolve(devWebpackConfig)
     }
   })

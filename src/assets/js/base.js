@@ -4,13 +4,13 @@
 
 Date.prototype.format = Date.prototype.format || function(format) {
     var o = {
-    "M+" : this.getMonth()+1, //month
-    "d+" : this.getDate(),    //day
-    "h+" : this.getHours(),   //hour
-    "m+" : this.getMinutes(), //minute
-    "s+" : this.getSeconds(), //second
-    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
-    "S" : this.getMilliseconds() //millisecond
+        "M+" : this.getMonth()+1, //month
+        "d+" : this.getDate(),    //day
+        "h+" : this.getHours(),   //hour
+        "m+" : this.getMinutes(), //minute
+        "s+" : this.getSeconds(), //second
+        "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+        "S" : this.getMilliseconds() //millisecond
     }
 
     if(/(y+)/.test(format)) {
@@ -121,6 +121,14 @@ export function entityToString(entity = '') {
     let res = div.innerText || div.textContent;
     return res;
 }
+
+// trim
 export function trim(str) {
     return (str || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
 }
+
+// 判断是PC还是mobile
+// export function isMobile() {
+//     let ua = navigator.userAgent;
+//     // let 
+// }

@@ -13,6 +13,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 
+/**
+ * ps:
+ * 
+ * 在 /static 中的文件，是不会经过webpack编译的。
+ * 将会直接copy进编译后的文件夹中。
+ */
+
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -101,7 +108,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
     new webpack.optimize.CommonsChunkPlugin({
         name: 'common',
-        minChunks: 2
+        minChunks: 4
     }),
 
     // keep module.id stable when vendor modules does not change

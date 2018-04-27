@@ -46,8 +46,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '../../assets/css/base';
+<style scoped>
+/* @import '../../css/base'; */
 
 .disabled {
     pointer-events: none;

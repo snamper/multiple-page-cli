@@ -3,11 +3,15 @@
     <span 
         class="ui-input-number__decrease"
         @click="decrease"
-        >-</span>
+    >
+        -
+    </span>
     <span 
         class="ui-input-number__increase"
         @click="increase"
-        >+</span>
+    >
+        +
+    </span>
     <input 
         class="ui-input-number__input"
         :type="type"
@@ -16,7 +20,8 @@
         ref="input"
         @focus="focus" 
         @blur="blur" 
-        @change="change" />
+        @change="change"
+    />
 </div>
 </template>
 
@@ -30,29 +35,40 @@ export default {
         },
         value: [String, Number],
         placeholder: String,
+        min: {
+            type: Number,
+            default: -Infinity
+        },
+        max: {
+            type: Number,
+            default: Infinity
+        }
     },
     data() {
         return {
-            currentValue: this.value
+            currentValue: 0
         }
     },
-    // watch: {
-    //     'currentValue'(val, oldValue) {
-    //         // console.log('watch' + val + ',' + oldValue)
-    //         // this.$refs.input.setCurrentValue(val);
-    //         this.setCurrentValue(val);
-    //     }
-    // },
+    watch: {
+        value: {
+            immediate: true,
+            handler(value) {
+                let newVal = value === undefined ? value : Number(value);
+                if (newVal !== undefined && isNaN(newVal)) return;
+                if (newVal >= this.max) newVal = this.max;
+                if (newVal <= this.min) newVal = this.min;
+                this.setCurrentValue(newVal);
+            }
+        }
+    },
     methods: {
         decrease() {
-            if (this.currentValue > 1) {
-                this.currentValue = this.currentValue - 1;                
-                this.setCurrentValue(this.currentValue);                
-            }
+            const newVal = this.value - 1;                
+            this.setCurrentValue(newVal);                
         },
         increase() {
-            this.currentValue = this.currentValue + 1;
-            this.setCurrentValue(this.currentValue);
+            const newVal = this.value + 1;
+            this.setCurrentValue(newVal);
         },
         focus() {
             this.$refs.input.focus();
@@ -65,15 +81,24 @@ export default {
             this.setCurrentValue(newVal);
         },
         setCurrentValue(value) {
-            this.currentValue = value;
-            this.$emit('input', value)
+            const oldVal = this.currentValue;
+            let newVal = value;
+            // console.log(newVal, oldVal)
+            if (newVal >= this.max) newVal = this.max;
+            if (newVal <= this.min) newVal = this.min;
+            if (newVal === oldVal) {
+                return;
+            }
+            this.$emit('change', newVal, oldVal);
+            this.$emit('input', newVal);
+            this.currentValue = newVal;
         },
     }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/css/base';
+// @import '../../assets/css/base';
 
 .ui-input-number {
     position: relative;

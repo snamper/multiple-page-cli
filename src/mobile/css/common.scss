@@ -1,0 +1,238 @@
+@charset "utf-8";
+
+@import './variable.scss';
+@import './mixin.scss';
+
+/**************************************************
+  参考 https://www.w3cplus.com/css/bem-definitions.html
+  
+  最后，用团队的css规范
+
+  ps: 1. 我们在长名称中1个使用连字符分隔单词（例如，block-name），使用2个下划线来分隔块名和元素名（block-name__element-name）。
+
+      2. 我们用2个连字符来分隔块名（或元素名）和修饰符名，再用另1个下划线来分隔修饰符名和它对应的值。
+
+      block-name__element-name--feature-name_feature-value
+
+/**************************************************
+
+/**************************************************
+			类 <=> 含义
+
+			颗粒化处理，方便写样式
+*************************************************/
+
+// 定位
+.left {
+  position: absolute;
+  left: 0;
+}
+.right {
+  position: absolute;
+  right: 0;
+}
+.top {
+	position: absolute;
+	top: 0;
+}
+.bottom {
+	position: absolute;
+	bottom: 0;
+}
+
+// 文字
+.bold {
+	font-weight: 600;
+}
+
+.black-333 {
+	color: $black-333;
+}
+.black-666 {
+	color: $black-666;
+}
+.black-999 {
+	color: $black-999;
+}
+.black-ccc {
+	color: $black-ccc;
+}
+.black-eee {
+	color: $black-eee;
+}
+
+.red, .red-0 {
+	color: $red;
+}
+.red-1 {
+	color: $red-1;
+}
+.red-2 {
+	color: $red-2;
+}
+
+.brown {
+	color: $brown;
+}
+.brown-1 {
+	color: $brown-1;
+}
+.brown-2 {
+	color: $brown-2;
+}
+
+// border
+.bdtop {
+	border-top: 1px solid $black-ccc;
+}
+.bdbottom{
+  border-bottom: 1px solid $black-ccc;	
+}
+.bdright{
+  border-right: 1px solid $black-ccc;	
+}
+.no-bd {
+	border: 0;
+}
+
+// margin
+.mrtop-0 {
+	margin-top: 0;
+}
+.mrbottom-0 {
+	margin-bottom: 0;
+}
+.mrh-0 {	// margin-horizon
+	margin-left: 0;
+	margin-right: 0;
+}
+.mrh-1 {
+	margin-left: suit-size(1);
+	margin-right: suit-size(1);
+}
+.mrh-2 {
+	margin-left: suit-size(2);
+	margin-right: suit-size(2);
+}
+.mrv-0 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.mrv-1 {
+	margin-top: suit-size(1);
+	margin-bottom: suit-size(1);
+}
+.mrv-2 {
+	margin-top: suit-size(2);
+	margin-bottom: suit-size(2);
+}
+
+// padding
+.pdh-0 {	// padding-horizon
+	padding-left: 0;
+	padding-right: 0;
+}
+.pdh-1 {
+	padding-left: suit-size(1);
+	padding-right: suit-size(1);
+}
+.pdh-2 {
+	padding-left: suit-size(2);
+	padding-right: suit-size(2);
+}
+.pdv-0 {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.pdv-1 {
+	padding-top: sui¡t-size(1);
+	padding-bottom: suit-size(1);
+}
+.pdv-2 {
+	padding-top: suit-size(2);
+	padding-bottom: suit-size(2);
+}
+
+// 垂直水平居中
+.vc {
+	@include vc();
+}
+.hc {
+	@include hc();
+}
+.vhc {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+// 宽高
+.full-h {
+	height: 100%;
+}
+.full-w {
+	width: 100%;
+}
+
+
+/**************************************************
+			通用小零件样式 / 全局修饰符
+
+			颗粒化处理，方便写样式
+*************************************************/
+
+
+// 基本操作样式(默认中等）
+.operate,
+.operate_medium {
+  @include operate();
+  font-size: 24px;  
+}
+.operate_small {
+  @include operate();
+  font-size: 20px;  
+}
+.operate_large {
+  @include operate();
+  font-size: 28px;
+}
+
+// 普通操作（按钮，#666）
+.btn_default {
+  @include operate();  
+  border: 1px solid $black-666;
+  color: $black-666;
+  background: $white;
+}
+// 确定操作（按钮）
+.btn_confirm {
+  @include operate();  
+  border: 1px solid #bc2228;
+  color: #bc2228;
+}
+// 确定操作（实心按钮
+.btn_primary {
+  @include operate();
+  color: #fff;
+  background: #ff0000;
+  border: 1px solid #ff0000;  
+}
+
+// 商品图片，列表中的小图片尺寸
+.small_img {
+  position: absolute;
+  height: 110px;
+  width: 110px;
+  border-radius: 3px;
+}
+
+// 没有内容
+.empty {
+  text-align: center;
+}
+
+.position {
+  @include absolute();
+}
+
