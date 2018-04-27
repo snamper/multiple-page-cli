@@ -138,23 +138,28 @@
 import {getSpecialId} from '@/assets/js/common'
 import {entityToString, getUrlParams} from '@/assets/js/base'
 
-import specialHeader from '../../components/special__header'
-import specialFooter from '../../components/special__footer'
-import productListView from '../../components/product-list--view'
-import productListSelect from '../../components/product-list--select'
-import dialogWrapper from '../../components/dialog__wrapper'
-import skuList from '../../components/sku-list'
-import dialogFooter from '../../components/dialog__footer'
-import icon from '../../components/icon'
-import payFooter from '../../components/pay__footer'
-import orderForm from '../../components/order-form'
+/**
+ *  再次强调！此页面因为后台路径限制，只能放在pcmall下。
+ *  
+ *  但是样式组件都去mobile里面引用
+ */
+import specialHeader from '@/mobile/components/special__header'
+import specialFooter from '@/mobile/components/special__footer'
+import productListView from '@/mobile/components/product-list--view'
+import productListSelect from '@/mobile/components/product-list--select'
+import dialogWrapper from '@/mobile/components/dialog__wrapper'
+import skuList from '@/mobile/components/sku-list'
+import dialogFooter from '@/mobile/components/dialog__footer'
+import icon from '@/mobile/components/icon'
+import payFooter from '@/mobile/components/pay__footer'
+import orderForm from '@/mobile/components/order-form'
 
 // require styles
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-import specialBuy from '../..//components/mixin/specialBuy'
-import {getSpecialSeo, getSpecialProductList, getSpecialCase, getSpecialContent} from '../../js/apiService'
+import specialBuy from '@/mobile/components/mixin/specialBuy'
+import {getSpecialSeo, getSpecialProductList, getSpecialCase, getSpecialContent} from '@/mobile/js/apiService'
 
 import Loading from '@/ui-lib/src/loading/index'
 
@@ -228,7 +233,7 @@ export default {
   },
   mounted() {
 
-    require('../../js/commonFontsizeMatchDeviceWidthAdaptatePC')
+    require('@/mobile/js/commonFontsizeMatchDeviceWidthAdaptatePC')
 
     // 关于SEO，先用着渲染方式。。
     const id = getSpecialId() || 1366;
@@ -282,9 +287,9 @@ export default {
 </script>
 
 <style lang="scss">
-// @import '../../../assets/css/variable.scss';
-// @import '../../../assets/css/mixin.scss';
-@import '../../css/middleware.scss';
+// @import '~@/mobile/../assets/css/variable.scss';
+// @import '~@/mobile/../assets/css/mixin.scss';
+@import '~@/mobile/css/middleware.scss';
 
 .swiper-container {
   height: 520px;

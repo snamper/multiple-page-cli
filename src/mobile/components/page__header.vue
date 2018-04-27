@@ -46,6 +46,7 @@ export default {
   //     height: 100px;
   // }
   .icon-back {
+      position: absolute;    
       display: block;
       height: 100px;
       width: 100px;
