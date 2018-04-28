@@ -21,8 +21,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../css/variable';
-@import '../css/mixin';
+// @import '../css/variable';
+// @import '../css/mixin';
+@import '~@/mobile/css/mobile-component-output';
+
 
 .dialog__layout {
     @include flex-box(column, flex-start);

@@ -83,13 +83,13 @@
 
 // border
 .bdtop {
-	border-top: 1px solid $black-ccc;
+	border-top: 1PX solid $black-ccc;
 }
 .bdbottom{
-  border-bottom: 1px solid $black-ccc;	
+  border-bottom: 1PX solid $black-ccc;	
 }
 .bdright{
-  border-right: 1px solid $black-ccc;	
+  border-right: 1PX solid $black-ccc;	
 }
 .no-bd {
 	border: 0;
@@ -187,28 +187,28 @@
 .operate,
 .operate_medium {
   @include operate();
-  font-size: 24px;  
+  font-size: 24PX;  
 }
 .operate_small {
   @include operate();
-  font-size: 20px;  
+  font-size: 20PX;  
 }
 .operate_large {
   @include operate();
-  font-size: 28px;
+  font-size: 28PX;
 }
 
 // 普通操作（按钮，#666）
 .btn_default {
   @include operate();  
-  border: 1px solid $black-666;
+  border: 1PX solid $black-666;
   color: $black-666;
   background: $white;
 }
 // 确定操作（按钮）
 .btn_confirm {
   @include operate();  
-  border: 1px solid #bc2228;
+  border: 1PX solid #bc2228;
   color: #bc2228;
 }
 // 确定操作（实心按钮
@@ -216,15 +216,15 @@
   @include operate();
   color: #fff;
   background: #ff0000;
-  border: 1px solid #ff0000;  
+  border: 1PX solid #ff0000;  
 }
 
 // 商品图片，列表中的小图片尺寸
 .small_img {
   position: absolute;
-  height: 110px;
-  width: 110px;
-  border-radius: 3px;
+  height: 110PX;
+  width: 110PX;
+  border-radius: 3PX;
 }
 
 // 没有内容

@@ -1,6 +1,5 @@
 <template>
 <header class="header page-header">
-  <icon icon="back" @click="back"/>
   <h1 class="page-header__title">
     <slot></slot>
   </h1>
@@ -26,9 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import '../css/variable';
-// @import '../css/mixin';
-@import '~@/mobile/css/mobile-component-output';
+@import '~@/assets/css/mobile-component-output';
 
 .page-header {
   @include line-height-center(100px);

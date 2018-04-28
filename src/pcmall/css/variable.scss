@@ -1,25 +1,25 @@
 // 变量的值可以定义
 
 // 默认rem的值
-// $browser-default-font-size: 16px !default;
+// $browser-default-font-size: 16PX !default;
 
 /*
- *  这块是用于转换px与rem的
- *  稿子宽度一般是750px，开发的手机尺寸宽度一般是375px
+ *  这块是用于转换PX与rem的
+ *  稿子宽度一般是750PX，开发的手机尺寸宽度一般是375PX
  *
 */
 // // 默认设备宽度
-// $device-default-width: 375px !default;
+// $device-default-width: 375PX !default;
 
 // // 默认稿子宽度
-// $design-default-width: 750px !default;
+// $design-default-width: 750PX !default;
 
 // // 缩放比
 // $ratio: $design-default-width / $device-default-width;
 
 /** 
   * 关于上面注释掉的变量
-  * 20180326 xfh.log: px转rem使用webpack的postcss了，scss中的所有 @function pxtorem() 不再使用
+  * 20180326 xfh.log: PX转rem使用webpack的postcss了，scss中的所有 @function PXtorem() 不再使用
  */
 
 /**

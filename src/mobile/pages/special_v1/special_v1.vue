@@ -290,7 +290,7 @@ export default {
 // @import '~@/mobile/../assets/css/variable.scss';
 // @import '~@/mobile/../assets/css/mixin.scss';
 // @import '~@/assets/css/output.scss';
-@import './mobile-common';
+@import '../../css/output';
 
 .swiper-container {
   height: 520px;
