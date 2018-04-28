@@ -54,8 +54,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '../',          // 在打包出来的html中的文件引用位置
-    // assetsPublicPath: 'https://s103.ggwan.com/shopv2/vue',
+    // assetsPublicPath: '../',          // 在打包出来的html中的文件引用位置
+    assetsPublicPath: 'https://s103.ggwan.com/shopv2/vue',
 
     contentBasePath: path.resolve(__dirname, '../dist'),
 

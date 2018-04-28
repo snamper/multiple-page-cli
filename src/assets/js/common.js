@@ -123,7 +123,7 @@ export function getOrderStatus (opts) {
  */
 export function getSpecialId () {
     let reg = /\/(\w+)\.html/;
-    let path = location.path || '';
+    let path = location.pathname || '';
     // let path = 'http://testshop.linghit.com/specialtemplate/speical/1362.html';
 
     let result = path.match(reg);

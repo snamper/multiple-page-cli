@@ -94,6 +94,9 @@
 .no-bd {
 	border: 0;
 }
+.br-round {
+	border-radius: 50%;
+}
 
 // margin
 .mrtop-0 {
@@ -201,8 +204,8 @@
 // 普通操作（按钮，#666）
 .btn_default {
   @include operate();  
-  border: 1PX solid $black-666;
-  color: $black-666;
+  border: 1PX solid $brown;
+  color: $brown-2;
   background: $white;
 }
 // 确定操作（按钮）

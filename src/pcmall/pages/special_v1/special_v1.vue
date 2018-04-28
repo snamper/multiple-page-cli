@@ -236,7 +236,7 @@ export default {
     require('@/mobile/js/commonFontsizeMatchDeviceWidthAdaptatePC')
 
     // 关于SEO，先用着渲染方式。。
-    const id = getSpecialId() || 1366;
+    const id = Number(getSpecialId()) || 1366;
 
     // 发请求
     // SEO
@@ -290,7 +290,7 @@ export default {
 // @import '~@/mobile/../assets/css/variable.scss';
 // @import '~@/mobile/../assets/css/mixin.scss';
 // @import '~@/assets/css/output.scss';
-@import './mobile-common';
+@import './output';
 
 .swiper-container {
   height: 520px;

@@ -89,6 +89,10 @@
   height: $height;
   overflow: hidden;
 }
+@mixin round ($width) {
+  @include square($width);
+  border-radius: 50%;
+}
 
 @mixin flex-box ($flow: row, $justify-type: space-around, $align-items: stretch) {
   display: flex;
@@ -99,12 +103,13 @@
 
 @mixin operate () {
   @include line-height-center(46PX);
-  padding: 0 16PX;
+  padding: 0 20PX;
   display: inline-block;
   border-radius: 3PX;
   color: $black-666;  
   box-sizing: border-box;
-  min-width: 96PX;
+  min-width: 140PX;
+  font-size: 18PX;
 }
 
 @mixin ellipsis ($line-count: 1) {

@@ -1,6 +1,9 @@
 @charset 'utf-8';
 
-@import './output';
+@import './base';
+@import './variable';
+@import './mixin';
+@import './common';
 
 /*****************************
         .container  总的外层div，使之高度撑起来，背景颜色充满窗口

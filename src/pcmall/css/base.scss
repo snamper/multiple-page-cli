@@ -120,8 +120,8 @@ html, body {
 body, input, textarea {
 	font-family: "微软雅黑", Helvetica, STHeiti, Droid Sans Fallback;
 	color: #333;
-	// font-size: pxtorem(24px);
-	font-size: 24px;
+	// font-size: PXtorem(24PX);
+	font-size: 24PX;
 	border: 0;
 	outline: 0;
 }
@@ -157,9 +157,9 @@ button {
 *************************************************/
 
 em {
-	font-size: 28px;
+	font-size: 22PX;
 	font-weight: 600;
-	color: $red-1;
+	color: $red-4;
 }
 
 /**************************************************
@@ -167,18 +167,18 @@ em {
 	慢慢与便签联系起来，形成规范
 *************************************************/
 h1 {
-	font-size: 32px;
+	font-size: 21PX;
 }
 h2 {
-	font-size: 28px;
+	font-size: 28PX;
 }
 h3 {
-	font-size: 24px;
+	font-size: 24PX;
 }
 h4 {
-	font-size: 20px;
+	font-size: 20PX;
 }
 p, span {
-	font-size: 24px;
+	font-size: 14PX;
 }
 
